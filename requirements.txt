@@ -1,0 +1,19 @@
+# Requirements for AML Compliance System
+
+# Core Data Science Libraries
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Machine Learning
+scikit-learn>=1.3.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Optional Deep Learning (commented out by default)
+# tensorflow>=2.13.0
+# keras>=2.13.0
+
+# Utilities
+python-dateutil>=2.8.0
