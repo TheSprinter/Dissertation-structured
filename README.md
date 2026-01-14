@@ -1,6 +1,6 @@
-# AML Compliance System
+# Fraud Management System
 
-A comprehensive Anti-Money Laundering (AML) compliance system using AI/ML techniques for fraud detection, risk assessment, and regulatory compliance.
+A comprehensive fraud detection and management system using AI/ML techniques for fraud detection, risk assessment, and compliance monitoring.
 
 ## 📋 Table of Contents
 

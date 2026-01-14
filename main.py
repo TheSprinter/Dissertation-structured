@@ -2,7 +2,7 @@
 Main Execution Script
 =====================
 
-Run the complete AML Compliance System analysis.
+Run the complete Fraud Management System analysis.
 """
 
 import sys
@@ -18,7 +18,7 @@ def main():
     """Main execution function"""
     
     print("="*80)
-    print("AML COMPLIANCE SYSTEM - MAIN EXECUTION")
+    print("FRAUD MANAGEMENT SYSTEM - MAIN EXECUTION")
     print("="*80)
     
     # Initialize the system
@@ -31,7 +31,7 @@ def main():
     aml_system.load_data(data_path)
     
     # Run complete analysis
-    print("\n🔄 Starting complete AML compliance analysis...")
+    print("\n🔄 Starting complete fraud analysis...")
     analysis_results = aml_system.run_complete_analysis(save_results=True)
     
     # Example: Predict risk for a new transaction
