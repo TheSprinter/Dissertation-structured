@@ -9,6 +9,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
+from config import OUTPUT_DIR
 
 
 class AMLVisualizer:
@@ -48,7 +50,8 @@ class AMLVisualizer:
         self._plot_compliance_overview(axes[1, 2])
         
         plt.tight_layout()
-        plt.savefig('output/dashboard.png', dpi=300, bbox_inches='tight')
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
+        plt.savefig(os.path.join(OUTPUT_DIR, 'dashboard.png'), dpi=300, bbox_inches='tight')
         plt.show()
         
         # Additional detailed plots
@@ -150,7 +153,8 @@ class AMLVisualizer:
         plt.xticks([0, 1], ['Domestic', 'Cross-border'], rotation=0)
         
         plt.tight_layout()
-        plt.savefig('output/detailed_analysis.png', dpi=300, bbox_inches='tight')
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
+        plt.savefig(os.path.join(OUTPUT_DIR, 'detailed_analysis.png'), dpi=300, bbox_inches='tight')
         plt.show()
         
         # Customer profile visualization
@@ -210,7 +214,8 @@ class AMLVisualizer:
         
         plt.suptitle('Customer Profile Analysis', fontsize=14, fontweight='bold')
         plt.tight_layout()
-        plt.savefig('output/customer_profiles.png', dpi=300, bbox_inches='tight')
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
+        plt.savefig(os.path.join(OUTPUT_DIR, 'customer_profiles.png'), dpi=300, bbox_inches='tight')
         plt.show()
     
     def generate_compliance_report(self, customer_profiles=None, anomalies=None, ml_metrics=None):

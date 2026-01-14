@@ -7,6 +7,8 @@ Handles transaction anomaly detection using multiple algorithms.
 
 import pandas as pd
 import numpy as np
+import os
+from config import OUTPUT_DIR
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 
@@ -42,8 +44,10 @@ class AnomalyDetector:
         self._display_anomaly_results()
         
         if save_results:
-            self.anomalies.to_csv('output/detected_anomalies.csv', index=False)
-            print("💾 Anomaly results saved to output/detected_anomalies.csv")
+            os.makedirs(OUTPUT_DIR, exist_ok=True)
+            out_path = os.path.join(OUTPUT_DIR, 'detected_anomalies.csv')
+            self.anomalies.to_csv(out_path, index=False)
+            print(f"💾 Anomaly results saved to {out_path}")
         
         return self.anomalies
     

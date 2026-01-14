@@ -73,18 +73,23 @@ class MLPredictor:
                 self.label_encoders[feature] = le
                 features = features.drop(feature, axis=1)
         
-        # Store feature names
-        self.feature_names = [col for col in features.columns if col != 'Is_laundering']
+        # Keep only numeric features (exclude any string/object columns)
+        numeric_features = features.select_dtypes(include=[np.number]).copy()
+        if 'Is_laundering' not in numeric_features.columns and 'Is_laundering' in features.columns:
+            numeric_features['Is_laundering'] = features['Is_laundering']
+
+        # Store feature names (exclude target)
+        self.feature_names = [col for col in numeric_features.columns if col != 'Is_laundering']
         
         # Prepare X and y
-        X = features[self.feature_names]
-        y = features['Is_laundering']
+        X = numeric_features[self.feature_names]
+        y = numeric_features['Is_laundering'] if 'Is_laundering' in numeric_features.columns else features['Is_laundering']
         
         # Scale features
         X_scaled = self.scaler.fit_transform(X)
         X = pd.DataFrame(X_scaled, columns=self.feature_names)
         
-        print(f"✓ Feature preparation complete: {len(self.feature_names)} features")
+        print(f"✓ Feature preparation complete: {len(self.feature_names)} numeric features")
         return X, y
     
     def _engineer_features(self, df):

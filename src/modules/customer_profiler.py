@@ -6,6 +6,8 @@ Handles customer risk profiling and classification.
 """
 
 import pandas as pd
+import os
+from config import OUTPUT_DIR
 
 
 class CustomerProfiler:
@@ -39,8 +41,10 @@ class CustomerProfiler:
         self._display_profiling_results()
         
         if save_results:
-            self.profiles.to_csv('output/customer_profiles.csv', index=False)
-            print("💾 Customer profiles saved to output/customer_profiles.csv")
+            os.makedirs(OUTPUT_DIR, exist_ok=True)
+            out_path = os.path.join(OUTPUT_DIR, 'customer_profiles.csv')
+            self.profiles.to_csv(out_path, index=False)
+            print(f"💾 Customer profiles saved to {out_path}")
         
         return self.profiles
     
