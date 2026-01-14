@@ -209,9 +209,14 @@ For issues or questions:
 
 ---
 
-## 📄 License
+## 📄 Academic Project
 
-Educational and research purposes.
+This project is submitted as part of the **Final Semester Dissertation Project** for the **Master of Technology (MTech) in Artificial Intelligence and Machine Learning (AIML)** degree at **Birla Institute of Technology and Science (BITS), Pilani**.
+
+**Institution**: BITS Pilani  
+**Program**: MTech in AIML  
+**Project Type**: Dissertation Project  
+**Academic Year**: 2025-2026
 
 ---
 

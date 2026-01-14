@@ -319,5 +319,11 @@ For deployment issues:
 
 ---
 
+## 📄 Academic Project
+
+This deployment guide is part of the **Final Semester Dissertation Project** for **MTech in AIML** at **BITS Pilani**.
+
+---
+
 **Version**: 1.0.0  
 **Last Updated**: January 2026

@@ -190,18 +190,19 @@ Time,Date,Sender_account,Receiver_account,Amount,Payment_currency,Received_curre
 
 Contributions are welcome! Please feel free to submit pull requests or open issues.
 
-## 📜 License
+## 📜 Academic Project
 
-This project is for educational and demonstration purposes.
+This project is submitted as part of the **Final Semester Dissertation Project** for the **Master of Technology (MTech) in Artificial Intelligence and Machine Learning (AIML)** degree at **Birla Institute of Technology and Science (BITS), Pilani**.
 
-## 👥 Authors
-
-AML Compliance Team
+**Institution**: BITS Pilani  
+**Program**: MTech in AIML  
+**Project Type**: Dissertation Project  
+**Academic Year**: 2025-2026
 
 ## 📧 Contact
 
-For questions or support, please open an issue in the project repository.
+For academic inquiries or questions about this dissertation project, please contact through the appropriate BITS Pilani academic channels.
 
 ---
 
-**Note**: This system is designed for educational purposes. For production use, ensure compliance with local regulations and conduct thorough testing.
+**Note**: This system is designed for academic research and demonstration purposes as part of an MTech dissertation. For production use, ensure compliance with local regulations and conduct thorough testing.

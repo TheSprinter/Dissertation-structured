@@ -132,7 +132,26 @@ def main():
     
     # Home Page
     if page == "🏠 Home":
-        st.header("Welcome to the Fraud Management System")
+        #st.header("Welcome to the Fraud Management System")
+        
+        # Project Information
+        st.markdown("""
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    padding: 1.5rem; 
+                    border-radius: 10px; 
+                    color: white; 
+                    margin-bottom: 2rem;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <h3 style="margin: 0 0 1rem 0; color: white;">🎓 Academic Project Information</h3>
+            <p style="margin: 0.5rem 0; font-size: 1.1rem;">
+                <strong>Project:</strong> Final Semester Dissertation Project<br>
+                <strong>Institution:</strong> BITS Pilani<br>
+                <strong>Program:</strong> MTech in Artificial Intelligence and Machine Learning (AIML)<br>
+                <strong>Submitted by:</strong> Simit Das<br>
+                <strong>BITS ID:</strong> 2023AA05807
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
         
         col1, col2, col3 = st.columns(3)
         
@@ -593,9 +612,14 @@ def main():
         
         For questions or support, please refer to the documentation or contact the development team.
         
-        ### 📄 License
+        ### 📄 Academic Project
         
-        This system is developed for educational and research purposes.
+        This project is submitted as part of the **Final Semester Dissertation Project** for the **Master of Technology (MTech) in Artificial Intelligence and Machine Learning (AIML)** degree at **Birla Institute of Technology and Science (BITS), Pilani**.
+        
+        **Institution**: BITS Pilani  
+        **Program**: MTech in AIML  
+        **Project Type**: Dissertation Project  
+        **Academic Year**: 2025-2026
         
         ---
         
