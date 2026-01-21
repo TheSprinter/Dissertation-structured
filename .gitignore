@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+*.egg-info/
+dist/
+build/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data files
+*.csv
+*.xlsx
+*.xls
+!fraud_management_dataset-1.5L (1).csv
+
+# Output files
+output/
+*.png
+*.jpg
+*.jpeg
+*.pdf
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Temporary files
+temp_*.csv
+*.tmp
+*.log
+
+# Environment variables
+.env
+.env.local
+
+# Docker
+*.log

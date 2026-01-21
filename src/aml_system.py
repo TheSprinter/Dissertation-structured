@@ -1,8 +1,8 @@
 """
-AML Compliance System
-=====================
+Fraud Management System
+=======================
 
-Main orchestration class for the AML Compliance System.
+Main orchestration class for the Fraud Management System.
 """
 
 from modules.data_manager import DataManager
@@ -35,7 +35,7 @@ class AMLComplianceSystem:
         self.df = None
         
         print("="*80)
-        print("AML COMPLIANCE AI SYSTEM INITIALIZED")
+        print("FRAUD MANAGEMENT AI SYSTEM INITIALIZED")
         print("="*80)
         print("🔧 System Components:")
         print("   • Data Management Module")
@@ -67,7 +67,7 @@ class AMLComplianceSystem:
     def run_complete_analysis(self, save_results=True):
         """Run the complete AML compliance analysis pipeline"""
         print("\n" + "="*80)
-        print("RUNNING COMPLETE AML COMPLIANCE ANALYSIS")
+        print("RUNNING COMPLETE FRAUD ANALYSIS")
         print("="*80)
         
         if self.df is None:
