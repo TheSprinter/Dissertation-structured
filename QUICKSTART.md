@@ -1,4 +1,4 @@
-# Quick Start Guide - AML Compliance System
+# Quick Start Guide - Fraud Management System
 
 ## 🚀 Getting Started in 5 Minutes
 

@@ -7,22 +7,36 @@ Handles machine learning model training and predictions.
 
 import pandas as pd
 import numpy as np
+import pickle
+import os
+from datetime import datetime
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, IsolationForest
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import (accuracy_score, precision_score, recall_score, f1_score)
+try:
+    from joblib import dump, load
+    JOBLIB_AVAILABLE = True
+except ImportError:
+    JOBLIB_AVAILABLE = False
 
 
 class MLPredictor:
     """Handles machine learning model training and predictions"""
     
-    def __init__(self, df):
+    def __init__(self, df, model_dir='models'):
         self.df = df
         self.model = None
         self.scaler = StandardScaler()
         self.label_encoders = {}
         self.feature_names = []
         self.model_metrics = {}
+        self.model_dir = model_dir
+        self.model_path = os.path.join(model_dir, 'fraud_model.pkl')
+        self.package_path = os.path.join(model_dir, 'ml_package.pkl')
+        
+        # Create models directory if it doesn't exist
+        os.makedirs(model_dir, exist_ok=True)
         
     def train_compliance_model(self, test_size=0.3):
         """Train machine learning model for compliance risk prediction"""
@@ -181,6 +195,137 @@ class MLPredictor:
         
         print(f"\n✓ Best model selected with F1-score: {best_score:.3f}")
         return best_model
+    
+    def save_model(self, filename=None):
+        """Save trained model and all components to disk"""
+        if self.model is None:
+            raise ValueError("No model to save. Train a model first.")
+        
+        filepath = filename if filename else self.model_path
+        
+        print(f"\n💾 Saving trained model to {filepath}...")
+        
+        try:
+            if JOBLIB_AVAILABLE:
+                # Use joblib for better performance with sklearn models
+                dump(self.model, filepath)
+                print("✓ Model saved using joblib")
+            else:
+                # Fallback to pickle
+                with open(filepath, 'wb') as f:
+                    pickle.dump(self.model, f)
+                print("✓ Model saved using pickle")
+            return True
+        except Exception as e:
+            print(f"✗ Error saving model: {e}")
+            return False
+    
+    def load_model(self, filename=None):
+        """Load pre-trained model from disk"""
+        filepath = filename if filename else self.model_path
+        
+        if not os.path.exists(filepath):
+            print(f"⚠ No saved model found at {filepath}")
+            return False
+        
+        print(f"📂 Loading model from {filepath}...")
+        
+        try:
+            if JOBLIB_AVAILABLE:
+                self.model = load(filepath)
+                print("✓ Model loaded using joblib")
+            else:
+                with open(filepath, 'rb') as f:
+                    self.model = pickle.load(f)
+                print("✓ Model loaded using pickle")
+            return True
+        except Exception as e:
+            print(f"✗ Error loading model: {e}")
+            return False
+    
+    def save_complete_package(self, filename=None):
+        """Save model with all preprocessing components and metadata"""
+        if self.model is None:
+            raise ValueError("No model to save. Train a model first.")
+        
+        filepath = filename if filename else self.package_path
+        
+        print(f"\n💾 Saving complete ML package to {filepath}...")
+        
+        # Package all components
+        ml_package = {
+            'model': self.model,
+            'scaler': self.scaler,
+            'label_encoders': self.label_encoders,
+            'feature_names': self.feature_names,
+            'model_metrics': self.model_metrics,
+            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'n_features': len(self.feature_names)
+        }
+        
+        try:
+            with open(filepath, 'wb') as f:
+                pickle.dump(ml_package, f, protocol=pickle.HIGHEST_PROTOCOL)
+            print("✓ Complete ML package saved successfully")
+            print(f"  - Model: {type(self.model).__name__}")
+            print(f"  - Features: {len(self.feature_names)}")
+            print(f"  - Encoders: {len(self.label_encoders)}")
+            print(f"  - Timestamp: {ml_package['timestamp']}")
+            return True
+        except Exception as e:
+            print(f"✗ Error saving ML package: {e}")
+            return False
+    
+    def load_complete_package(self, filename=None):
+        """Load model with all preprocessing components"""
+        filepath = filename if filename else self.package_path
+        
+        if not os.path.exists(filepath):
+            print(f"⚠ No saved package found at {filepath}")
+            return False
+        
+        print(f"📂 Loading complete ML package from {filepath}...")
+        
+        try:
+            with open(filepath, 'rb') as f:
+                ml_package = pickle.load(f)
+            
+            # Restore all components
+            self.model = ml_package['model']
+            self.scaler = ml_package['scaler']
+            self.label_encoders = ml_package['label_encoders']
+            self.feature_names = ml_package['feature_names']
+            self.model_metrics = ml_package.get('model_metrics', {})
+            
+            print("✓ Complete ML package loaded successfully")
+            print(f"  - Model: {type(self.model).__name__}")
+            print(f"  - Features: {len(self.feature_names)}")
+            print(f"  - Encoders: {len(self.label_encoders)}")
+            print(f"  - Saved on: {ml_package.get('timestamp', 'Unknown')}")
+            return True
+        except Exception as e:
+            print(f"✗ Error loading ML package: {e}")
+            return False
+    
+    def list_saved_models(self):
+        """List all saved models in the models directory"""
+        if not os.path.exists(self.model_dir):
+            print(f"⚠ Models directory not found: {self.model_dir}")
+            return []
+        
+        models = [f for f in os.listdir(self.model_dir) if f.endswith(('.pkl', '.joblib'))]
+        
+        if models:
+            print(f"\n📋 Found {len(models)} saved model(s):")
+            for i, model in enumerate(models, 1):
+                filepath = os.path.join(self.model_dir, model)
+                size = os.path.getsize(filepath) / 1024  # KB
+                modified = datetime.fromtimestamp(os.path.getmtime(filepath))
+                print(f"  {i}. {model} ({size:.1f} KB) - Modified: {modified.strftime('%Y-%m-%d %H:%M')}")
+        else:
+            print(f"⚠ No saved models found in {self.model_dir}")
+        
+        return models
     
     def _analyze_feature_importance(self):
         """Analyze and display feature importance"""

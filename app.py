@@ -25,51 +25,293 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for better styling
+# Custom CSS for modern UI styling
 st.markdown("""
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    /* Global Styles */
+    * {
+        font-family: 'Inter', sans-serif;
+    }
+    
+    /* Main Container */
+    .main {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        padding: 2rem;
+    }
+    
+    /* Header with Glassmorphism */
     .main-header {
-        font-size: 3rem;
-        font-weight: bold;
-        color: #1E3A8A;
+        font-size: 3.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         text-align: center;
-        padding: 1rem;
-        background: linear-gradient(90deg, #EFF6FF 0%, #DBEAFE 100%);
-        border-radius: 10px;
+        padding: 2rem;
         margin-bottom: 2rem;
+        position: relative;
+        animation: fadeInDown 0.8s ease-in-out;
     }
+    
+    /* Modern Card Design with Glassmorphism */
     .metric-card {
-        background-color: #F8FAFC;
-        padding: 1.5rem;
-        border-radius: 10px;
-        border-left: 5px solid #3B82F6;
-        margin: 1rem 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+        margin: 1.5rem 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
     }
+    
+    .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .metric-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 12px 48px rgba(31, 38, 135, 0.25);
+    }
+    
+    .metric-card h3 {
+        color: #1a202c;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+    }
+    
+    .metric-card ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .metric-card li {
+        padding: 0.6rem 0;
+        color: #4a5568;
+        font-size: 1rem;
+        position: relative;
+        padding-left: 1.5rem;
+    }
+    
+    .metric-card li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #667eea;
+        font-weight: bold;
+    }
+    
+    /* Risk Labels with Modern Design */
     .risk-high {
         color: #DC2626;
-        font-weight: bold;
+        font-weight: 700;
+        padding: 0.3rem 0.8rem;
+        background: rgba(220, 38, 38, 0.1);
+        border-radius: 8px;
+        display: inline-block;
     }
+    
     .risk-medium {
         color: #F59E0B;
-        font-weight: bold;
+        font-weight: 700;
+        padding: 0.3rem 0.8rem;
+        background: rgba(245, 158, 11, 0.1);
+        border-radius: 8px;
+        display: inline-block;
     }
+    
     .risk-low {
         color: #10B981;
-        font-weight: bold;
+        font-weight: 700;
+        padding: 0.3rem 0.8rem;
+        background: rgba(16, 185, 129, 0.1);
+        border-radius: 8px;
+        display: inline-block;
     }
+    
+    /* Modern Button Styles */
     .stButton>button {
         width: 100%;
-        background-color: #3B82F6;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
-        font-weight: bold;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
+        font-weight: 600;
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
         border: none;
-        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 1rem;
+        letter-spacing: 0.5px;
     }
+    
     .stButton>button:hover {
-        background-color: #2563EB;
-        transform: translateY(-2px);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
+    
+    .stButton>button:active {
+        transform: translateY(-1px);
+    }
+    
+    /* Sidebar Styling */
+    .css-1d391kg {
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #1a202c 0%, #2d3748 100%);
+    }
+    
+    [data-testid="stSidebar"] .css-17eq0hr {
+        color: white;
+    }
+    
+    /* Metric Containers */
+    [data-testid="stMetricValue"] {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    /* Input Fields */
+    .stTextInput>div>div>input,
+    .stSelectbox>div>div>select,
+    .stNumberInput>div>div>input {
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+        padding: 0.75rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stTextInput>div>div>input:focus,
+    .stSelectbox>div>div>select:focus,
+    .stNumberInput>div>div>input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    /* Data Tables */
+    .dataframe {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Info/Warning/Success Boxes */
+    .stAlert {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    /* Expander */
+    .streamlit-expanderHeader {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        border-radius: 12px;
+        font-weight: 600;
+    }
+    
+    /* File Uploader */
+    [data-testid="stFileUploader"] {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 2px dashed #cbd5e0;
+        transition: all 0.3s ease;
+    }
+    
+    [data-testid="stFileUploader"]:hover {
+        border-color: #667eea;
+        background: rgba(102, 126, 234, 0.05);
+    }
+    
+    /* Animations */
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Radio Buttons */
+    .stRadio>div {
+        background: white;
+        padding: 1rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Progress Bar */
+    .stProgress > div > div > div {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+    }
+    
+    /* Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        background: rgba(255, 255, 255, 0.8);
+        font-weight: 600;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
     }
     </style>
     """, unsafe_allow_html=True)
@@ -127,8 +369,19 @@ def main():
         "🔍 Transaction Risk Prediction",
         "👥 Customer Risk Profiles",
         "📈 Dashboard & Reports",
+        "💾 Model Management",
         "ℹ️ About"
     ])
+    
+    # Model Management Section in Sidebar
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("### 🔧 Quick Actions")
+    
+    if st.session_state.data_loaded:
+        if st.sidebar.button("📋 List Saved Models"):
+            aml_system = st.session_state.aml_system
+            with st.sidebar:
+                aml_system.list_available_models()
     
     # Home Page
     if page == "🏠 Home":
@@ -565,6 +818,105 @@ def main():
                             file_name="detected_anomalies.csv",
                             mime="text/csv"
                         )
+    
+    # Model Management Page
+    elif page == "💾 Model Management":
+        st.header("Model Management")
+        
+        st.markdown("""
+        Manage your trained machine learning models. Save, load, and track model versions 
+        for easy deployment and reuse.
+        """)
+        
+        if not st.session_state.data_loaded:
+            st.warning("⚠️ Please load data first from the 'Data Upload & Analysis' page.")
+        else:
+            aml_system = st.session_state.aml_system
+            
+            # Create tabs for different model operations
+            tab1, tab2, tab3 = st.tabs(["📋 View Models", "💾 Save Model", "📂 Load Model"])
+            
+            with tab1:
+                st.subheader("Available Saved Models")
+                
+                if st.button("🔄 Refresh Model List"):
+                    models = aml_system.list_available_models()
+                    if models:
+                        st.success(f"Found {len(models)} model(s)")
+                    else:
+                        st.info("No saved models found")
+                
+                st.markdown("""
+                **Model Storage Location**: `models/` directory
+                
+                Models are saved with all preprocessing components including:
+                - Trained model
+                - Feature scaler
+                - Label encoders
+                - Feature names
+                - Model metrics
+                - Timestamp
+                """)
+            
+            with tab2:
+                st.subheader("Save Trained Model")
+                
+                if st.session_state.analysis_complete:
+                    st.info("Current model is ready to be saved")
+                    
+                    model_name = st.text_input("Model Name (optional)", 
+                                              value="ml_package.pkl",
+                                              help="Enter a custom name or use default")
+                    
+                    if not model_name.endswith('.pkl'):
+                        model_name += '.pkl'
+                    
+                    model_path = f"models/{model_name}"
+                    
+                    if st.button("💾 Save Model"):
+                        with st.spinner("Saving model..."):
+                            success = aml_system.save_trained_model(model_path)
+                            if success:
+                                st.success(f"✅ Model saved successfully to `{model_path}`")
+                                st.balloons()
+                            else:
+                                st.error("❌ Failed to save model")
+                else:
+                    st.warning("⚠️ No trained model available. Please run the analysis first.")
+                    if st.button("▶️ Run Analysis Now"):
+                        st.experimental_rerun()
+            
+            with tab3:
+                st.subheader("Load Pre-trained Model")
+                
+                st.markdown("""
+                Load a previously trained model to make predictions without retraining.
+                """)
+                
+                # Option to use default or custom path
+                load_option = st.radio("Select loading option:", 
+                                      ["Load default model", "Load custom model"])
+                
+                model_to_load = None
+                
+                if load_option == "Load default model":
+                    model_to_load = "models/ml_package.pkl"
+                    st.info(f"Will load: `{model_to_load}`")
+                else:
+                    custom_path = st.text_input("Enter model path:", 
+                                               value="models/ml_package.pkl")
+                    model_to_load = custom_path
+                
+                if st.button("📂 Load Model"):
+                    with st.spinner(f"Loading model from {model_to_load}..."):
+                        success = aml_system.load_pretrained_model(model_to_load)
+                        if success:
+                            st.success("✅ Model loaded successfully!")
+                            st.session_state.analysis_complete = True
+                            st.info("Model is now ready for predictions. Go to 'Transaction Risk Prediction' page.")
+                        else:
+                            st.error(f"❌ Failed to load model from `{model_to_load}`")
+                            st.info("Make sure the model file exists in the specified path.")
     
     # About Page
     elif page == "ℹ️ About":

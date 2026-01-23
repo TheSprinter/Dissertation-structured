@@ -64,7 +64,7 @@ class AMLComplianceSystem:
         print("\n✓ All modules initialized with loaded data")
         return self.df
     
-    def run_complete_analysis(self, save_results=True):
+    def run_complete_analysis(self, save_results=True, save_model=True):
         """Run the complete AML compliance analysis pipeline"""
         print("\n" + "="*80)
         print("RUNNING COMPLETE FRAUD ANALYSIS")
@@ -84,6 +84,10 @@ class AMLComplianceSystem:
         # Step 3: Machine Learning Model Training
         print("\n🤖 Step 3: ML Model Training...")
         model = self.ml_predictor.train_compliance_model()
+        
+        # Save the trained model if requested
+        if save_model:
+            self.ml_predictor.save_complete_package()
         
         # Step 4: Comprehensive Visualization
         print("\n📊 Step 4: Generating Visualizations...")
@@ -114,6 +118,32 @@ class AMLComplianceSystem:
             raise ValueError("ML model not trained. Please run run_complete_analysis() first.")
         
         return self.ml_predictor.predict_risk(transaction_data)
+    
+    def load_pretrained_model(self, model_path=None):
+        """Load a pre-trained model from disk"""
+        if self.ml_predictor is None:
+            raise ValueError("Data not loaded. Please run load_data() first.")
+        
+        success = self.ml_predictor.load_complete_package(model_path)
+        if success:
+            print("✓ Pre-trained model loaded successfully. Ready for predictions!")
+        return success
+    
+    def save_trained_model(self, model_path=None):
+        """Save the currently trained model"""
+        if self.ml_predictor is None or self.ml_predictor.model is None:
+            raise ValueError("No trained model to save.")
+        
+        return self.ml_predictor.save_complete_package(model_path)
+    
+    def list_available_models(self):
+        """List all saved models"""
+        if self.ml_predictor is None:
+            # Create temporary predictor to access list method
+            from modules.ml_predictor import MLPredictor
+            temp_predictor = MLPredictor(pd.DataFrame())
+            return temp_predictor.list_saved_models()
+        return self.ml_predictor.list_saved_models()
     
     def get_customer_risk_profile(self, account_id):
         """Get detailed risk profile for specific customer"""
