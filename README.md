@@ -17,6 +17,7 @@ A comprehensive fraud detection and management system using AI/ML techniques for
 - **Customer Risk Profiling**: Comprehensive risk assessment based on transaction patterns
 - **Anomaly Detection**: Multi-algorithm approach using Isolation Forest and statistical methods
 - **Machine Learning**: Predictive models for compliance risk forecasting
+- **Model Persistence**: Save and load trained models using pickle/joblib
 - **Visualization**: Interactive dashboards and comprehensive reports
 - **Real-time Prediction**: Risk assessment for new transactions
 
@@ -28,6 +29,7 @@ aml_compliance_system/
 ├── main.py                      # Main execution script
 ├── requirements.txt             # Python dependencies
 ├── README.md                   # This file
+├── MODEL_PERSISTENCE.md        # Model saving/loading guide
 │
 ├── src/                        # Source code
 │   ├── __init__.py
@@ -42,6 +44,7 @@ aml_compliance_system/
 │       ├── ml_predictor.py    # ML model training and prediction
 │       └── visualizer.py      # Visualization and reporting
 │
+├── models/                    # Saved ML models (auto-generated)
 ├── data/                      # Data directory (place your CSV files here)
 ├── output/                    # Generated outputs
 │   ├── customer_profiles.csv
@@ -109,6 +112,33 @@ risk = aml_system.predict_compliance_risk(new_txn)
 print(risk)
 ```
 
+### Model Persistence
+
+Save and load trained models for faster reuse:
+
+```python
+from src.aml_system import AMLComplianceSystem
+
+# Initialize and load data
+system = AMLComplianceSystem()
+system.load_data('fraud_management_dataset-1.5L (1).csv')
+
+# Option 1: Auto-save after training (default)
+system.run_complete_analysis()  # Model saved automatically
+
+# Option 2: Load existing model
+if system.ml_predictor.load_model_from_disk():
+    print("Model loaded! Ready for predictions.")
+else:
+    print("No saved model. Training new one...")
+    system.train_new_model()
+
+# Option 3: Explicitly save current model
+system.save_current_model()
+```
+
+For detailed information, see [MODEL_PERSISTENCE.md](MODEL_PERSISTENCE.md)
+
 ## 🧩 Modules
 
 ### 1. Data Manager (`data_manager.py`)
@@ -133,6 +163,8 @@ print(risk)
 - Feature engineering (20+ features)
 - Cross-validation for model selection
 - Risk probability prediction
+- **Model persistence with pickle/joblib**
+- Save and load trained models
 
 ### 5. Visualizer (`visualizer.py`)
 - Comprehensive dashboard generation
