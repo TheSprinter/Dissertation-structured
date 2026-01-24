@@ -7,6 +7,9 @@ Handles machine learning model training and predictions.
 
 import pandas as pd
 import numpy as np
+import joblib
+import os
+from datetime import datetime
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, IsolationForest
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -24,7 +27,7 @@ class MLPredictor:
         self.feature_names = []
         self.model_metrics = {}
         
-    def train_compliance_model(self, test_size=0.3):
+    def train_compliance_model(self, test_size=0.3, save_model=True):
         """Train machine learning model for compliance risk prediction"""
         print("\n" + "="*60)
         print("MACHINE LEARNING MODEL TRAINING")
@@ -48,6 +51,10 @@ class MLPredictor:
         
         # Feature importance analysis
         self._analyze_feature_importance()
+        
+        # Save model to disk
+        if save_model:
+            self.save_model_to_disk()
         
         print("✓ Model training completed successfully!")
         return self.model
@@ -192,6 +199,93 @@ class MLPredictor:
             
             print(f"\n🔍 Top 10 Most Important Features:")
             print(feature_importance.head(10).to_string(index=False))
+    
+    def save_model_to_disk(self, model_dir='models'):
+        """Save trained model, scaler, encoders, and metadata to disk using joblib"""
+        if self.model is None:
+            raise ValueError("No model to save. Train a model first.")
+        
+        # Create models directory if it doesn't exist
+        os.makedirs(model_dir, exist_ok=True)
+        
+        # Generate timestamp for versioning
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        
+        # Save model
+        model_path = os.path.join(model_dir, 'fraud_model.pkl')
+        joblib.dump(self.model, model_path, compress=3)
+        
+        # Save scaler
+        scaler_path = os.path.join(model_dir, 'scaler.pkl')
+        joblib.dump(self.scaler, scaler_path, compress=3)
+        
+        # Save label encoders
+        encoders_path = os.path.join(model_dir, 'label_encoders.pkl')
+        joblib.dump(self.label_encoders, encoders_path, compress=3)
+        
+        # Save feature names
+        features_path = os.path.join(model_dir, 'feature_names.pkl')
+        joblib.dump(self.feature_names, features_path, compress=3)
+        
+        # Save model metrics and metadata
+        metadata = {
+            'model_metrics': self.model_metrics,
+            'timestamp': timestamp,
+            'feature_count': len(self.feature_names)
+        }
+        metadata_path = os.path.join(model_dir, 'model_metadata.pkl')
+        joblib.dump(metadata, metadata_path, compress=3)
+        
+        print(f"\n💾 Model saved successfully to '{model_dir}/' directory")
+        print(f"   - Model: fraud_model.pkl")
+        print(f"   - Scaler: scaler.pkl")
+        print(f"   - Encoders: label_encoders.pkl")
+        print(f"   - Features: feature_names.pkl")
+        print(f"   - Metadata: model_metadata.pkl")
+    
+    def load_model_from_disk(self, model_dir='models'):
+        """Load pre-trained model, scaler, and encoders from disk"""
+        try:
+            # Load model
+            model_path = os.path.join(model_dir, 'fraud_model.pkl')
+            self.model = joblib.load(model_path)
+            
+            # Load scaler
+            scaler_path = os.path.join(model_dir, 'scaler.pkl')
+            self.scaler = joblib.load(scaler_path)
+            
+            # Load label encoders
+            encoders_path = os.path.join(model_dir, 'label_encoders.pkl')
+            self.label_encoders = joblib.load(encoders_path)
+            
+            # Load feature names
+            features_path = os.path.join(model_dir, 'feature_names.pkl')
+            self.feature_names = joblib.load(features_path)
+            
+            # Load metadata
+            metadata_path = os.path.join(model_dir, 'model_metadata.pkl')
+            metadata = joblib.load(metadata_path)
+            self.model_metrics = metadata.get('model_metrics', {})
+            
+            print(f"\n✅ Model loaded successfully from '{model_dir}/' directory")
+            print(f"   - Trained on: {metadata.get('timestamp', 'Unknown')}")
+            print(f"   - Features: {metadata.get('feature_count', len(self.feature_names))}")
+            if self.model_metrics:
+                print(f"   - Performance metrics available")
+            return True
+            
+        except FileNotFoundError as e:
+            print(f"\n⚠ No saved model found in '{model_dir}/' directory")
+            print("   Train a new model using train_compliance_model()")
+            return False
+        except Exception as e:
+            print(f"\n❌ Error loading model: {str(e)}")
+            return False
+    
+    def model_exists(self, model_dir='models'):
+        """Check if a trained model exists on disk"""
+        model_path = os.path.join(model_dir, 'fraud_model.pkl')
+        return os.path.exists(model_path)
     
     def predict_risk(self, transaction_data):
         """Predict compliance risk for a new transaction"""

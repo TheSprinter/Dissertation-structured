@@ -83,7 +83,12 @@ class AMLComplianceSystem:
         
         # Step 3: Machine Learning Model Training
         print("\n🤖 Step 3: ML Model Training...")
-        model = self.ml_predictor.train_compliance_model()
+        # Try to load existing model, otherwise train new one
+        if not self.ml_predictor.load_model_from_disk():
+            model = self.ml_predictor.train_compliance_model()
+        else:
+            model = self.ml_predictor.model
+            print("   Using pre-trained model from disk")
         
         # Step 4: Comprehensive Visualization
         print("\n📊 Step 4: Generating Visualizations...")
@@ -114,6 +119,28 @@ class AMLComplianceSystem:
             raise ValueError("ML model not trained. Please run run_complete_analysis() first.")
         
         return self.ml_predictor.predict_risk(transaction_data)
+    
+    def train_new_model(self, save=True):
+        """Force training of a new ML model"""
+        if self.ml_predictor is None:
+            raise ValueError("ML predictor not initialized. Please run load_data() first.")
+        
+        print("\n🔄 Training new model...")
+        return self.ml_predictor.train_compliance_model(save_model=save)
+    
+    def load_saved_model(self, model_dir='models'):
+        """Load a previously saved model"""
+        if self.ml_predictor is None:
+            raise ValueError("ML predictor not initialized. Please run load_data() first.")
+        
+        return self.ml_predictor.load_model_from_disk(model_dir)
+    
+    def save_current_model(self, model_dir='models'):
+        """Save the current trained model to disk"""
+        if self.ml_predictor is None or self.ml_predictor.model is None:
+            raise ValueError("No model to save. Train a model first.")
+        
+        self.ml_predictor.save_model_to_disk(model_dir)
     
     def get_customer_risk_profile(self, account_id):
         """Get detailed risk profile for specific customer"""
