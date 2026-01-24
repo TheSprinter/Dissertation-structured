@@ -1,5 +1,5 @@
 """
-Usage Examples for AML Compliance System
+"""Usage Examples for Fraud Management System
 =========================================
 
 This file contains practical examples of how to use the system.
@@ -374,7 +374,7 @@ def example_10_complete_workflow():
 
 if __name__ == "__main__":
     print("="*60)
-    print("AML COMPLIANCE SYSTEM - USAGE EXAMPLES")
+    print("FRAUD MANAGEMENT SYSTEM - USAGE EXAMPLES")
     print("="*60)
     
     # Uncomment the example you want to run:

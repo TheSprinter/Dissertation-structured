@@ -1,5 +1,5 @@
 """
-Setup Script for AML Compliance System
+Setup Script for Fraud Management System
 =======================================
 
 Quick setup and verification script.
@@ -113,7 +113,7 @@ def display_next_steps():
 def main():
     """Main setup function"""
     print("="*60)
-    print("AML COMPLIANCE SYSTEM - SETUP")
+    print("FRAUD MANAGEMENT SYSTEM - SETUP")
     print("="*60)
     
     # Create necessary directories

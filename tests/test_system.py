@@ -1,5 +1,5 @@
 """
-Unit Tests for AML Compliance System
+Unit Tests for Fraud Management System
 =====================================
 
 Basic tests for the system modules.

@@ -1,6 +1,15 @@
 # Fraud Management System - Streamlit Web Application
 
-## 🚀 Quick Start
+## �️ Technologies Used
+
+- **Streamlit** (v1.30.0+) - Interactive web application framework
+- **Python** (v3.8+) - Runtime environment
+- **pandas** (v2.0.0+) - Data manipulation and analysis
+- **scikit-learn** (v1.3.0+) - Machine learning models
+- **matplotlib** & **seaborn** - Data visualization
+- **Docker** - Containerization for deployment
+
+## �🚀 Quick Start
 
 ### Option 1: Using the Start Script (Easiest)
 

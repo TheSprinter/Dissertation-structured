@@ -21,7 +21,34 @@ A comprehensive fraud detection and management system using AI/ML techniques for
 - **Visualization**: Interactive dashboards and comprehensive reports
 - **Real-time Prediction**: Risk assessment for new transactions
 
-## 📁 Project Structure
+## �️ Technologies Used
+
+### Data Processing & Analysis
+- **pandas** (v2.0.0+) - Data manipulation and analysis
+- **numpy** (v1.24.0+) - Numerical computing
+- **python-dateutil** (v2.8.0+) - Date/time utilities
+
+### Machine Learning
+- **scikit-learn** (v1.3.0+) - Machine learning algorithms (Random Forest, Isolation Forest, etc.)
+- **joblib** (v1.3.0+) - Model serialization and persistence
+
+### Visualization
+- **matplotlib** (v3.7.0+) - Static plotting library
+- **seaborn** (v0.12.0+) - Statistical data visualization
+- **Pillow** (v10.0.0+) - Image processing
+
+### Web Framework
+- **Streamlit** (v1.30.0+) - Interactive web application framework
+
+### Optional Deep Learning (commented out)
+- **TensorFlow** (v2.13.0+) - Deep learning framework
+- **Keras** (v2.13.0+) - Neural network API
+
+### Deployment
+- **Docker** - Containerization
+- **Python** (v3.8+) - Runtime environment
+
+## �📁 Project Structure
 
 ```
 aml_compliance_system/

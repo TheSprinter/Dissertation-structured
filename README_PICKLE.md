@@ -4,6 +4,13 @@
 
 This guide explains how to use the model persistence feature in the Fraud Management System.
 
+## 🛠️ Technologies Used for Model Persistence
+
+- **joblib** (v1.3.0+) - Model serialization and persistence (recommended over pickle)
+- **Python pickle** - Built-in object serialization
+- **scikit-learn** (v1.3.0+) - Supports model persistence via joblib
+- **Python** (v3.8+) - Runtime environment
+
 ---
 
 ## 🎯 What is Model Persistence?

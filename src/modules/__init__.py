@@ -1,8 +1,8 @@
 """
-AML Compliance System Modules
+Fraud Management System Modules
 ==============================
 
-This package contains all the core modules for the AML Compliance System.
+This package contains all the core modules for the Fraud Management System.
 """
 
 from .data_manager import DataManager

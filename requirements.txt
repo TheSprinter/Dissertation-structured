@@ -1,4 +1,4 @@
-# Requirements for AML Compliance System
+# Requirements for Fraud Management System
 
 # Core Data Science Libraries
 pandas>=2.0.0

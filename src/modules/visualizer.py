@@ -27,7 +27,7 @@ class AMLVisualizer:
         
         # Set up the plotting area
         fig, axes = plt.subplots(2, 3, figsize=(18, 12))
-        fig.suptitle('AML Compliance System - Comprehensive Dashboard', fontsize=16, fontweight='bold')
+        fig.suptitle('Fraud Management System - Comprehensive Dashboard', fontsize=16, fontweight='bold')
         
         # 1. Transaction Volume Distribution
         self._plot_transaction_distribution(axes[0, 0])
@@ -221,7 +221,7 @@ class AMLVisualizer:
     def generate_compliance_report(self, customer_profiles=None, anomalies=None, ml_metrics=None):
         """Generate comprehensive compliance report"""
         print("\n" + "="*80)
-        print("COMPREHENSIVE AML COMPLIANCE REPORT")
+        print("COMPREHENSIVE FRAUD MANAGEMENT REPORT")
         print("="*80)
         
         # Basic statistics

@@ -2,6 +2,12 @@
 
 This directory stores trained ML models and related files.
 
+## 🛠️ Technologies Used for Model Storage
+
+- **joblib** (v1.3.0+) - Model serialization format for efficient storage and loading
+- **scikit-learn** (v1.3.0+) - Generates compatible model files
+- **Python pickle** - Binary serialization protocol for Python objects
+
 ## Contents (after training):
 - fraud_model.pkl - Trained machine learning model
 - scaler.pkl - Feature scaler

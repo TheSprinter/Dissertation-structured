@@ -2,11 +2,11 @@
 Configuration Module
 ====================
 
-Configuration settings for the AML Compliance System.
+Configuration settings for the Fraud Management System.
 """
 
 # System Settings
-SYSTEM_NAME = "AML Compliance AI System"
+SYSTEM_NAME = "Fraud Management AI System"
 VERSION = "1.0.0"
 
 # Data Settings
