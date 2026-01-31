@@ -70,8 +70,10 @@ class MLPredictor:
         features = self._engineer_features(ml_df)
         
         # Encode categorical variables
-        categorical_features = ['Payment_type', 'Sender_bank_location', 'Receiver_bank_location',
-                               'Payment_currency', 'Received_currency']
+        categorical_features = ['merchant_category', 'payment_method', 'transaction_type',
+                               'location', 'device_type', 'ip_country', 'card_type',
+                               'billing_country', 'shipping_country', 'transaction_currency',
+                               'billing_currency', 'merchant_reputation']
         
         for feature in categorical_features:
             if feature in features.columns:
@@ -82,15 +84,15 @@ class MLPredictor:
         
         # Keep only numeric features (exclude any string/object columns)
         numeric_features = features.select_dtypes(include=[np.number]).copy()
-        if 'Is_laundering' not in numeric_features.columns and 'Is_laundering' in features.columns:
-            numeric_features['Is_laundering'] = features['Is_laundering']
+        if 'is_fraud' not in numeric_features.columns and 'is_fraud' in features.columns:
+            numeric_features['is_fraud'] = features['is_fraud']
 
         # Store feature names (exclude target)
-        self.feature_names = [col for col in numeric_features.columns if col != 'Is_laundering']
+        self.feature_names = [col for col in numeric_features.columns if col != 'is_fraud']
         
         # Prepare X and y
         X = numeric_features[self.feature_names]
-        y = numeric_features['Is_laundering'] if 'Is_laundering' in numeric_features.columns else features['Is_laundering']
+        y = numeric_features['is_fraud'] if 'is_fraud' in numeric_features.columns else features['is_fraud']
         
         # Scale features
         X_scaled = self.scaler.fit_transform(X)
@@ -102,22 +104,27 @@ class MLPredictor:
     def _engineer_features(self, df):
         """Engineer additional features for better prediction"""
         # Time-based features
-        df['hour'] = pd.to_datetime(df['Time'], format='%H:%M:%S').dt.hour
-        df['is_weekend'] = pd.to_datetime(df['Date']).dt.weekday >= 5
-        df['is_night_transaction'] = ((df['hour'] >= 22) | (df['hour'] <= 5)).astype(int)
+        df['transaction_hour'] = pd.to_datetime(df['transaction_time'], format='%H:%M:%S').dt.hour if 'transaction_time' in df.columns else df.get('transaction_hour', 0)
+        df['is_night_transaction'] = ((df['transaction_hour'] >= 22) | (df['transaction_hour'] <= 5)).astype(int)
         
         # Amount-based features
-        df['log_amount'] = np.log1p(df['Amount'])
-        df['is_round_amount'] = (df['Amount'] % 1000 == 0).astype(int)
-        df['is_structuring_amount'] = ((df['Amount'] >= 9000) & (df['Amount'] < 10000)).astype(int)
+        df['log_amount'] = np.log1p(df['transaction_amount'])
+        df['is_round_amount'] = (df['transaction_amount'] % 1000 == 0).astype(int)
+        df['is_structuring_amount'] = ((df['transaction_amount'] >= 9000) & (df['transaction_amount'] < 10000)).astype(int)
         
         # Geographic features
-        df['is_cross_border'] = (df['Sender_bank_location'] != df['Receiver_bank_location']).astype(int)
-        df['is_currency_mismatch'] = (df['Payment_currency'] != df['Received_currency']).astype(int)
+        df['is_cross_border'] = (df['billing_country'] != df['shipping_country']).astype(int)
+        df['currency_mismatch'] = (df['transaction_currency'] != df['billing_currency']).astype(int)
         
-        # Account pattern features
-        df['sender_frequency'] = df.groupby('Sender_account')['Sender_account'].transform('count')
-        df['receiver_frequency'] = df.groupby('Receiver_account')['Receiver_account'].transform('count')
+        # Customer behavior features
+        df['is_high_velocity'] = (df['velocity_score'] > 70).astype(int) if 'velocity_score' in df.columns else 0
+        df['has_failed_logins'] = (df['failed_login_attempts'] > 0).astype(int)
+        
+        # Risk indicator features
+        df['unverified_email'] = (df['email_verified'] == 0).astype(int)
+        df['unverified_phone'] = (df['phone_verified'] == 0).astype(int)
+        df['unverified_address'] = (df['shipping_address_verified'] == 0).astype(int)
+        df['verification_gap'] = df['unverified_email'] + df['unverified_phone'] + df['unverified_address']
         
         return df
     
@@ -298,12 +305,48 @@ class MLPredictor:
         else:
             transaction_df = transaction_data.copy()
         
+        # Add default values for missing columns
+        default_columns = {
+            'customer_age': 35,
+            'account_age_days': 365,
+            'previous_transactions_24h': 2,
+            'previous_transactions_7d': 10,
+            'previous_transactions_30d': 50,
+            'avg_transaction_amount': 500,
+            'is_weekend': 0,
+            'is_holiday': 0,
+            'distance_from_home_km': 10,
+            'distance_from_last_transaction_km': 50,
+            'failed_login_attempts': 0,
+            'session_duration_seconds': 600,
+            'num_page_views': 5,
+            'time_since_last_transaction_minutes': 1440,
+            'same_merchant_last_30d': 1,
+            'num_unique_merchants_30d': 5,
+            'num_locations_7d': 1,
+            'currency_mismatch': 0,
+            'velocity_score': 50,
+            'email_verified': 1,
+            'phone_verified': 1,
+            'shipping_address_verified': 1,
+            'card_present': 0,
+            'cvv_match': 1,
+            'merchant_reputation': 'High',
+            'is_fraud': 0
+        }
+        
+        for col, default_val in default_columns.items():
+            if col not in transaction_df.columns:
+                transaction_df[col] = default_val
+        
         # Engineer features
         features = self._engineer_features(transaction_df)
         
         # Encode categorical variables
-        categorical_features = ['Payment_type', 'Sender_bank_location', 'Receiver_bank_location',
-                               'Payment_currency', 'Received_currency']
+        categorical_features = ['merchant_category', 'payment_method', 'transaction_type',
+                               'location', 'device_type', 'ip_country', 'card_type',
+                               'billing_country', 'shipping_country', 'transaction_currency',
+                               'billing_currency', 'merchant_reputation']
         
         for feature in categorical_features:
             if feature in features.columns and feature in self.label_encoders:
@@ -315,8 +358,17 @@ class MLPredictor:
                     features[f'{feature}_encoded'] = 0
                     features = features.drop(feature, axis=1)
         
-        # Select and scale features
-        X = features[self.feature_names]
+        # Select and scale features - only use features that exist in both
+        available_features = [f for f in self.feature_names if f in features.columns]
+        X = features[available_features]
+        
+        # If we're missing some features, fill with zeros
+        if len(available_features) < len(self.feature_names):
+            missing_features = set(self.feature_names) - set(available_features)
+            for missing_feat in missing_features:
+                X[missing_feat] = 0
+            X = X[self.feature_names]  # Reorder to match training order
+        
         X_scaled = self.scaler.transform(X)
         
         # Make prediction

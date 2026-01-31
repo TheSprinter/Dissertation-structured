@@ -59,7 +59,7 @@ class AMLVisualizer:
     
     def _plot_transaction_distribution(self, ax):
         """Plot transaction amount distribution"""
-        ax.hist(self.df['Amount'], bins=50, alpha=0.7, color='skyblue', edgecolor='black')
+        ax.hist(self.df['transaction_amount'], bins=50, alpha=0.7, color='skyblue', edgecolor='black')
         ax.set_title('Transaction Amount Distribution')
         ax.set_xlabel('Transaction Amount')
         ax.set_ylabel('Frequency')
@@ -75,12 +75,12 @@ class AMLVisualizer:
     def _plot_geographic_analysis(self, ax):
         """Plot geographic transaction patterns"""
         location_data = pd.concat([
-            self.df['Sender_bank_location'],
-            self.df['Receiver_bank_location']
+            self.df['billing_country'],
+            self.df['shipping_country']
         ]).value_counts().head(10)
         
         location_data.plot(kind='bar', ax=ax, color='coral')
-        ax.set_title('Top 10 Bank Locations')
+        ax.set_title('Top 10 Transaction Locations')
         ax.set_xlabel('Location')
         ax.set_ylabel('Transaction Count')
         ax.tick_params(axis='x', rotation=45)
@@ -88,7 +88,7 @@ class AMLVisualizer:
     def _plot_temporal_patterns(self, ax):
         """Plot temporal transaction patterns"""
         # Extract hour from time
-        hours = pd.to_datetime(self.df['Time'], format='%H:%M:%S').dt.hour
+        hours = pd.to_datetime(self.df['transaction_time'], format='%H:%M:%S').dt.hour
         hour_counts = hours.value_counts().sort_index()
         
         ax.plot(hour_counts.index, hour_counts.values, marker='o', linewidth=2, markersize=4)
@@ -109,13 +109,13 @@ class AMLVisualizer:
     def _plot_compliance_overview(self, ax):
         """Plot overall compliance metrics"""
         compliance_data = {
-            'Legitimate': len(self.df[self.df['Is_laundering'] == 0]),
-            'Suspicious': len(self.df[self.df['Is_laundering'] == 1])
+            'Legitimate': len(self.df[self.df['is_fraud'] == 0]),
+            'Fraudulent': len(self.df[self.df['is_fraud'] == 1])
         }
         
         ax.bar(compliance_data.keys(), compliance_data.values(), 
                color=['green', 'red'], alpha=0.7)
-        ax.set_title('Transaction Compliance Overview')
+        ax.set_title('Transaction Fraud Overview')
         ax.set_ylabel('Transaction Count')
         
         # Add percentage labels
@@ -127,29 +127,29 @@ class AMLVisualizer:
     def _create_detailed_analysis_plots(self, customer_profiles, anomalies):
         """Create additional detailed analysis plots"""
         
-        # Plot 1: Laundering Type Distribution
+        # Plot 1: Merchant Category Distribution
         plt.figure(figsize=(12, 4))
         
         plt.subplot(1, 3, 1)
-        laundering_types = self.df[self.df['Is_laundering'] == 1]['Laundering_type'].value_counts()
-        plt.pie(laundering_types.values, labels=laundering_types.index, autopct='%1.1f%%')
-        plt.title('Laundering Type Distribution')
+        fraud_merchants = self.df[self.df['is_fraud'] == 1]['merchant_category'].value_counts().head(8)
+        plt.pie(fraud_merchants.values, labels=fraud_merchants.index, autopct='%1.1f%%')
+        plt.title('Fraudulent Transactions by Merchant Category')
         
-        # Plot 2: Payment Type vs Risk
+        # Plot 2: Payment Method vs Risk
         plt.subplot(1, 3, 2)
-        payment_risk = self.df.groupby('Payment_type')['Is_laundering'].mean().sort_values(ascending=False)
+        payment_risk = self.df.groupby('payment_method')['is_fraud'].mean().sort_values(ascending=False)
         payment_risk.plot(kind='bar', color='orange', alpha=0.7)
-        plt.title('Risk by Payment Type')
-        plt.ylabel('Laundering Rate')
+        plt.title('Risk by Payment Method')
+        plt.ylabel('Fraud Rate')
         plt.xticks(rotation=45)
         
         # Plot 3: Cross-border vs Domestic Risk
         plt.subplot(1, 3, 3)
-        self.df['is_cross_border'] = (self.df['Sender_bank_location'] != self.df['Receiver_bank_location'])
-        cross_border_risk = self.df.groupby('is_cross_border')['Is_laundering'].mean()
+        self.df['is_cross_border'] = (self.df['billing_country'] != self.df['shipping_country'])
+        cross_border_risk = self.df.groupby('is_cross_border')['is_fraud'].mean()
         cross_border_risk.plot(kind='bar', color='purple', alpha=0.7)
         plt.title('Cross-border vs Domestic Risk')
-        plt.ylabel('Laundering Rate')
+        plt.ylabel('Fraud Rate')
         plt.xticks([0, 1], ['Domestic', 'Cross-border'], rotation=0)
         
         plt.tight_layout()
@@ -180,11 +180,11 @@ class AMLVisualizer:
         plt.ylabel('Risk Score')
         plt.xscale('log')
         
-        # Suspicious transaction ratio
+        # Fraudulent transaction ratio
         plt.subplot(2, 3, 3)
-        profiles['susp_ratio'] = profiles['suspicious_transactions'] / profiles['total_transactions']
-        plt.hist(profiles['susp_ratio'], bins=20, alpha=0.7, color='orange', edgecolor='black')
-        plt.title('Suspicious Transaction Ratio')
+        profiles['fraud_ratio'] = profiles['fraudulent_transactions'] / profiles['total_transactions']
+        plt.hist(profiles['fraud_ratio'], bins=20, alpha=0.7, color='orange', edgecolor='black')
+        plt.title('Fraudulent Transaction Ratio')
         plt.xlabel('Ratio')
         plt.ylabel('Customer Count')
         
@@ -226,14 +226,14 @@ class AMLVisualizer:
         
         # Basic statistics
         total_transactions = len(self.df)
-        suspicious_transactions = self.df['Is_laundering'].sum()
-        suspicion_rate = suspicious_transactions / total_transactions * 100
+        fraudulent_transactions = self.df['is_fraud'].sum()
+        fraud_rate = fraudulent_transactions / total_transactions * 100
         
         print(f"\n📊 TRANSACTION OVERVIEW:")
         print(f"   Total Transactions Analyzed: {total_transactions:,}")
-        print(f"   Suspicious Transactions: {suspicious_transactions:,}")
-        print(f"   Overall Suspicion Rate: {suspicion_rate:.2f}%")
-        print(f"   Date Range: {self.df['Date'].min()} to {self.df['Date'].max()}")
+        print(f"   Fraudulent Transactions: {fraudulent_transactions:,}")
+        print(f"   Overall Fraud Rate: {fraud_rate:.2f}%")
+        print(f"   Date Range: {self.df['transaction_date'].min()} to {self.df['transaction_date'].max()}")
         
         # Customer risk summary
         if customer_profiles is not None:

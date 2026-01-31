@@ -127,6 +127,7 @@ def main():
         "🔍 Transaction Risk Prediction",
         "👥 Customer Risk Profiles",
         "📈 Dashboard & Reports",
+        "💾 Model Management",
         "ℹ️ About"
     ])
     
@@ -262,12 +263,11 @@ def main():
                     with col1:
                         st.metric("Total Transactions", f"{len(df):,}")
                     with col2:
-                        st.metric("Unique Accounts", 
-                                f"{len(set(df['Sender_account']) | set(df['Receiver_account'])):,}")
+                        st.metric("Unique Customers", f"{df['customer_id'].nunique():,}")
                     with col3:
-                        st.metric("Total Volume", f"${df['Amount'].sum():,.2f}")
+                        st.metric("Total Volume", f"${df['transaction_amount'].sum():,.2f}")
                     with col4:
-                        st.metric("Avg Transaction", f"${df['Amount'].mean():,.2f}")
+                        st.metric("Avg Transaction", f"${df['transaction_amount'].mean():,.2f}")
                     
                 except Exception as e:
                     st.error(f"Error loading data: {str(e)}")
@@ -324,34 +324,42 @@ def main():
             col1, col2 = st.columns(2)
             
             with col1:
-                time = st.text_input("Time (HH:MM:SS)", "14:30:00")
-                date = st.date_input("Date")
-                sender_account = st.text_input("Sender Account", "ACC0001")
-                receiver_account = st.text_input("Receiver Account", "ACC0002")
-                amount = st.number_input("Amount ($)", min_value=0.0, value=5000.0, step=100.0)
+                transaction_time = st.text_input("Transaction Time (HH:MM:SS)", "14:30:00")
+                transaction_date = st.date_input("Transaction Date")
+                customer_id = st.text_input("Customer ID", "CUST00001")
+                transaction_amount = st.number_input("Transaction Amount ($)", min_value=0.0, value=500.0, step=50.0)
+                merchant_id = st.text_input("Merchant ID", "MERCH0001")
+                merchant_category = st.selectbox("Merchant Category", 
+                    ["Electronics", "Grocery", "Restaurant", "Travel", "Healthcare",
+                     "Entertainment", "Utilities", "Fashion", "Home", "Sports"])
             
             with col2:
-                payment_currency = st.selectbox("Payment Currency", 
-                    ["USD", "EUR", "GBP", "AED", "CHF", "JPY", "CNY"])
-                received_currency = st.selectbox("Received Currency", 
-                    ["USD", "EUR", "GBP", "AED", "CHF", "JPY", "CNY"])
-                sender_location = st.text_input("Sender Bank Location", "US-NY")
-                receiver_location = st.text_input("Receiver Bank Location", "AE-DXB")
-                payment_type = st.selectbox("Payment Type", 
-                    ["Wire", "ACH", "Check", "Card", "Cash", "Crypto"])
+                payment_method = st.selectbox("Payment Method", 
+                    ["Credit Card", "Debit Card", "Digital Wallet", "Bank Transfer", "Cryptocurrency"])
+                transaction_type = st.selectbox("Transaction Type",
+                    ["Purchase", "Cash Withdrawal", "Transfer", "Payment"])
+                device_type = st.selectbox("Device Type",
+                    ["Mobile", "Desktop", "Tablet"])
+                location = st.selectbox("Location", 
+                    ["US", "UK", "IN", "AE", "CN", "SG", "JP", "DE", "FR", "AU"])
+                card_type = st.selectbox("Card Type",
+                    ["Visa", "Mastercard", "American Express", "Discover"])
+                cvv_match = st.selectbox("CVV Match", [0, 1], help="0=No match, 1=Match")
             
             if st.button("🎯 Predict Risk", key="predict_btn"):
                 transaction = {
-                    'Time': time,
-                    'Date': str(date),
-                    'Sender_account': sender_account,
-                    'Receiver_account': receiver_account,
-                    'Amount': amount,
-                    'Payment_currency': payment_currency,
-                    'Received_currency': received_currency,
-                    'Sender_bank_location': sender_location,
-                    'Receiver_bank_location': receiver_location,
-                    'Payment_type': payment_type
+                    'transaction_time': transaction_time,
+                    'transaction_date': str(transaction_date),
+                    'customer_id': customer_id,
+                    'transaction_amount': transaction_amount,
+                    'merchant_id': merchant_id,
+                    'merchant_category': merchant_category,
+                    'payment_method': payment_method,
+                    'transaction_type': transaction_type,
+                    'device_type': device_type,
+                    'location': location,
+                    'card_type': card_type,
+                    'cvv_match': cvv_match
                 }
                 
                 try:
@@ -416,7 +424,7 @@ def main():
                 with col2:
                     sort_by = st.selectbox(
                         "Sort by",
-                        ['risk_score', 'transaction_count', 'total_volume', 'account']
+                        ['risk_score', 'total_transactions', 'total_volume', 'customer_id']
                     )
                 
                 with col3:
@@ -587,10 +595,36 @@ def main():
         
         ### 🔧 Technology Stack
         
-        - **Frontend**: Streamlit
-        - **ML/AI**: Scikit-learn, Pandas, NumPy
-        - **Visualization**: Matplotlib, Seaborn
-        - **Data Processing**: Python 3.8+
+        **Model Persistence & Serialization:**
+        - **Joblib** (v1.3.0+) - Optimized model serialization for scikit-learn, better compression, recommended for production
+        - **Python pickle** - Built-in object serialization (fallback), standard Python protocol
+        
+        **Frontend & Web Framework:**
+        - **Streamlit** (v1.30.0+) - Interactive web application framework with model management UI
+        
+        **Data Processing & Analysis:**
+        - **Pandas** (v2.0.0+) - Data manipulation and analysis
+        - **NumPy** (v1.24.0+) - Numerical computing
+        - **Python-dateutil** (v2.8.0+) - Date/time utilities
+        
+        **Machine Learning & AI:**
+        - **Scikit-learn** (v1.3.0+) - ML algorithms (Random Forest, Isolation Forest, GradientBoosting, etc.)
+        
+        **Data Visualization:**
+        - **Matplotlib** (v3.7.0+) - Static plotting library
+        - **Seaborn** (v0.12.0+) - Statistical data visualization
+        - **Pillow** (v10.0.0+) - Image processing
+        
+        **Runtime & Deployment:**
+        - **Python** (v3.8+) - Programming language
+        - **Docker** - Containerization with persistent model volumes
+        
+        **Optional Deep Learning (Available):**
+        - **TensorFlow** (v2.13.0+) - Deep learning framework with SavedModel format
+        - **Keras** (v2.13.0+) - Neural network API with h5 format support
+        
+        **Performance:**
+        - Save Time: < 2 seconds | Load Time: < 1 second | File Size: 5-50 MB
         
         ### 📊 Modules
         
@@ -608,11 +642,7 @@ def main():
         4. Use **Transaction Risk Prediction** to assess new transactions
         5. Check **Customer Risk Profiles** for detailed customer analysis
         
-        ### 📞 Support
-        
-        For questions or support, please refer to the documentation or contact the development team.
-        
-        ### 📄 Academic Project
+        ###  Academic Project
         
         This project is submitted as part of the **Final Semester Dissertation Project** for the **Master of Technology (MTech) in Artificial Intelligence and Machine Learning (AIML)** degree at **Birla Institute of Technology and Science (BITS), Pilani**.
         

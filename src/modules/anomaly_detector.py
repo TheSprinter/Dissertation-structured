@@ -57,28 +57,31 @@ class AnomalyDetector:
         feature_df = self.df.copy()
         
         # Convert time to minutes since midnight
-        feature_df['time_minutes'] = pd.to_datetime(feature_df['Time'], format='%H:%M:%S').dt.hour * 60 + \
-                                    pd.to_datetime(feature_df['Time'], format='%H:%M:%S').dt.minute
+        feature_df['time_minutes'] = pd.to_datetime(feature_df['transaction_time'], format='%H:%M:%S').dt.hour * 60 + \
+                                    pd.to_datetime(feature_df['transaction_time'], format='%H:%M:%S').dt.minute
         
         # Encode categorical variables
+        le_category = LabelEncoder()
         le_payment = LabelEncoder()
-        le_sender_loc = LabelEncoder()
-        le_receiver_loc = LabelEncoder()
+        le_location = LabelEncoder()
+        le_device = LabelEncoder()
         
-        feature_df['payment_type_encoded'] = le_payment.fit_transform(feature_df['Payment_type'])
-        feature_df['sender_loc_encoded'] = le_sender_loc.fit_transform(feature_df['Sender_bank_location'])
-        feature_df['receiver_loc_encoded'] = le_receiver_loc.fit_transform(feature_df['Receiver_bank_location'])
+        feature_df['merchant_category_encoded'] = le_category.fit_transform(feature_df['merchant_category'])
+        feature_df['payment_method_encoded'] = le_payment.fit_transform(feature_df['payment_method'])
+        feature_df['location_encoded'] = le_location.fit_transform(feature_df['location'])
+        feature_df['device_type_encoded'] = le_device.fit_transform(feature_df['device_type'])
         
         # Cross-border indicator
-        feature_df['is_cross_border'] = (feature_df['Sender_bank_location'] != feature_df['Receiver_bank_location']).astype(int)
+        feature_df['is_cross_border'] = (feature_df['billing_country'] != feature_df['shipping_country']).astype(int)
         
         # Currency mismatch
-        feature_df['currency_mismatch'] = (feature_df['Payment_currency'] != feature_df['Received_currency']).astype(int)
+        feature_df['currency_mismatch'] = (feature_df['transaction_currency'] != feature_df['billing_currency']).astype(int)
         
         # Select numerical features
-        features = feature_df[['Amount', 'time_minutes', 'payment_type_encoded', 
-                              'sender_loc_encoded', 'receiver_loc_encoded', 
-                              'is_cross_border', 'currency_mismatch']]
+        features = feature_df[['transaction_amount', 'time_minutes', 'merchant_category_encoded', 
+                              'payment_method_encoded', 'location_encoded', 'device_type_encoded',
+                              'is_cross_border', 'currency_mismatch', 'failed_login_attempts',
+                              'velocity_score', 'distance_from_last_transaction_km']]
         
         return features
     
@@ -110,14 +113,13 @@ class AnomalyDetector:
         results = self.df.copy()
         
         # Z-score based anomaly detection for amount
-        amount_zscore = np.abs((self.df['Amount'] - self.df['Amount'].mean()) / self.df['Amount'].std())
+        amount_zscore = np.abs((self.df['transaction_amount'] - self.df['transaction_amount'].mean()) / self.df['transaction_amount'].std())
         amount_anomalies = amount_zscore > 3
         
         # Time-based anomalies (unusual hours)
-        time_minutes = pd.to_datetime(self.df['Time'], format='%H:%M:%S').dt.hour * 60 + \
-                      pd.to_datetime(self.df['Time'], format='%H:%M:%S').dt.minute
+        transaction_hours = pd.to_datetime(self.df['transaction_time'], format='%H:%M:%S').dt.hour
         # Anomalies for very early (0-5 AM) or very late (10 PM - midnight) transactions
-        time_anomalies = (time_minutes < 300) | (time_minutes > 1320)
+        time_anomalies = (transaction_hours < 5) | (transaction_hours > 22)
         
         # Combine statistical anomalies
         statistical_anomalies = amount_anomalies | time_anomalies
@@ -162,7 +164,7 @@ class AnomalyDetector:
         
         # Show top anomalies
         top_anomalies = self.anomalies.nlargest(5, 'anomaly_risk_score')[
-            ['Sender_account', 'Receiver_account', 'Amount', 'anomaly_risk_score', 'Is_laundering']
+            ['customer_id', 'transaction_amount', 'merchant_id', 'anomaly_risk_score', 'is_fraud']
         ]
         print(f"\n🚨 Top 5 Highest Risk Anomalies:")
         print(top_anomalies.to_string(index=False))

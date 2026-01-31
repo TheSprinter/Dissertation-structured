@@ -142,17 +142,17 @@ class AMLComplianceSystem:
         
         self.ml_predictor.save_model_to_disk(model_dir)
     
-    def get_customer_risk_profile(self, account_id):
+    def get_customer_risk_profile(self, customer_id):
         """Get detailed risk profile for specific customer"""
         if self.customer_profiler is None or self.customer_profiler.profiles is None:
             raise ValueError("Customer profiling not completed. Please run run_complete_analysis() first.")
         
         profile = self.customer_profiler.profiles[
-            self.customer_profiler.profiles['account'] == account_id
+            self.customer_profiler.profiles['customer_id'] == customer_id
         ]
         
         if len(profile) == 0:
-            return f"No profile found for account: {account_id}"
+            return f"No profile found for customer: {customer_id}"
         
         return profile.iloc[0].to_dict()
     
@@ -171,14 +171,15 @@ class AMLComplianceSystem:
         if self.df is None:
             raise ValueError("No data loaded for analysis")
         
+        fraud_count = self.df['is_fraud'].sum() if 'is_fraud' in self.df.columns else 0
         summary = {
             'total_transactions': len(self.df),
-            'suspicious_transactions': self.df['Is_laundering'].sum(),
-            'suspicion_rate': self.df['Is_laundering'].mean() * 100,
-            'date_range': f"{self.df['Date'].min()} to {self.df['Date'].max()}",
-            'unique_accounts': len(set(self.df['Sender_account']) | set(self.df['Receiver_account'])),
-            'total_volume': self.df['Amount'].sum(),
-            'avg_transaction_amount': self.df['Amount'].mean()
+            'suspicious_transactions': fraud_count,
+            'suspicion_rate': fraud_count / len(self.df) * 100 if len(self.df) > 0 else 0,
+            'date_range': f"{self.df['transaction_date'].min()} to {self.df['transaction_date'].max()}",
+            'unique_accounts': self.df['customer_id'].nunique(),
+            'total_volume': self.df['transaction_amount'].sum(),
+            'avg_transaction_amount': self.df['transaction_amount'].mean()
         }
         
         if hasattr(self, 'customer_profiler') and self.customer_profiler.profiles is not None:

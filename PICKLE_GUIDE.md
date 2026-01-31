@@ -1,161 +1,149 @@
-# Pickle Integration Guide
+# Pickle Integration - Model Persistence Guide
 
-> **Complete guide to model persistence in the Fraud Management System**
+## Overview
 
-## 📚 Table of Contents
+The Fraud Management System now includes comprehensive pickle/joblib integration for model persistence. This allows you to save trained models and reuse them without retraining.
 
-1. [Introduction](#introduction)
-2. [Quick Setup](#quick-setup)
-3. [How It Works](#how-it-works)
-4. [File Structure](#file-structure)
-5. [API Reference](#api-reference)
-6. [Usage Patterns](#usage-patterns)
-7. [Best Practices](#best-practices)
-8. [Troubleshooting](#troubleshooting)
+## Features
 
----
-
-## Introduction
-
-The Fraud Management System uses **joblib** for model persistence, allowing you to:
-- ✅ Save trained models to disk
-- ✅ Load models instantly (2 seconds vs 5 minutes training)
-- ✅ Deploy pre-trained models to production
-- ✅ Share models across sessions
-
-### Why Joblib?
-
-- **Fast**: 2-3x faster than standard pickle for ML models
-- **Optimized**: Built for scikit-learn and numpy
-- **Compressed**: Reduces file sizes by ~50%
-- **Reliable**: Industry standard for ML model persistence
+✅ **Save Trained Models**: Save ML models with all preprocessing components  
+✅ **Load Pre-trained Models**: Quickly load saved models for predictions  
+✅ **Complete Package**: Saves model, scaler, encoders, features, and metrics  
+✅ **Model Versioning**: Save multiple model versions with custom names  
+✅ **List Models**: View all saved models with metadata  
+✅ **Joblib Support**: Optimized for scikit-learn models (falls back to pickle)
 
 ---
 
-## Quick Setup
+## What Gets Saved?
 
-### Installation
+When you save a model, the following components are persisted:
 
-```bash
-# Install all dependencies (includes joblib)
-pip install -r requirements.txt
-```
-
-### Verify Setup
-
-```bash
-python check_pickle_config.py
-```
-
-You should see:
-```
-🎉 RESULT: Pickle is PROPERLY CONFIGURED!
-```
+- ✅ **Trained ML Model** (RandomForest/GradientBoosting)
+- ✅ **StandardScaler** (feature normalization)
+- ✅ **Label Encoders** (categorical variable encoders)
+- ✅ **Feature Names** (column order and names)
+- ✅ **Model Metrics** (accuracy, precision, recall, F1)
+- ✅ **Timestamp** (when model was saved)
+- ✅ **Metadata** (number of features, model type)
 
 ---
 
-## How It Works
+## Usage
 
-### Automatic Mode (Recommended)
+### 1. Using the Web Application (Streamlit)
 
-The system automatically handles model persistence:
+#### Navigate to "💾 Model Management" page:
 
+**View Saved Models (📋 View Models Tab):**
+- Access all previously saved models in a clean list format
+- See numbered list of available models
+- **Load button** - Quickly select a model for predictions
+- **Info button** - View file details (size, name, timestamp)
+- Shows total count of saved models
+- Helpful tips for new users
+- Display of model components (what gets saved with each model)
+
+**Save Current Model (💾 Save Model Tab):**
+- Train a model via "Data Upload & Analysis" page
+- Go to "Model Management" → "Save Model" tab
+- Enter custom model name or use default `ml_package.pkl`
+- Click "💾 Save Model" button
+- Receive success confirmation with balloons 🎉
+- Model saved with all preprocessing components
+
+**Load Pre-trained Model (📂 Load Model Tab):**
+- Go to "Model Management" → "Load Model" tab
+- Choose default model or custom model path
+- Click "📂 Load Model"
+- Model and all components ready for predictions
+- Use for batch predictions without retraining
+
+**Model Components Saved:**
+- ✓ Trained ML Model (RandomForest/GradientBoosting)
+- ✓ Feature Scaler (StandardScaler)
+- ✓ Label Encoders (for categorical variables)
+- ✓ Feature Names and Metadata
+- ✓ Model Metrics (Accuracy, Precision, Recall, F1)
+- ✓ Training Timestamp
+
+---
+
+### 2. Using Python API
+
+#### Example 1: Train and Save Model
 ```python
-from src.aml_system import AMLComplianceSystem
+from aml_system import AMLComplianceSystem
 
-system = AMLComplianceSystem()
-system.load_data('data.csv')
+# Initialize system
+aml_system = AMLComplianceSystem()
+aml_system.load_data('your_data.csv')
 
-# First run: Trains and saves model
-results = system.run_complete_analysis()
+# Train and automatically save
+results = aml_system.run_complete_analysis(save_model=True)
 
-# Future runs: Loads saved model automatically
-results = system.run_complete_analysis()
+# Model saved to: models/ml_package.pkl
 ```
 
-**What happens:**
-1. First run: Model trained (5 min) → Auto-saved to `models/`
-2. Next runs: Model loaded from disk (2 sec) → Ready instantly!
-
-### Manual Mode (Advanced)
-
-For more control:
-
+#### Example 2: Load Pre-trained Model
 ```python
-from src.aml_system import AMLComplianceSystem
+from aml_system import AMLComplianceSystem
 
-system = AMLComplianceSystem()
-system.load_data('data.csv')
+# Initialize system
+aml_system = AMLComplianceSystem()
+aml_system.load_data('your_data.csv')
 
-# Check if model exists
-if system.ml_predictor.model_exists():
-    # Load existing model
-    system.load_saved_model()
-    print("✅ Model loaded!")
-else:
-    # Train new model
-    system.train_new_model(save=True)
-    print("✅ Model trained and saved!")
+# Load pre-trained model
+aml_system.load_pretrained_model()
 
 # Make predictions
-result = system.predict_compliance_risk(transaction_data)
+prediction = aml_system.predict_compliance_risk({
+    'Amount': 9500,
+    'Payment_currency': 'USD',
+    # ... other features
+})
+```
+
+#### Example 3: Save with Custom Name
+```python
+# Save with version number
+aml_system.save_trained_model('models/fraud_model_v2.pkl')
+```
+
+#### Example 4: List All Models
+```python
+# List all saved models
+models = aml_system.list_available_models()
 ```
 
 ---
 
-## File Structure
+### 3. Using Example Script
 
-### Saved Files
+Run the provided examples:
 
-When you save a model, 5 files are created:
-
-```
-models/
-├── fraud_model.pkl         # The trained ML model (10-50 MB)
-├── scaler.pkl             # Feature scaler (<1 MB)
-├── label_encoders.pkl     # Categorical encoders (<1 MB)
-├── feature_names.pkl      # Feature list (<1 KB)
-└── model_metadata.pkl     # Training info (<100 KB)
+```bash
+python pickle_examples.py
 ```
 
-### File Contents
+Choose from:
+1. Train and save a new model
+2. Load pre-trained model and make predictions
+3. List all saved models
+4. Save model with custom name
+5. Run all examples
 
-#### 1. fraud_model.pkl
-- **Contains**: Trained RandomForest or GradientBoosting classifier
-- **Purpose**: Core prediction model
-- **Size**: 10-50 MB (depends on model complexity)
+---
 
-#### 2. scaler.pkl
-- **Contains**: Fitted StandardScaler
-- **Purpose**: Normalizes features before prediction
-- **Size**: <1 MB
+## File Locations
 
-#### 3. label_encoders.pkl
-- **Contains**: Dictionary of LabelEncoder objects for:
-  - Payment_type
-  - Sender_bank_location
-  - Receiver_bank_location
-  - Payment_currency
-  - Received_currency
-- **Purpose**: Converts categorical features to numeric
-- **Size**: <1 MB
+**Models Directory**: `models/`
+- `ml_package.pkl` - Default complete package
+- `fraud_model.pkl` - Just the model (lightweight)
+- Custom named models (e.g., `fraud_model_v1.pkl`)
 
-#### 4. feature_names.pkl
-- **Contains**: List of feature names (20+ features)
-- **Purpose**: Ensures correct feature ordering during prediction
-- **Size**: <1 KB
-
-#### 5. model_metadata.pkl
-- **Contains**:
-  ```python
-  {
-      'model_metrics': {'accuracy': 0.893, 'precision': 0.650, ...},
-      'timestamp': '20260124_143052',
-      'feature_count': 23
-  }
-  ```
-- **Purpose**: Track model performance and version
-- **Size**: <100 KB
+**Output Directory**: `output/`
+- Analysis results, profiles, reports
 
 ---
 
@@ -163,445 +151,232 @@ models/
 
 ### AMLComplianceSystem Methods
 
-#### `run_complete_analysis(save_results=True)`
-Run complete analysis with automatic model handling.
+#### `run_complete_analysis(save_results=True, save_model=True)`
+Run full analysis and optionally save the trained model.
 
-```python
-system = AMLComplianceSystem()
-system.load_data('data.csv')
-results = system.run_complete_analysis()  # Auto-loads or trains
-```
+**Parameters:**
+- `save_results` (bool): Save analysis outputs to CSV
+- `save_model` (bool): Save trained model to disk
 
-**Behavior:**
-- Checks for saved model
-- Loads if exists (fast)
-- Trains if not found (saves automatically)
+**Returns:** Dictionary with results
 
 ---
 
-#### `train_new_model(save=True)`
-Force train a new model (bypass auto-load).
+#### `load_pretrained_model(model_path=None)`
+Load a pre-trained model from disk.
 
+**Parameters:**
+- `model_path` (str, optional): Path to model file. Uses default if None.
+
+**Returns:** bool - Success status
+
+**Example:**
 ```python
-system.train_new_model(save=True)  # Train and save
-system.train_new_model(save=False) # Train only (don't save)
+aml_system.load_pretrained_model('models/ml_package.pkl')
 ```
-
-**Use when:**
-- You have new/updated data
-- You want to retrain with different parameters
-- Model performance has degraded
 
 ---
 
-#### `load_saved_model(model_dir='models')`
-Explicitly load a saved model.
+#### `save_trained_model(model_path=None)`
+Save currently trained model.
 
+**Parameters:**
+- `model_path` (str, optional): Where to save. Uses default if None.
+
+**Returns:** bool - Success status
+
+**Example:**
 ```python
-# Load from default location
-success = system.load_saved_model()
-
-# Load from custom location
-success = system.load_saved_model(model_dir='my_models')
+aml_system.save_trained_model('models/my_model.pkl')
 ```
-
-**Returns:** `True` if successful, `False` if no model found
 
 ---
 
-#### `save_current_model(model_dir='models')`
-Explicitly save the current model.
+#### `list_available_models()`
+List all saved models in the models directory.
 
+**Returns:** List of model filenames
+
+**Example:**
 ```python
-# Save to default location
-system.save_current_model()
-
-# Save to custom location
-system.save_current_model(model_dir='backup_models')
+models = aml_system.list_available_models()
 ```
-
-**Raises:** `ValueError` if no model to save
 
 ---
 
 ### MLPredictor Methods
 
-#### `save_model_to_disk(model_dir='models')`
-Save all model components to disk.
+#### `save_model(filename=None)`
+Save just the trained model (lightweight).
 
-```python
-predictor = system.ml_predictor
-predictor.save_model_to_disk()  # Default location
-predictor.save_model_to_disk('my_models')  # Custom location
-```
+#### `load_model(filename=None)`
+Load just the model file.
 
-**Saves:**
-- fraud_model.pkl
-- scaler.pkl
-- label_encoders.pkl
-- feature_names.pkl
-- model_metadata.pkl
+#### `save_complete_package(filename=None)`
+Save model + all preprocessing components (recommended).
 
----
+#### `load_complete_package(filename=None)`
+Load complete package (recommended).
 
-#### `load_model_from_disk(model_dir='models')`
-Load all model components from disk.
-
-```python
-predictor = system.ml_predictor
-success = predictor.load_model_from_disk()  # Default location
-success = predictor.load_model_from_disk('my_models')  # Custom
-```
-
-**Returns:** `True` if successful, `False` otherwise
-
----
-
-#### `model_exists(model_dir='models')`
-Check if a saved model exists.
-
-```python
-if predictor.model_exists():
-    print("Model found!")
-else:
-    print("No model saved yet.")
-```
-
-**Returns:** `True` if fraud_model.pkl exists
-
----
-
-#### `train_compliance_model(test_size=0.3, save_model=True)`
-Train ML model with optional auto-save.
-
-```python
-# Train and save (default)
-model = predictor.train_compliance_model()
-
-# Train without saving
-model = predictor.train_compliance_model(save_model=False)
-
-# Custom test size
-model = predictor.train_compliance_model(test_size=0.2)
-```
-
----
-
-## Usage Patterns
-
-### Pattern 1: Web Application (Streamlit)
-
-```python
-# In app.py
-def run_analysis():
-    system = st.session_state.aml_system
-    with st.spinner("Running analysis..."):
-        # Automatically loads model if available
-        results = system.run_complete_analysis()
-        return results
-```
-
-**User Experience:**
-- First user: 5-minute wait (training)
-- Subsequent users: 2-second wait (loading)
-
----
-
-### Pattern 2: Batch Processing
-
-```python
-from src.aml_system import AMLComplianceSystem
-
-# Initialize once
-system = AMLComplianceSystem()
-system.load_data('data.csv')
-
-# Load model once
-system.load_saved_model()
-
-# Process many transactions
-for transaction in transactions:
-    result = system.predict_compliance_risk(transaction)
-    print(f"Risk: {result['risk_label']}")
-```
-
-**Performance:** Process 1000s of transactions per second
-
----
-
-### Pattern 3: Model Updates
-
-```python
-from src.aml_system import AMLComplianceSystem
-
-# Load current model
-system = AMLComplianceSystem()
-system.load_data('updated_data.csv')
-
-# Backup old model
-import shutil
-shutil.copytree('models', 'models_backup_20260124')
-
-# Train new model
-system.train_new_model(save=True)
-print("✅ New model saved!")
-```
-
----
-
-### Pattern 4: A/B Testing
-
-```python
-# Load model A
-system_a = AMLComplianceSystem()
-system_a.load_data('data.csv')
-system_a.ml_predictor.load_model_from_disk('models_a')
-
-# Load model B
-system_b = AMLComplianceSystem()
-system_b.load_data('data.csv')
-system_b.ml_predictor.load_model_from_disk('models_b')
-
-# Compare predictions
-result_a = system_a.predict_compliance_risk(transaction)
-result_b = system_b.predict_compliance_risk(transaction)
-
-print(f"Model A: {result_a['risk_score']}")
-print(f"Model B: {result_b['risk_score']}")
-```
+#### `list_saved_models()`
+List all models with metadata.
 
 ---
 
 ## Best Practices
 
-### ✅ Do's
+1. **Use Complete Package**: Always use `save_complete_package()` to ensure all components are saved together
 
-1. **Let auto-save/load handle most cases**
+2. **Version Your Models**: Use descriptive names with versions:
    ```python
-   # Good: Automatic handling
-   system.run_complete_analysis()
+   aml_system.save_trained_model('models/fraud_model_v1_20260123.pkl')
    ```
 
-2. **Retrain periodically**
+3. **Regular Backups**: Keep backup copies of production models
+
+4. **Test After Loading**: Always verify predictions after loading:
    ```python
-   # Good: Monthly retraining
-   if days_since_training > 30:
-       system.train_new_model()
+   if aml_system.load_pretrained_model():
+       # Test prediction
+       test_result = aml_system.predict_compliance_risk(test_data)
    ```
 
-3. **Keep model backups**
-   ```python
-   # Good: Backup before retraining
-   shutil.copytree('models', f'models_backup_{date}')
-   system.train_new_model()
-   ```
+5. **Monitor File Sizes**: Large models may need compression or pruning
 
-4. **Monitor model age**
-   ```python
-   # Good: Check model freshness
-   import os
-   from datetime import datetime
-   
-   model_time = os.path.getmtime('models/fraud_model.pkl')
-   age_days = (datetime.now().timestamp() - model_time) / 86400
-   if age_days > 30:
-       print("⚠️ Model is old. Consider retraining.")
-   ```
+6. **Security**: Only load pickle files from trusted sources (security risk)
 
-5. **Test after loading**
-   ```python
-   # Good: Validate loaded model
-   if system.load_saved_model():
-       test_result = system.predict_compliance_risk(test_transaction)
-       assert test_result is not None
-   ```
+---
 
-### ❌ Don'ts
+## 🔧 Technology Stack
 
-1. **Don't load untrusted models**
-   ```python
-   # Bad: Security risk!
-   system.load_saved_model('untrusted_source/models')
-   ```
+### Model Persistence & Serialization
+- **Joblib** (v1.3.0+)
+  - Optimized for scikit-learn models and NumPy arrays
+  - More efficient compression than standard pickle
+  - Better performance for large models
+  - Parallel backend support for distributed storage
+  - Recommended for production use
 
-2. **Don't commit models to Git**
-   ```bash
-   # Bad: Models are too large
-   git add models/*.pkl  # ❌
-   
-   # Good: Add to .gitignore
-   echo "models/*.pkl" >> .gitignore
-   ```
+- **Python pickle** (Built-in)
+  - Standard Python object serialization protocol
+  - Used as fallback when joblib is unavailable
+  - Secure when used with trusted model sources only
+  - Supported protocols: 2, 3, 4, 5 (protocol 5 recommended)
 
-3. **Don't ignore load failures**
-   ```python
-   # Bad: Silent failure
-   system.load_saved_model()
-   
-   # Good: Handle failures
-   if not system.load_saved_model():
-       print("Loading failed. Training new model...")
-       system.train_new_model()
-   ```
+### Model Components Persisted
+- **Trained ML Model** - RandomForest/GradientBoosting classifier
+- **StandardScaler** - Feature normalization
+- **LabelEncoders** - Categorical variable encoding
+- **Feature Names** - Column order and metadata
+- **Model Metrics** - Accuracy, precision, recall, F1 scores
+- **Metadata** - Timestamp, model type, feature count
 
-4. **Don't load in loops**
-   ```python
-   # Bad: Inefficient
-   for transaction in transactions:
-       system.load_saved_model()  # ❌ Loads every iteration
-       predict(transaction)
-   
-   # Good: Load once
-   system.load_saved_model()
-   for transaction in transactions:
-       predict(transaction)
-   ```
+### Machine Learning & AI
+- **Scikit-learn** (v1.3.0+) - ML algorithms with pickle-compatible estimators
+- **NumPy** (v1.24.0+) - Numerical computing for preprocessing
 
-5. **Don't mix model versions**
-   ```python
-   # Bad: Incompatible components
-   predictor.model = joblib.load('models_v1/fraud_model.pkl')
-   predictor.scaler = joblib.load('models_v2/scaler.pkl')  # ❌
-   
-   # Good: Load complete set
-   predictor.load_model_from_disk('models_v1')
-   ```
+### Data Processing
+- **Pandas** (v2.0.0+) - Data manipulation and feature engineering
+- **Python-dateutil** (v2.8.0+) - Date/time utilities
+
+### Web Framework
+- **Streamlit** (v1.30.0+) - Interactive UI for model management and file operations
+
+### Runtime & Deployment
+- **Python** (v3.8+) - Programming language
+- **Docker** - Containerization with persistent model volumes
+
+### Optional Deep Learning
+- **TensorFlow** (v2.13.0+) - Deep learning framework (SavedModel format)
+- **Keras** (v2.13.0+) - Neural network API (h5 format support)
+
+### Performance Characteristics
+- **Save Time**: < 2 seconds for complete package
+- **Load Time**: < 1 second for most models
+- **File Size**: 5-50 MB depending on model complexity
+- **Compression**: Joblib offers optional compression (gzip)
 
 ---
 
 ## Troubleshooting
 
-### Problem: Model won't load
-
-**Symptoms:**
+### Model Not Found
 ```
-⚠ No saved model found in 'models/' directory
+⚠ No saved package found at models/ml_package.pkl
 ```
-
-**Solutions:**
-1. Check if files exist:
-   ```bash
-   ls models/
-   ```
-
-2. Train and save model:
-   ```python
-   system.train_new_model(save=True)
-   ```
+**Solution:** Train a model first or check the file path.
 
 ---
 
-### Problem: "Module not found" error
-
-**Symptoms:**
+### Import Error
 ```
-❌ No module named 'sklearn.ensemble'
+AttributeError: module has no attribute 'load'
 ```
-
-**Solutions:**
-1. Reinstall requirements:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. Check scikit-learn version:
-   ```bash
-   pip show scikit-learn
-   ```
+**Solution:** Install joblib:
+```bash
+pip install joblib
+```
 
 ---
 
-### Problem: Predictions are wrong
-
-**Symptoms:**
-- All predictions return same value
-- Predictions don't match expectations
-
-**Solutions:**
-1. Retrain with current data:
-   ```python
-   system.train_new_model(save=True)
-   ```
-
-2. Verify model metrics:
-   ```python
-   import joblib
-   metadata = joblib.load('models/model_metadata.pkl')
-   print(metadata['model_metrics'])
-   ```
+### Version Mismatch
+```
+ModuleNotFoundError: No module named 'sklearn.xxx'
+```
+**Solution:** Ensure scikit-learn version matches:
+```bash
+pip install scikit-learn>=1.3.0
+```
 
 ---
 
-### Problem: Out of memory
+## Performance
 
-**Symptoms:**
-```
-❌ MemoryError
-```
-
-**Solutions:**
-1. Close other applications
-2. Use smaller model:
-   ```python
-   # Reduce estimators
-   from sklearn.ensemble import RandomForestClassifier
-   model = RandomForestClassifier(n_estimators=50)  # Instead of 100
-   ```
+- **Joblib**: ~2-3x faster than pickle for sklearn models
+- **File Size**: Complete package typically 1-5 MB
+- **Load Time**: < 1 second for most models
+- **Save Time**: < 2 seconds for complete package
 
 ---
 
-### Problem: Slow loading
+## Security Note
 
-**Symptoms:**
-- Loading takes >10 seconds
-- App feels sluggish
+⚠️ **WARNING**: Never load pickle files from untrusted sources. Malicious pickle files can execute arbitrary code.
 
-**Solutions:**
-1. Use SSD storage (5-10x faster)
-2. Reduce compression:
-   ```python
-   joblib.dump(model, 'model.pkl', compress=0)  # Faster, larger
-   ```
-3. Load models at startup, not per-request
+**Safe Usage:**
+- Only load models you created
+- Verify file integrity before loading
+- Use in controlled environments
 
 ---
 
 ## Additional Resources
 
-### Documentation
-- [README_PICKLE.md](README_PICKLE.md) - Quick start guide
-- [MODEL_PERSISTENCE.md](MODEL_PERSISTENCE.md) - Detailed usage
-- [ARCHITECTURE_PICKLE.md](ARCHITECTURE_PICKLE.md) - Technical architecture
-
-### Code Examples
-- [example_model_persistence.py](example_model_persistence.py) - Interactive examples
-- [demo_pickle.py](demo_pickle.py) - Live demonstration
-- [pickle_examples.py](pickle_examples.py) - Code snippets
-
-### Testing & Verification
-- [test_pickle_integration.py](test_pickle_integration.py) - Integration tests
-- [check_pickle_config.py](check_pickle_config.py) - Configuration checker
-
-### External Links
-- [Joblib Documentation](https://joblib.readthedocs.io/)
-- [Scikit-learn Model Persistence](https://scikit-learn.org/stable/model_persistence.html)
-- [Python Pickle Security](https://docs.python.org/3/library/pickle.html)
+- [Streamlit App](app.py) - Full web interface
+- [Example Script](pickle_examples.py) - Usage examples
+- [ML Predictor Module](src/modules/ml_predictor.py) - Implementation
+- [Main System](src/aml_system.py) - System integration
 
 ---
 
-## Summary
+## Quick Reference
 
-Pickle integration provides:
-- ✅ **Automatic** save/load (no configuration)
-- ✅ **Fast** loading (99% time reduction)
-- ✅ **Complete** persistence (model + all components)
-- ✅ **Reliable** error handling
-- ✅ **Production-ready** deployment
+```python
+# Train and save
+aml_system.run_complete_analysis(save_model=True)
 
-**Just use `run_complete_analysis()` - everything else is automatic!** 🚀
+# Load and predict
+aml_system.load_pretrained_model()
+prediction = aml_system.predict_compliance_risk(data)
+
+# List models
+aml_system.list_available_models()
+
+# Custom save
+aml_system.save_trained_model('models/my_model.pkl')
+```
 
 ---
 
-**Version**: 1.0  
-**Last Updated**: January 24, 2026  
-**Author**: Fraud Management System Team
+**Last Updated**: January 23, 2026  
+**Version**: 1.0
