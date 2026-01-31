@@ -373,8 +373,11 @@ Your Fraud Management System has been successfully refactored from a single 1500
 5. **Tests**: Run `tests/test_system.py`
 
 ---
-
-**Happy Coding! 🚀**
+## DOcuments to be submitted:
+1. Final Project report in pdf format
+2. Mentor Evaluation form in pdf format
+3. Plagiarism Report
+4. Project PPT.
 
 ---
 
