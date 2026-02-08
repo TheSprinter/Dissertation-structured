@@ -1,262 +1,358 @@
 # Fraud Management System
 
-A comprehensive fraud detection and management system using AI/ML techniques for fraud detection, risk assessment, and compliance monitoring.
+A comprehensive fraud detection and management system using AI/ML techniques for fraud detection, risk assessment, and compliance monitoring. The system provides both a **Streamlit web application** and a **Python/CLI batch pipeline**, and is developed as part of an MTech AIML dissertation at BITS Pilani.
 
 ## 📋 Table of Contents
 
 - [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Architecture Overview](#architecture-overview)
 - [Project Structure](#project-structure)
 - [Installation](#installation)
-- [Usage](#usage)
-- [Modules](#modules)
+- [Quickstart – Streamlit Web App](#quickstart--streamlit-web-app)
+- [Quickstart – CLI / Batch Pipeline](#quickstart--cli--batch-pipeline)
+- [Docker & Cloud Deployment](#docker--cloud-deployment)
+- [Core Modules](#core-modules)
 - [Output](#output)
 - [Configuration](#configuration)
+- [Data Format](#data-format)
+- [Further Documentation](#further-documentation)
+- [Academic Context](#academic-context)
+- [Contact](#contact)
 
 ## ✨ Features
 
-- **Customer Risk Profiling**: Comprehensive risk assessment based on transaction patterns
-- **Anomaly Detection**: Multi-algorithm approach using Isolation Forest and statistical methods
-- **Machine Learning**: Predictive models for compliance risk forecasting
-- **Model Persistence**: Save and load trained models using pickle/joblib
-- **Visualization**: Interactive dashboards and comprehensive reports
-- **Real-time Prediction**: Risk assessment for new transactions
+- **Customer Risk Profiling** – Comprehensive customer-level risk assessment based on transaction behaviour
+- **Anomaly Detection** – Multi-algorithm approach using Isolation Forest and statistical methods
+- **Supervised ML Models** – Predictive models for fraud/compliance risk forecasting
+- **Model Persistence** – Save and load trained models using pickle/joblib
+- **Dashboards & Reports** – Visual dashboards and analytical plots for investigation
+- **Real-time Prediction** – Risk assessment for new transactions via web UI or Python API
 
-## �️ Technologies Used
+## 🧰 Technologies Used
 
 ### Data Processing & Analysis
-- **pandas** (v2.0.0+) - Data manipulation and analysis
-- **numpy** (v1.24.0+) - Numerical computing
-- **python-dateutil** (v2.8.0+) - Date/time utilities
+- pandas (≥ 2.0.0)
+- numpy (≥ 1.24.0)
+- python-dateutil (≥ 2.8.0)
 
 ### Machine Learning
-- **scikit-learn** (v1.3.0+) - Machine learning algorithms (Random Forest, Isolation Forest, etc.)
-- **joblib** (v1.3.0+) - Model serialization and persistence
+- scikit-learn (≥ 1.3.0)
+- joblib (≥ 1.3.0)
 
 ### Visualization
-- **matplotlib** (v3.7.0+) - Static plotting library
-- **seaborn** (v0.12.0+) - Statistical data visualization
-- **Pillow** (v10.0.0+) - Image processing
+- matplotlib (≥ 3.7.0)
+- seaborn (≥ 0.12.0)
+- Pillow (≥ 10.0.0)
 
 ### Web Framework
-- **Streamlit** (v1.30.0+) - Interactive web application framework
-
-### Optional Deep Learning (commented out)
-- **TensorFlow** (v2.13.0+) - Deep learning framework
-- **Keras** (v2.13.0+) - Neural network API
+- Streamlit (≥ 1.30.0)
 
 ### Deployment
-- **Docker** - Containerization
-- **Python** (v3.8+) - Runtime environment
+- Python 3.12 (Docker base image) – local/runtime environment
+- Docker & docker-compose – containerization and orchestration
 
-## �📁 Project Structure
+Optional deep learning libraries (TensorFlow / Keras) are listed in `requirements.txt` but commented out by default.
 
-```
-aml_compliance_system/
+## 🧱 Architecture Overview
+
+At a high level, the system is organised into three layers:
+
+- **Interface layer** – Streamlit web UI (`app.py`) and optional CLI scripts (`main.py`, `examples.py`).
+- **Orchestration layer** – `AMLComplianceSystem` in `src/aml_system.py` coordinates data loading, profiling, anomaly detection, model training, prediction, and report generation.
+- **Module layer** – Independent modules under `src/modules/` handle data management, profiling, anomaly detection, ML models, and visualisation.
+
+For detailed diagrams and data-flow descriptions, see:
+
+- `ARCHITECTURE_DIAGRAM.md` – architecture and data flow diagrams
+- `STRUCTURE.md` – detailed description of modules and their responsibilities
+
+## 📁 Project Structure
+
+Root directory (simplified):
+
+```text
+.
+├── app.py                     # Streamlit web application entry point
+├── main.py                    # CLI/batch analysis entry point
+├── examples.py                # Example usage patterns for developers
+├── generate_report.py         # Automated dissertation report (DOCX) generator
+├── generate_presentation.py   # Automated presentation (PPTX) generator
+├── requirements.txt           # Python dependencies
+├── Dockerfile                 # Docker image definition (Streamlit app)
+├── docker-compose.yml         # Docker Compose service for the web app
+├── MODEL_PERSISTENCE.md       # Detailed model persistence guide
+├── WEBAPP_README.md           # Detailed Streamlit web app usage
+├── DEPLOYMENT.md              # Deployment options (Docker, cloud, etc.)
+├── STRUCTURE.md               # Full project structure and module details
+├── ARCHITECTURE_DIAGRAM.md    # Architecture and data flow diagrams
 │
-├── main.py                      # Main execution script
-├── requirements.txt             # Python dependencies
-├── README.md                   # This file
-├── MODEL_PERSISTENCE.md        # Model saving/loading guide
-│
-├── src/                        # Source code
+├── src/
 │   ├── __init__.py
-│   ├── config.py              # Configuration settings
-│   ├── aml_system.py          # Main system orchestrator
-│   │
-│   └── modules/               # Core modules
+│   ├── config.py              # Global configuration (thresholds, paths, etc.)
+│   ├── aml_system.py          # AMLComplianceSystem orchestrator
+│   └── modules/
 │       ├── __init__.py
-│       ├── data_manager.py    # Data loading and generation
+│       ├── data_manager.py    # Data loading, validation, synthetic data
 │       ├── customer_profiler.py   # Customer risk profiling
-│       ├── anomaly_detector.py    # Anomaly detection
-│       ├── ml_predictor.py    # ML model training and prediction
-│       └── visualizer.py      # Visualization and reporting
+│       ├── anomaly_detector.py    # Anomaly detection logic
+│       ├── ml_predictor.py    # ML training and prediction
+│       └── visualizer.py      # Visualisation and reporting
 │
-├── models/                    # Saved ML models (auto-generated)
-├── data/                      # Data directory (place your CSV files here)
-├── output/                    # Generated outputs
-│   ├── customer_profiles.csv
-│   ├── detected_anomalies.csv
-│   ├── dashboard.png
-│   ├── detailed_analysis.png
-│   └── customer_profiles.png
-│
-└── tests/                     # Unit tests (to be implemented)
+├── models/                    # Saved ML models and related artefacts
+├── output/                    # Generated outputs (CSV, plots, reports)
+└── tests/                     # Unit tests for core components
 ```
+
+For a more exhaustive tree and explanation of every directory, see `STRUCTURE.md`.
 
 ## 🚀 Installation
 
-1. **Clone or download the project**
+1. **Clone the repository**
 
-2. **Create a virtual environment** (recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+    ```bash
+    git clone <repo-url>
+    cd Dissertation-structured
+    ```
 
-3. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+2. **(Optional) Create a virtual environment**
 
-## 💻 Usage
+    ```bash
+    python -m venv venv
+    # Windows
+    venv\Scripts\activate
+    # Linux/Mac
+    # source venv/bin/activate
+    ```
 
-### Basic Usage
+3. **Install dependencies**
 
-Run the complete analysis:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+## 🌐 Quickstart – Streamlit Web App
+
+The Streamlit web application is the primary interface for interactive analysis.
+
+### Option 1 – Start script (recommended)
+
+**Windows:**
+
+```bash
+start_app.bat
+```
+
+**Linux / Mac:**
+
+```bash
+chmod +x start_app.sh
+./start_app.sh
+```
+
+Then open a browser and visit: `http://localhost:8501`.
+
+### Option 2 – Manual start
+
+```bash
+pip install -r requirements.txt   # if not already installed
+streamlit run app.py
+```
+
+Key pages in the web app include:
+
+- **Home** – Overview of system capabilities
+- **Data Upload & Analysis** – Load data (CSV or sample) and run the full pipeline
+- **Transaction Risk Prediction** – Real-time risk scoring for single transactions
+- **Customer Risk Profiles** – Explore per-customer risk profiles
+- **Dashboard & Reports** – Visual dashboards and downloadable analysis artefacts
+
+For screenshots, troubleshooting, and more detailed instructions, see `WEBAPP_README.md`.
+
+## 🧪 Quickstart – CLI / Batch Pipeline
+
+You can also run the full analysis pipeline from the command line.
+
+### Basic batch run
+
 ```bash
 python main.py
 ```
 
-### Custom Usage
+This will:
+
+- Load transaction data (from a configured path or generate synthetic data if unavailable)
+- Run customer profiling, anomaly detection, and ML-based fraud prediction
+- Generate CSV outputs and plots into the `output/` directory
+
+### Programmatic usage (Python API)
 
 ```python
 from src.aml_system import AMLComplianceSystem
 
-# Initialize system
 aml_system = AMLComplianceSystem()
 
-# Load data
-aml_system.load_data('path/to/your/data.csv')
+# Load your own CSV (must follow the current schema)
+aml_system.load_data("path/to/transactions.csv")
 
-# Run analysis
-results = aml_system.run_complete_analysis()
+# Run the complete analysis pipeline
+results = aml_system.run_complete_analysis(save_results=True)
 
-# Predict risk for new transaction
-new_txn = {
-    'Time': '14:30:00',
-    'Date': '2024-06-15',
-    'Sender_account': 'ACC0001',
-    'Receiver_account': 'ACC0002',
-    'Amount': 9500,
-    'Payment_currency': 'USD',
-    'Received_currency': 'USD',
-    'Sender_bank_location': 'US-NY',
-    'Receiver_bank_location': 'AE-DXB',
-    'Payment_type': 'Wire'
+# Predict risk for a new transaction (schema-aligned dictionary)
+example_txn = {
+     "transaction_id": "TXN0000001",
+     "customer_id": "CUST00001",
+     "transaction_amount": 9500.0,
+     "transaction_date": "2024-06-15",
+     "transaction_time": "14:30:00",
+     "merchant_category": "Electronics",
+     "merchant_id": "MERCH0001",
+     "payment_method": "Credit Card",
+     "transaction_type": "Purchase",
+     "location": "US",
+     "device_type": "Mobile",
+     "ip_country": "US",
+     "card_type": "Visa",
+     # ... additional optional fields as in data_manager.py ...
 }
 
-risk = aml_system.predict_compliance_risk(new_txn)
+risk = aml_system.predict_compliance_risk(example_txn)
 print(risk)
 ```
 
-### Model Persistence
+More end-to-end examples are available in `examples.py` and `QUICKSTART.md`.
 
-Save and load trained models for faster reuse:
+## 🐳 Docker & Cloud Deployment
 
-```python
-from src.aml_system import AMLComplianceSystem
+### Docker (local)
 
-# Initialize and load data
-system = AMLComplianceSystem()
-system.load_data('fraud_management_dataset-1.5L (1).csv')
+Build and run the Streamlit app in a container:
 
-# Option 1: Auto-save after training (default)
-system.run_complete_analysis()  # Model saved automatically
-
-# Option 2: Load existing model
-if system.ml_predictor.load_model_from_disk():
-    print("Model loaded! Ready for predictions.")
-else:
-    print("No saved model. Training new one...")
-    system.train_new_model()
-
-# Option 3: Explicitly save current model
-system.save_current_model()
+```bash
+docker build -t aml-app .
+docker run -p 8501:8501 aml-app
 ```
 
-For detailed information, see [MODEL_PERSISTENCE.md](MODEL_PERSISTENCE.md)
+Or using Docker Compose:
 
-## 🧩 Modules
+```bash
+docker-compose up -d
+```
 
-### 1. Data Manager (`data_manager.py`)
-- Loads transaction data from CSV files or Google Drive
-- Generates synthetic data for testing
-- Validates data integrity
+The app will be available at `http://localhost:8501`.
 
-### 2. Customer Profiler (`customer_profiler.py`)
-- Analyzes customer transaction patterns
-- Calculates risk scores (0-100)
-- Classifies customers as HIGH, MEDIUM, or LOW risk
-- Identifies suspicious behaviors
+### Cloud deployment
 
-### 3. Anomaly Detector (`anomaly_detector.py`)
-- Uses Isolation Forest algorithm
-- Applies statistical Z-score analysis
-- Detects unusual transaction patterns
-- Identifies time-based anomalies
+The project includes guidance for deploying to:
 
-### 4. ML Predictor (`ml_predictor.py`)
-- Trains Random Forest and Gradient Boosting models
-- Feature engineering (20+ features)
-- Cross-validation for model selection
-- Risk probability prediction
-- **Model persistence with pickle/joblib**
-- Save and load trained models
+- Streamlit Cloud
+- Heroku
+- Azure App Service
+- AWS EC2 (and similar environments)
 
-### 5. Visualizer (`visualizer.py`)
-- Comprehensive dashboard generation
-- Customer profile visualizations
-- Risk distribution charts
-- Compliance reports
+For step-by-step instructions and configuration details, see `DEPLOYMENT.md`.
+
+## 🧩 Core Modules
+
+All core modules live under `src/modules/` and are orchestrated by `AMLComplianceSystem`.
+
+### Data Manager (`data_manager.py`)
+
+- Loads transaction data from CSV files or Google Drive links
+- Validates dataset against the expected schema
+- Generates realistic synthetic data when required columns are missing
+- Provides rich data summaries (volume, date range, fraud ratio)
+
+### Customer Profiler (`customer_profiler.py`)
+
+- Analyses customer-level behaviour and transaction history
+- Computes risk scores (0–100) per customer
+- Classifies customers into HIGH, MEDIUM, or LOW risk
+
+### Anomaly Detector (`anomaly_detector.py`)
+
+- Uses Isolation Forest and statistical methods to detect anomalies
+- Flags unusual transaction patterns and temporal anomalies
+
+### ML Predictor (`ml_predictor.py`)
+
+- Trains supervised models (e.g., Random Forest, Gradient Boosting)
+- Performs feature engineering and model evaluation
+- Provides prediction APIs for single or batch transactions
+- Handles model persistence (save/load models with joblib/pickle)
+
+### Visualizer (`visualizer.py`)
+
+- Builds dashboards and detailed analysis plots
+- Generates visual artefacts for investigation and reporting
+
+For deeper, implementation-level details, see `STRUCTURE.md` and `ARCHITECTURE_DIAGRAM.md`.
 
 ## 📊 Output
 
-The system generates several outputs in the `output/` directory:
+The system writes outputs into the `output/` directory. Typical artefacts include:
 
-1. **customer_profiles.csv**: Detailed risk profiles for all customers
-2. **detected_anomalies.csv**: List of detected anomalous transactions
-3. **dashboard.png**: Main visualization dashboard
-4. **detailed_analysis.png**: Additional analysis charts
-5. **customer_profiles.png**: Customer-specific visualizations
+1. `customer_profiles.csv` – Per-customer profiles and risk scores
+2. `detected_anomalies.csv` – List of anomalous transactions and associated scores
+3. Dashboard and analysis images (`dashboard.png`, `detailed_analysis.png`, etc.)
+4. Additional plots and summaries used in the dissertation
+
+These outputs are consumed by the Streamlit web app and can also be used directly in analysis or reporting.
 
 ## ⚙️ Configuration
 
-Edit `src/config.py` to customize:
+Global configuration is centralised in `src/config.py`. You can adjust, for example:
 
-- Risk thresholds
-- High-risk locations
-- Model parameters
-- Output settings
-- Visualization preferences
+- Risk thresholds (e.g., `HIGH_RISK_THRESHOLD`, `MEDIUM_RISK_THRESHOLD`)
+- Anomaly detection settings (e.g., `CONTAMINATION_RATE` for Isolation Forest)
+- Output directory paths
+- Visualisation and reporting options
+
+Both the CLI and Streamlit web app honour these shared settings.
 
 ## 📝 Data Format
 
-Expected CSV format:
-```csv
-Time,Date,Sender_account,Receiver_account,Amount,Payment_currency,Received_currency,Sender_bank_location,Receiver_bank_location,Payment_type,Is_laundering,Laundering_type
-14:30:00,2024-01-15,ACC0001,ACC0002,5000,USD,USD,US-NY,US-NY,Wire,0,None
-```
+The current pipeline expects a **transaction-centric schema**. Key required columns (see `DataManager` in `src/modules/data_manager.py`) include:
 
-## 🔧 Key Features Explained
+- `transaction_id`
+- `customer_id`
+- `transaction_amount`
+- `transaction_date` (YYYY-MM-DD)
+- `transaction_time` (HH:MM:SS)
+- `merchant_id`
+- `merchant_category`
+- `payment_method`
+- `transaction_type`
+- `card_type`
+- `location`
+- `device_type`
+- `ip_country`
+- `is_fraud` (0 or 1 – label, if available)
 
-### Risk Scoring
-- Suspicious transaction ratio: 30%
-- High-value transactions: up to 20%
-- Cross-border activity: 20%
-- High-risk countries: up to 15%
-- Structuring indicators: up to 15%
+Additional optional fields (billing/shipping countries, verification flags, behavioural features, etc.) are automatically handled and used for richer modelling. If your CSV is missing some of the required columns, the system will warn you and, if necessary, fall back to generating synthetic data for demonstration.
 
-### Anomaly Detection
-- **Isolation Forest**: Detects outliers in multi-dimensional feature space
-- **Statistical Methods**: Z-score > 3 for amounts, unusual transaction times
+> Note: Older documentation and examples using columns like `Sender_account`, `Receiver_account`, `Is_laundering`, and `Laundering_type` refer to a previous version of the dataset. New experiments should follow the schema implemented in `data_manager.py`.
 
-### ML Models
-- **Random Forest**: Ensemble of decision trees
-- **Gradient Boosting**: Sequential ensemble method
-- Automatic feature importance analysis
+## 📚 Further Documentation
 
-## 🤝 Contributing
+- `WEBAPP_README.md` – Detailed Streamlit web app usage and screenshots
+- `DEPLOYMENT.md` – Docker and cloud deployment instructions
+- `STRUCTURE.md` – Full project structure and module internals
+- `ARCHITECTURE_DIAGRAM.md` – Architecture and data flow diagrams
+- `MODEL_PERSISTENCE.md` – Model saving/loading and file layout in `models/`
+- `QUICKSTART.md` – Additional developer-focused quickstart and usage patterns
+- `PROJECT_SUMMARY.md` – Narrative summary of the refactoring and project evolution
 
-Contributions are welcome! Please feel free to submit pull requests or open issues.
+## 📜 Academic Context
 
-## 📜 Academic Project
+This project is submitted as part of the **Final Semester Dissertation Project** for the **Master of Technology (MTech) in Artificial Intelligence and Machine Learning (AIML)** degree at **Birla Institute of Technology and Science (BITS), Pilani)**.
 
-This project is submitted as part of the **Final Semester Dissertation Project** for the **Master of Technology (MTech) in Artificial Intelligence and Machine Learning (AIML)** degree at **Birla Institute of Technology and Science (BITS), Pilani**.
+- **Institution**: BITS Pilani
+- **Program**: MTech in AIML
+- **Project Type**: Dissertation Project
+- **Academic Year**: 2025–2026
 
-**Institution**: BITS Pilani  
-**Program**: MTech in AIML  
-**Project Type**: Dissertation Project  
-**Academic Year**: 2025-2026
+The dissertation investigates the design of a modular, explainable fraud management system that combines anomaly detection, supervised learning, and interactive analytics via a web-based interface.
 
 ## 📧 Contact
 
@@ -264,4 +360,4 @@ For academic inquiries or questions about this dissertation project, please cont
 
 ---
 
-**Note**: This system is designed for academic research and demonstration purposes as part of an MTech dissertation. For production use, ensure compliance with local regulations and conduct thorough testing.
+**Note**: This system is designed for academic research and demonstration purposes as part of an MTech dissertation. For production use, ensure compliance with local regulations, integrate with enterprise observability, and conduct thorough testing and validation.

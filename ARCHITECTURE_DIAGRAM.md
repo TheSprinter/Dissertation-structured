@@ -35,10 +35,10 @@
 │  │                                                                          │ │
 │  │  ┌────────────────────────────────────────────────────────────────┐   │ │
 │  │  │  Core Functions:                                                │   │ │
-│  │  │  • load_data()         - Initialize data across all modules    │   │ │
-│  │  │  • run_complete_analysis() - Execute full fraud analysis       │   │ │
-│  │  │  • predict_risk()      - Real-time risk prediction             │   │ │
-│  │  │  • get_analysis_results() - Retrieve comprehensive results     │   │ │
+│  │  │  • load_data()             - Initialize data across all modules    │   │ │
+│  │  │  • run_complete_analysis() - Execute full fraud analysis           │   │ │
+│  │  │  • predict_compliance_risk() - Real-time risk prediction          │   │ │
+│  │  │  • generate_summary_report() - Retrieve executive summary         │   │ │
 │  │  └────────────────────────────────────────────────────────────────┘   │ │
 │  │                                                                          │ │
 │  └───┬──────────┬──────────┬──────────┬──────────┬──────────────────────┘ │
@@ -258,7 +258,7 @@
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    REAL-TIME PREDICTION                             │
 │                                                                     │
-│  aml_system.predict_risk(new_transaction)                          │
+│  aml_system.predict_compliance_risk(new_transaction)              │
 │       │                                                             │
 │       └──► MLPredictor.predict(new_transaction)                    │
 │            ├─ Load saved model                                     │
@@ -441,7 +441,7 @@
 │  │   LOCAL        │      │   HEROKU       │              │
 │  │   DEPLOYMENT   │      │   DEPLOYMENT   │              │
 │  ├────────────────┤      ├────────────────┤              │
-│  │ • Python 3.8+  │      │ • Procfile     │              │
+│  │ • Python 3.12+ │      │ • Procfile     │              │
 │  │ • Virtual env  │      │ • runtime.txt  │              │
 │  │ • CLI/Web      │      │ • Web process  │              │
 │  └────────────────┘      └────────────────┘              │
@@ -473,7 +473,7 @@
 │ • Plotly (Interactive charts)                               │
 │                                                             │
 │ Backend:                                                    │
-│ • Python 3.8+                                               │
+│ • Python 3.12+                                              │
 │ • Pandas (Data manipulation)                                │
 │ • NumPy (Numerical operations)                              │
 │                                                             │

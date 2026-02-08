@@ -9,9 +9,46 @@ from pptx.enum.text import PP_ALIGN
 from pptx.dml.color import RGBColor
 from datetime import datetime
 
+# Mild, professional colour palette
+PRIMARY_COLOR = RGBColor(0, 51, 102)        # Deep navy
+ACCENT_COLOR = RGBColor(0, 102, 153)        # Soft teal-blue
+SUCCESS_COLOR = RGBColor(0, 100, 80)        # Muted green
+TEXT_COLOR = RGBColor(40, 40, 40)           # Neutral body text (dark grey)
+BACKGROUND_COLOR = RGBColor(235, 244, 252)  # Light blue background
+
+
+def _style_standard_slide(slide):
+    """Apply gentle background and title colour to a standard content slide."""
+    # Light background
+    background = slide.background
+    fill = background.fill
+    fill.solid()
+    fill.fore_color.rgb = BACKGROUND_COLOR
+
+    # Title styling
+    title_shape = slide.shapes.title
+    if title_shape is not None and hasattr(title_shape, "text_frame"):
+        # Give the title a coloured banner
+        title_fill = title_shape.fill
+        title_fill.solid()
+        title_fill.fore_color.rgb = ACCENT_COLOR
+
+        tf = title_shape.text_frame
+        if tf.paragraphs:
+            p = tf.paragraphs[0]
+            if p.font is not None:
+                p.font.color.rgb = RGBColor(255, 255, 255)  # White text on accent banner
+                p.font.bold = True
+
+
 def add_title_slide(prs):
     """Create title slide"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])  # Blank layout
+    # Apply light background
+    bg = slide.background
+    bg_fill = bg.fill
+    bg_fill.solid()
+    bg_fill.fore_color.rgb = BACKGROUND_COLOR
     
     # Add university name
     left = Inches(0.5)
@@ -25,7 +62,7 @@ def add_title_slide(prs):
     tf.paragraphs[0].alignment = PP_ALIGN.CENTER
     tf.paragraphs[0].font.size = Pt(20)
     tf.paragraphs[0].font.bold = True
-    tf.paragraphs[0].font.color.rgb = RGBColor(0, 0, 128)
+    tf.paragraphs[0].font.color.rgb = PRIMARY_COLOR
     
     # Add degree
     top = Inches(2.5)
@@ -35,6 +72,7 @@ def add_title_slide(prs):
     tf.paragraphs[0].alignment = PP_ALIGN.CENTER
     tf.paragraphs[0].font.size = Pt(16)
     tf.paragraphs[0].font.bold = True
+    tf.paragraphs[0].font.color.rgb = TEXT_COLOR
     
     # Add project title
     top = Inches(3.5)
@@ -45,7 +83,7 @@ def add_title_slide(prs):
     tf.paragraphs[0].alignment = PP_ALIGN.CENTER
     tf.paragraphs[0].font.size = Pt(28)
     tf.paragraphs[0].font.bold = True
-    tf.paragraphs[0].font.color.rgb = RGBColor(0, 51, 102)
+    tf.paragraphs[0].font.color.rgb = PRIMARY_COLOR
     
     # Add subtitle
     top = Inches(5.0)
@@ -55,6 +93,7 @@ def add_title_slide(prs):
     tf.text = "Final Semester Dissertation Project"
     tf.paragraphs[0].alignment = PP_ALIGN.CENTER
     tf.paragraphs[0].font.size = Pt(14)
+    tf.paragraphs[0].font.color.rgb = TEXT_COLOR
     
     # Add student info
     top = Inches(6.0)
@@ -64,12 +103,14 @@ def add_title_slide(prs):
     tf.paragraphs[0].alignment = PP_ALIGN.CENTER
     tf.paragraphs[0].font.size = Pt(14)
     tf.paragraphs[0].font.bold = True
+    tf.paragraphs[0].font.color.rgb = PRIMARY_COLOR
 
 def add_agenda_slide(prs):
     """Create agenda slide"""
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Presentation Agenda"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
@@ -99,10 +140,20 @@ def add_introduction_slide(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Introduction & Problem Statement"
+    _style_standard_slide(slide)
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
     tf.clear()
+
+    # One-line description
+    p = tf.add_paragraph()
+    p.text = "Context of financial fraud and the motivation for this work."
+    p.font.italic = True
+    p.font.size = Pt(13)
+    p.font.color.rgb = TEXT_COLOR
+    p.space_after = Pt(8)
     
     # Background
     p = tf.add_paragraph()
@@ -150,11 +201,20 @@ def add_objectives_slide(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Project Objectives"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
     tf.clear()
-    
+
+    # One-line description
+    p = tf.add_paragraph()
+    p.text = "What the proposed fraud management system is designed to achieve."
+    p.font.italic = True
+    p.font.size = Pt(13)
+    p.font.color.rgb = TEXT_COLOR
+    p.space_after = Pt(8)
+
     objectives = [
         "Design modular fraud management system using AI/ML",
         "Implement multiple detection algorithms (Isolation Forest, Random Forest, Gradient Boosting)",
@@ -178,6 +238,7 @@ def add_architecture_slide(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "System Architecture Overview"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
@@ -209,13 +270,66 @@ def add_architecture_slide(prs):
     p.text = "Design Principles: Modular, Scalable, Maintainable"
     p.font.italic = True
     p.font.size = Pt(14)
-    p.font.color.rgb = RGBColor(0, 51, 102)
+    p.font.color.rgb = PRIMARY_COLOR
+
+
+def add_design_patterns_slide(prs):
+    """Create design patterns slide"""
+    slide = prs.slides.add_slide(prs.slide_layouts[1])
+    title = slide.shapes.title
+    title.text = "Design Patterns & Principles"
+    _style_standard_slide(slide)
+
+    content = slide.placeholders[1]
+    tf = content.text_frame
+    tf.clear()
+
+    p = tf.add_paragraph()
+    p.text = "Key Design Patterns"
+    p.font.bold = True
+    p.font.size = Pt(16)
+    p.font.color.rgb = PRIMARY_COLOR
+
+    patterns = [
+        "Layered architecture separating UI, orchestration, modules and data layers",
+        "Facade / Orchestrator: AMLComplianceSystem exposes a simple entry point to complex flows",
+        "Strategy-style use of interchangeable algorithms for anomaly detection and ML prediction",
+        "Modular design with single-responsibility modules (Data Manager, Profiler, Detector, etc.)",
+        "Pipeline-style data flow: ingestion → validation → feature engineering → detection → reporting"
+    ]
+
+    for pat in patterns:
+        p = tf.add_paragraph()
+        p.text = pat
+        p.level = 1
+        p.font.size = Pt(14)
+
+    p = tf.add_paragraph()
+    p.text = "Benefits"
+    p.font.bold = True
+    p.font.size = Pt(16)
+    p.font.color.rgb = PRIMARY_COLOR
+    p.space_before = Pt(8)
+
+    benefits = [
+        "Improves maintainability and testability of individual modules",
+        "Enables easy swapping or extension of algorithms without changing orchestration",
+        "Supports scalability and deployment flexibility (on-prem or cloud)",
+        "Reduces coupling between UI and core AML logic"
+    ]
+
+    for b in benefits:
+        p = tf.add_paragraph()
+        p.text = b
+        p.level = 1
+        p.font.size = Pt(14)
 
 def add_modules_overview_slide(prs):
     """Create modules overview slide"""
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Core Modules - Overview"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
@@ -234,7 +348,7 @@ def add_modules_overview_slide(prs):
         p.text = module_name
         p.font.bold = True
         p.font.size = Pt(18)
-        p.font.color.rgb = RGBColor(0, 51, 102)
+        p.font.color.rgb = PRIMARY_COLOR
         p.space_after = Pt(4)
         
         p = tf.add_paragraph()
@@ -248,6 +362,7 @@ def add_data_manager_slide(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Module 1: Data Manager"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
@@ -289,6 +404,7 @@ def add_customer_profiler_slide(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Module 2: Customer Profiler"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
@@ -337,11 +453,20 @@ def add_anomaly_detector_slide(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Module 3: Anomaly Detector"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
     tf.clear()
-    
+
+    # One-line description
+    p = tf.add_paragraph()
+    p.text = "Unsupervised engine that spots unusual, high-risk transaction behaviour."
+    p.font.italic = True
+    p.font.size = Pt(13)
+    p.font.color.rgb = TEXT_COLOR
+    p.space_after = Pt(8)
+
     p = tf.add_paragraph()
     p.text = "Purpose"
     p.font.bold = True
@@ -376,7 +501,7 @@ def add_anomaly_detector_slide(prs):
     p.text = "Advantage: 95%+ detection accuracy with confidence scores"
     p.font.italic = True
     p.font.size = Pt(14)
-    p.font.color.rgb = RGBColor(0, 100, 0)
+    p.font.color.rgb = SUCCESS_COLOR
     p.space_before = Pt(10)
 
 def add_ml_predictor_slide(prs):
@@ -384,11 +509,20 @@ def add_ml_predictor_slide(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Module 4: ML Predictor"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
     tf.clear()
-    
+
+    # One-line description
+    p = tf.add_paragraph()
+    p.text = "Supervised learning models that classify transactions as fraudulent or legitimate."
+    p.font.italic = True
+    p.font.size = Pt(13)
+    p.font.color.rgb = TEXT_COLOR
+    p.space_after = Pt(8)
+
     p = tf.add_paragraph()
     p.text = "Purpose"
     p.font.bold = True
@@ -440,11 +574,20 @@ def add_visualizer_slide(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Module 5: Visualizer"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
     tf.clear()
-    
+
+    # One-line description
+    p = tf.add_paragraph()
+    p.text = "Analytics and reporting layer that turns model outputs into insights."
+    p.font.italic = True
+    p.font.size = Pt(13)
+    p.font.color.rgb = TEXT_COLOR
+    p.space_after = Pt(8)
+
     p = tf.add_paragraph()
     p.text = "Purpose"
     p.font.bold = True
@@ -483,11 +626,20 @@ def add_workflow_slide(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "System Workflow & Data Flow"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
     tf.clear()
-    
+
+    # One-line description
+    p = tf.add_paragraph()
+    p.text = "End-to-end flow from raw data ingestion to actionable fraud alerts."
+    p.font.italic = True
+    p.font.size = Pt(13)
+    p.font.color.rgb = TEXT_COLOR
+    p.space_after = Pt(8)
+
     workflow_steps = [
         ("1. Data Input", "Load transaction data via CSV or API"),
         ("2. Data Validation", "Clean, validate, and preprocess data"),
@@ -522,35 +674,89 @@ def add_technologies_slide(prs):
     """Create technologies slide"""
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
-    title.text = "Technologies & Tools Used"
+    title.text = "Technologies & Tools Used (1/2)"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
     tf.clear()
-    
-    tech_categories = [
-        ("Programming Language", ["Python 3.8+"]),
-        ("Data Processing", ["pandas 2.0.0+", "numpy 1.24.0+", "python-dateutil"]),
-        ("Machine Learning", ["scikit-learn 1.3.0+ (Random Forest, Gradient Boosting, Isolation Forest)", "joblib (Model persistence)"]),
-        ("Visualization", ["matplotlib 3.7.0+", "seaborn 0.12.0+", "Pillow"]),
-        ("Web Framework", ["Streamlit 1.30.0+ (Interactive UI)"]),
-        ("Development Tools", ["Git (Version control)", "VS Code", "pytest (Testing)"])
+
+    # Part 1: Core language, data and ML stack
+    tech_categories_part1 = [
+        ("Programming Language", [
+            ("Python 3.8+", "Core implementation language for orchestration and ML pipelines")
+        ]),
+        ("Data Processing", [
+            ("pandas 2.0.0+", "Tabular data manipulation, feature engineering and aggregation"),
+            ("numpy 1.24.0+", "Numerical computing and vectorized operations"),
+            ("python-dateutil", "Robust handling of dates, times and time zones")
+        ]),
+        ("Machine Learning", [
+            ("scikit-learn 1.3.0+", "Core ML library for Random Forest, Gradient Boosting, Isolation Forest"),
+            ("joblib", "Efficient model persistence and loading for deployment")
+        ])
     ]
-    
-    for category, tools in tech_categories:
+
+    for category, tools in tech_categories_part1:
         p = tf.add_paragraph()
         p.text = category
         p.font.bold = True
         p.font.size = Pt(15)
-        p.font.color.rgb = RGBColor(0, 51, 102)
+        p.font.color.rgb = PRIMARY_COLOR
         p.space_after = Pt(4)
-        
-        for tool in tools:
+
+        for tool, purpose in tools:
             p = tf.add_paragraph()
-            p.text = tool
+            p.text = f"{tool} – {purpose}"
             p.level = 1
             p.font.size = Pt(13)
-        
+
+        tf.add_paragraph()
+
+
+def add_technologies_slide_part2(prs):
+    """Create second technologies slide"""
+    slide = prs.slides.add_slide(prs.slide_layouts[1])
+    title = slide.shapes.title
+    title.text = "Technologies & Tools Used (2/2)"
+    _style_standard_slide(slide)
+
+    content = slide.placeholders[1]
+    tf = content.text_frame
+    tf.clear()
+
+    # Part 2: Visualization, UI and engineering tooling
+    tech_categories_part2 = [
+        ("Visualization", [
+            ("matplotlib 3.7.0+", "Base plotting library for analytical charts"),
+            ("seaborn 0.12.0+", "Statistical visualizations for patterns and distributions"),
+            ("Pillow", "Image processing for saving and exporting plots")
+        ]),
+        ("Web Framework", [
+            ("Streamlit 1.30.0+", "Interactive web UI for analysts to run scenarios")
+        ]),
+        ("Development & Quality", [
+            ("Git", "Version control and collaborative development"),
+            ("GitHub", "Remote repository hosting and CI integration"),
+            ("VS Code", "Primary development environment"),
+            ("pytest", "Automated testing of core modules")
+        ])
+    ]
+
+    for category, tools in tech_categories_part2:
+        p = tf.add_paragraph()
+        p.text = category
+        p.font.bold = True
+        p.font.size = Pt(15)
+        p.font.color.rgb = PRIMARY_COLOR
+        p.space_after = Pt(4)
+
+        for tool, purpose in tools:
+            p = tf.add_paragraph()
+            p.text = f"{tool} – {purpose}"
+            p.level = 1
+            p.font.size = Pt(13)
+
         tf.add_paragraph()
 
 def add_algorithms_slide(prs):
@@ -558,6 +764,7 @@ def add_algorithms_slide(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Algorithms & Methodology"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
@@ -567,7 +774,7 @@ def add_algorithms_slide(prs):
     p.text = "1. Isolation Forest"
     p.font.bold = True
     p.font.size = Pt(16)
-    p.font.color.rgb = RGBColor(0, 51, 102)
+    p.font.color.rgb = PRIMARY_COLOR
     
     p = tf.add_paragraph()
     p.text = "Isolates anomalies through random partitioning • O(nlog(n)) complexity • 10% contamination"
@@ -579,7 +786,7 @@ def add_algorithms_slide(prs):
     p.text = "2. Random Forest"
     p.font.bold = True
     p.font.size = Pt(16)
-    p.font.color.rgb = RGBColor(0, 51, 102)
+    p.font.color.rgb = PRIMARY_COLOR
     
     p = tf.add_paragraph()
     p.text = "Ensemble of 100 decision trees • Handles imbalanced data • Provides feature importance"
@@ -591,7 +798,7 @@ def add_algorithms_slide(prs):
     p.text = "3. Gradient Boosting"
     p.font.bold = True
     p.font.size = Pt(16)
-    p.font.color.rgb = RGBColor(0, 51, 102)
+    p.font.color.rgb = PRIMARY_COLOR
     
     p = tf.add_paragraph()
     p.text = "Sequential learning • Corrects previous errors • 0.1 learning rate with early stopping"
@@ -603,7 +810,7 @@ def add_algorithms_slide(prs):
     p.text = "4. Statistical Methods"
     p.font.bold = True
     p.font.size = Pt(16)
-    p.font.color.rgb = RGBColor(0, 51, 102)
+    p.font.color.rgb = PRIMARY_COLOR
     
     p = tf.add_paragraph()
     p.text = "Z-Score (3σ threshold) • IQR method • Fast and interpretable"
@@ -615,6 +822,7 @@ def add_results_slide(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Results & Performance Metrics"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
@@ -624,7 +832,7 @@ def add_results_slide(prs):
     p.text = "Model Performance (10,000 transactions)"
     p.font.bold = True
     p.font.size = Pt(16)
-    p.font.color.rgb = RGBColor(0, 51, 102)
+    p.font.color.rgb = PRIMARY_COLOR
     
     metrics = [
         "Accuracy: 96.5%",
@@ -640,7 +848,7 @@ def add_results_slide(prs):
         p.level = 1
         p.font.size = Pt(15)
         p.font.bold = True
-        p.font.color.rgb = RGBColor(0, 100, 0)
+        p.font.color.rgb = SUCCESS_COLOR
     
     p = tf.add_paragraph()
     p.text = ""
@@ -650,7 +858,7 @@ def add_results_slide(prs):
     p.text = "Processing Performance"
     p.font.bold = True
     p.font.size = Pt(16)
-    p.font.color.rgb = RGBColor(0, 51, 102)
+    p.font.color.rgb = PRIMARY_COLOR
     
     perf_metrics = [
         "Average prediction time: 5ms per transaction",
@@ -670,6 +878,7 @@ def add_comparison_slide(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Comparative Analysis"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
@@ -704,13 +913,14 @@ def add_comparison_slide(prs):
     p.text = "18% improvement over rule-based systems"
     p.font.size = Pt(16)
     p.font.bold = True
-    p.font.color.rgb = RGBColor(0, 100, 0)
+    p.font.color.rgb = SUCCESS_COLOR
 
 def add_benefits_slide(prs):
     """Create benefits slide"""
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Benefits & Applications"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
@@ -720,7 +930,7 @@ def add_benefits_slide(prs):
     p.text = "Key Benefits"
     p.font.bold = True
     p.font.size = Pt(16)
-    p.font.color.rgb = RGBColor(0, 51, 102)
+    p.font.color.rgb = PRIMARY_COLOR
     
     benefits = [
         "Real-time fraud detection with <5ms latency",
@@ -749,11 +959,136 @@ def add_benefits_slide(prs):
     p.font.italic = True
     p.font.size = Pt(14)
 
+def add_performance_scalability_slide(prs):
+    """Create performance & scalability slide"""
+    slide = prs.slides.add_slide(prs.slide_layouts[1])
+    title = slide.shapes.title
+    title.text = "Performance & Scalability"
+    _style_standard_slide(slide)
+
+    content = slide.placeholders[1]
+    tf = content.text_frame
+    tf.clear()
+
+    # System performance
+    p = tf.add_paragraph()
+    p.text = "System Performance"
+    p.font.bold = True
+    p.font.size = Pt(16)
+    p.font.color.rgb = PRIMARY_COLOR
+
+    perf_points = [
+        "Average prediction latency: ~5 ms per transaction",
+        "Throughput: ~3,000 transactions/second on commodity hardware",
+        "Optimized feature pipeline to minimise I/O and CPU overhead",
+        "Batch and near real-time processing modes supported"
+    ]
+
+    for point in perf_points:
+        p = tf.add_paragraph()
+        p.text = point
+        p.level = 1
+        p.font.size = Pt(14)
+
+    # Scalability characteristics
+    p = tf.add_paragraph()
+    p.text = "Scalability & Deployment"
+    p.font.bold = True
+    p.font.size = Pt(16)
+    p.font.color.rgb = PRIMARY_COLOR
+    p.space_before = Pt(10)
+
+    scale_points = [
+        "Modular microservice-friendly design around core AMLComplianceSystem",
+        "Stateless prediction layer – can be horizontally scaled behind a load balancer",
+        "Supports containerization via Docker for cloud-native deployment",
+        "Model persistence enables separate training and serving environments"
+    ]
+
+    for point in scale_points:
+        p = tf.add_paragraph()
+        p.text = point
+        p.level = 1
+        p.font.size = Pt(14)
+
+def add_real_world_applications_slide(prs):
+    """Create real-world applications slide"""
+    slide = prs.slides.add_slide(prs.slide_layouts[1])
+    title = slide.shapes.title
+    title.text = "Real-World Applications"
+    _style_standard_slide(slide)
+
+    content = slide.placeholders[1]
+    tf = content.text_frame
+    tf.clear()
+
+    p = tf.add_paragraph()
+    p.text = "Industry Use Cases"
+    p.font.bold = True
+    p.font.size = Pt(16)
+    p.font.color.rgb = PRIMARY_COLOR
+
+    use_cases = [
+        "Banking & AML: Monitoring suspicious account and wire-transfer activity",
+        "Credit & Debit Cards: Real-time card-present and card-not-present fraud detection",
+        "E-commerce & Payment Gateways: Identifying fraudulent orders and chargeback risk",
+        "Fintech Wallets & BNPL: Detecting account takeovers and abnormal spending patterns",
+        "Insurance: Flagging anomalous claim behaviour for deeper investigation",
+        "Regulatory Compliance: Supporting KYC/AML obligations with explainable alerts"
+    ]
+
+    for case in use_cases:
+        p = tf.add_paragraph()
+        p.text = case
+        p.level = 1
+        p.font.size = Pt(14)
+
+    p = tf.add_paragraph()
+    p.text = "The architecture is generic enough to be adapted to any high-volume transactional domain where timely detection of anomalous behaviour is critical."
+    p.level = 1
+    p.font.size = Pt(14)
+    p.space_before = Pt(10)
+
+def add_repository_slide(prs):
+    """Create codebase repository slide"""
+    slide = prs.slides.add_slide(prs.slide_layouts[1])
+    title = slide.shapes.title
+    title.text = "Codebase & Repository"
+    _style_standard_slide(slide)
+
+    content = slide.placeholders[1]
+    tf = content.text_frame
+    tf.clear()
+
+    p = tf.add_paragraph()
+    p.text = "Project Repository"
+    p.font.bold = True
+    p.font.size = Pt(16)
+    p.font.color.rgb = PRIMARY_COLOR
+
+    p = tf.add_paragraph()
+    p.text = "The full dissertation codebase, including the web app, core AML engine, notebooks and documentation, is available on GitHub:"
+    p.level = 1
+    p.font.size = Pt(14)
+    p.space_after = Pt(8)
+
+    p = tf.add_paragraph()
+    p.text = "https://github.com/TheSprinter/Dissertation-structured/tree/team"
+    p.level = 1
+    p.font.size = Pt(14)
+    p.font.bold = True
+
+    p = tf.add_paragraph()
+    p.text = "The repository also contains the presentation generator, sample datasets and configuration required to reproduce the experiments."
+    p.level = 1
+    p.font.size = Pt(14)
+
 def add_future_work_slide(prs):
     """Create future work slide"""
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Future Enhancements"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
@@ -785,7 +1120,7 @@ def add_future_work_slide(prs):
         p.text = category
         p.font.bold = True
         p.font.size = Pt(16)
-        p.font.color.rgb = RGBColor(0, 51, 102)
+        p.font.color.rgb = PRIMARY_COLOR
         p.space_after = Pt(4)
         
         for item in items:
@@ -799,6 +1134,7 @@ def add_conclusion_slide(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     title = slide.shapes.title
     title.text = "Conclusion"
+    _style_standard_slide(slide)
     
     content = slide.placeholders[1]
     tf = content.text_frame
@@ -808,7 +1144,7 @@ def add_conclusion_slide(prs):
     p.text = "Key Achievements"
     p.font.bold = True
     p.font.size = Pt(16)
-    p.font.color.rgb = RGBColor(0, 51, 102)
+    p.font.color.rgb = PRIMARY_COLOR
     
     achievements = [
         "✓ Modular fraud management system with 5 specialized modules",
@@ -835,7 +1171,7 @@ def add_conclusion_slide(prs):
     p.text = "Impact"
     p.font.bold = True
     p.font.size = Pt(16)
-    p.font.color.rgb = RGBColor(0, 51, 102)
+    p.font.color.rgb = PRIMARY_COLOR
     
     p = tf.add_paragraph()
     p.text = "This system demonstrates the practical applicability of AI/ML in fraud detection, providing organizations with a powerful tool to combat financial crimes while maintaining excellent user experience."
@@ -905,6 +1241,9 @@ def generate_presentation():
     
     print("Adding Architecture...")
     add_architecture_slide(prs)
+
+    print("Adding Design Patterns...")
+    add_design_patterns_slide(prs)
     
     print("Adding Modules Overview...")
     add_modules_overview_slide(prs)
@@ -921,6 +1260,7 @@ def generate_presentation():
     
     print("Adding Technologies...")
     add_technologies_slide(prs)
+    add_technologies_slide_part2(prs)
     
     print("Adding Algorithms...")
     add_algorithms_slide(prs)
@@ -928,15 +1268,24 @@ def generate_presentation():
     print("Adding Results...")
     add_results_slide(prs)
     add_comparison_slide(prs)
+
+    print("Adding Performance & Scalability...")
+    add_performance_scalability_slide(prs)
     
     print("Adding Benefits...")
     add_benefits_slide(prs)
+
+    print("Adding Real-World Applications...")
+    add_real_world_applications_slide(prs)
     
     print("Adding Future Work...")
     add_future_work_slide(prs)
     
     print("Adding Conclusion...")
     add_conclusion_slide(prs)
+
+    print("Adding Repository Details...")
+    add_repository_slide(prs)
     
     print("Adding Thank You...")
     add_thank_you_slide(prs)
