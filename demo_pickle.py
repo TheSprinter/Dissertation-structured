@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 def print_header(title):
     """Print a formatted header"""
     print("\n" + "="*70)
-    print(f"  {title}")
+    print(f" {title}")
     print("="*70)
 
 def print_step(step_num, description):
@@ -32,33 +32,33 @@ def demo_check_configuration():
     """Demo: Check if pickle is configured"""
     print_header("DEMO 1: Check Pickle Configuration")
     
-    print("\n✓ Checking joblib installation...")
+    print("\n Checking joblib installation...")
     import joblib
-    print(f"  Joblib version: {joblib.__version__}")
+    print(f" Joblib version: {joblib.__version__}")
     
-    print("\n✓ Checking models directory...")
+    print("\n Checking models directory...")
     if os.path.exists('models'):
-        print(f"  Models directory exists: ✅")
+        print(f" Models directory exists: [OK]")
         files = os.listdir('models')
         if files:
-            print(f"  Files found: {len(files)}")
+            print(f" Files found: {len(files)}")
             for f in files:
-                print(f"    - {f}")
+                print(f" - {f}")
         else:
-            print(f"  Directory is empty (ready for first save)")
+            print(f" Directory is empty (ready for first save)")
     else:
-        print(f"  Models directory not found ⚠️")
+        print(f" Models directory not found [WARN]")
     
-    print("\n✓ Checking AMLComplianceSystem...")
+    print("\n Checking AMLComplianceSystem...")
     from aml_system import AMLComplianceSystem
     system = AMLComplianceSystem()
     
     methods = ['train_new_model', 'load_saved_model', 'save_current_model']
     for method in methods:
         if hasattr(system, method):
-            print(f"  {method}(): ✅")
+            print(f" {method}(): [OK]")
     
-    print("\n🎉 Pickle is configured and ready!")
+    print("\nPickle is configured and ready!")
     wait_for_user()
 
 def demo_check_existing_model():
@@ -73,7 +73,7 @@ def demo_check_existing_model():
     # Load sample data
     data_path = 'fraud_management_dataset-1.5L (1).csv'
     if not os.path.exists(data_path):
-        print(f"\n⚠️ Sample data not found: {data_path}")
+        print(f"\n[WARN] Sample data not found: {data_path}")
         print("Please ensure the dataset file exists in the project root.")
         return
     
@@ -82,8 +82,8 @@ def demo_check_existing_model():
     
     print_step(2, "Check if saved model exists")
     if system.ml_predictor.model_exists():
-        print("✅ Saved model found!")
-        print("   Location: models/fraud_model.pkl")
+        print("[PASS] Saved model found!")
+        print(" Location: models/fraud_model.pkl")
         
         # Get file info
         model_path = 'models/fraud_model.pkl'
@@ -92,11 +92,11 @@ def demo_check_existing_model():
         from datetime import datetime
         mod_date = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d %H:%M:%S')
         
-        print(f"   Size: {size_mb:.2f} MB")
-        print(f"   Last modified: {mod_date}")
+        print(f" Size: {size_mb:.2f} MB")
+        print(f" Last modified: {mod_date}")
     else:
-        print("⚠️ No saved model found")
-        print("   Run demo_train_and_save() to create one")
+        print("[WARN] No saved model found")
+        print(" Run demo_train_and_save() to create one")
     
     wait_for_user()
 
@@ -111,24 +111,24 @@ def demo_train_and_save():
     
     data_path = 'fraud_management_dataset-1.5L (1).csv'
     if not os.path.exists(data_path):
-        print(f"\n⚠️ Sample data not found: {data_path}")
+        print(f"\n[WARN] Sample data not found: {data_path}")
         return
     
     print(f"Loading data from: {data_path}")
     system.load_data(data_path)
-    print("✅ Data loaded successfully")
+    print("[PASS] Data loaded successfully")
     
     print_step(2, "Train machine learning model")
-    print("⚠️ This will take 3-5 minutes...")
-    print("   Training RandomForest and GradientBoosting models")
-    print("   Performing cross-validation")
-    print("   Selecting best model")
+    print("[NOTE] This will take 3-5 minutes...")
+    print(" Training RandomForest and GradientBoosting models")
+    print(" Performing cross-validation")
+    print(" Selecting best model")
     
     start_time = time.time()
     model = system.train_new_model(save=True)
     elapsed = time.time() - start_time
     
-    print(f"\n✅ Training complete in {elapsed:.1f} seconds")
+    print(f"\n[PASS] Training complete in {elapsed:.1f} seconds")
     
     print_step(3, "Model automatically saved!")
     print("Files created in models/ directory:")
@@ -137,11 +137,11 @@ def demo_train_and_save():
         if os.path.isfile(filepath):
             size_kb = os.path.getsize(filepath) / 1024
             if size_kb > 1024:
-                print(f"  ✓ {filename} ({size_kb/1024:.2f} MB)")
+                print(f" {filename} ({size_kb/1024:.2f} MB)")
             else:
-                print(f"  ✓ {filename} ({size_kb:.2f} KB)")
+                print(f" {filename} ({size_kb:.2f} KB)")
     
-    print("\n🎉 Model trained and saved successfully!")
+    print("\nModel trained and saved successfully!")
     wait_for_user()
 
 def demo_load_model():
@@ -155,41 +155,41 @@ def demo_load_model():
     
     data_path = 'fraud_management_dataset-1.5L (1).csv'
     if not os.path.exists(data_path):
-        print(f"\n⚠️ Sample data not found: {data_path}")
+        print(f"\n[WARN] Sample data not found: {data_path}")
         return
     
     system.load_data(data_path)
     
     print_step(2, "Load saved model from disk")
-    print("⚡ Loading model (this is FAST!)...")
+    print("Loading model (this is FAST!)...")
     
     start_time = time.time()
     success = system.load_saved_model()
     elapsed = time.time() - start_time
     
     if success:
-        print(f"\n✅ Model loaded in {elapsed:.2f} seconds!")
-        print("\n📊 Model is ready for predictions")
+        print(f"\n[PASS] Model loaded in {elapsed:.2f} seconds!")
+        print("\nModel is ready for predictions")
         
         # Show model info
         import joblib
         metadata = joblib.load('models/model_metadata.pkl')
         print("\nModel Information:")
-        print(f"  Training date: {metadata.get('timestamp', 'Unknown')}")
-        print(f"  Features: {metadata.get('feature_count', 'Unknown')}")
+        print(f" Training date: {metadata.get('timestamp', 'Unknown')}")
+        print(f" Features: {metadata.get('feature_count', 'Unknown')}")
         if 'model_metrics' in metadata:
             metrics = metadata['model_metrics']
             if metrics:
                 best_model = list(metrics.keys())[0]
                 m = metrics[best_model]
-                print(f"\n  Performance Metrics ({best_model}):")
-                print(f"    Accuracy:  {m.get('accuracy', 0):.3f}")
-                print(f"    Precision: {m.get('precision', 0):.3f}")
-                print(f"    Recall:    {m.get('recall', 0):.3f}")
-                print(f"    F1-Score:  {m.get('f1_score', 0):.3f}")
+                print(f"\n Performance Metrics ({best_model}):")
+                print(f" Accuracy: {m.get('accuracy', 0):.3f}")
+                print(f" Precision: {m.get('precision', 0):.3f}")
+                print(f" Recall: {m.get('recall', 0):.3f}")
+                print(f" F1-Score: {m.get('f1_score', 0):.3f}")
     else:
-        print("\n⚠️ Failed to load model")
-        print("   No saved model found. Run demo_train_and_save() first.")
+        print("\n[WARN] Failed to load model")
+        print(" No saved model found. Run demo_train_and_save() first.")
     
     wait_for_user()
 
@@ -201,15 +201,15 @@ def demo_compare_speed():
     
     data_path = 'fraud_management_dataset-1.5L (1).csv'
     if not os.path.exists(data_path):
-        print(f"\n⚠️ Sample data not found: {data_path}")
+        print(f"\n[WARN] Sample data not found: {data_path}")
         return
     
-    print("\n📊 Speed Comparison:")
+    print("\nSpeed Comparison:")
     print("-" * 70)
     
     # Check if model exists
     if os.path.exists('models/fraud_model.pkl'):
-        print("\n⚡ LOADING SAVED MODEL:")
+        print("\nLOADING SAVED MODEL:")
         system = AMLComplianceSystem()
         system.load_data(data_path)
         
@@ -217,22 +217,22 @@ def demo_compare_speed():
         system.load_saved_model()
         load_time = time.time() - start_time
         
-        print(f"   Time taken: {load_time:.2f} seconds")
-        print(f"   Status: ✅ Ready for predictions!")
+        print(f" Time taken: {load_time:.2f} seconds")
+        print(f" Status: [OK] Ready for predictions!")
         
-        print("\n🐢 IF WE HAD TO TRAIN:")
-        print(f"   Estimated time: 180-300 seconds (3-5 minutes)")
-        print(f"   Status: ⏰ Much slower!")
+        print("\nIF WE HAD TO TRAIN:")
+        print(f" Estimated time: 180-300 seconds (3-5 minutes)")
+        print(f" Status: Much slower!")
         
-        print(f"\n💡 SPEED IMPROVEMENT:")
-        estimated_train_time = 240  # Average 4 minutes
+        print(f"\nSPEED IMPROVEMENT:")
+        estimated_train_time = 240 # Average 4 minutes
         speedup = estimated_train_time / load_time
         time_saved = estimated_train_time - load_time
-        print(f"   {speedup:.0f}x faster!")
-        print(f"   Time saved: {time_saved:.0f} seconds ({time_saved/60:.1f} minutes)")
+        print(f" {speedup:.0f}x faster!")
+        print(f" Time saved: {time_saved:.0f} seconds ({time_saved/60:.1f} minutes)")
     else:
-        print("\n⚠️ No saved model found")
-        print("   Run demo_train_and_save() first to see the comparison")
+        print("\n[WARN] No saved model found")
+        print(" Run demo_train_and_save() first to see the comparison")
     
     wait_for_user()
 
@@ -244,7 +244,7 @@ def demo_make_prediction():
     
     data_path = 'fraud_management_dataset-1.5L (1).csv'
     if not os.path.exists(data_path):
-        print(f"\n⚠️ Sample data not found: {data_path}")
+        print(f"\n[WARN] Sample data not found: {data_path}")
         return
     
     print_step(1, "Load system and model")
@@ -252,10 +252,10 @@ def demo_make_prediction():
     system.load_data(data_path)
     
     if not system.load_saved_model():
-        print("⚠️ No model found. Train one first with demo_train_and_save()")
+        print("[WARN] No model found. Train one first with demo_train_and_save()")
         return
     
-    print("✅ Model loaded and ready")
+    print("[PASS] Model loaded and ready")
     
     print_step(2, "Create sample transaction")
     
@@ -273,31 +273,31 @@ def demo_make_prediction():
     }
     
     print("\nTransaction Details:")
-    print(f"  Amount: ${sample_transaction['Amount']:,}")
-    print(f"  From: {sample_transaction['Sender_bank_location']}")
-    print(f"  To: {sample_transaction['Receiver_bank_location']}")
-    print(f"  Type: {sample_transaction['Payment_type']}")
+    print(f" Amount: ${sample_transaction['Amount']:,}")
+    print(f" From: {sample_transaction['Sender_bank_location']}")
+    print(f" To: {sample_transaction['Receiver_bank_location']}")
+    print(f" Type: {sample_transaction['Payment_type']}")
     
     print_step(3, "Predict fraud risk")
     
     try:
         result = system.predict_compliance_risk(sample_transaction)
         
-        print("\n🎯 PREDICTION RESULTS:")
+        print("\nPREDICTION RESULTS:")
         print("-" * 70)
-        print(f"  Risk Label:       {result['risk_label']}")
-        print(f"  Risk Probability: {result['risk_probability']:.2%}")
-        print(f"  Risk Score:       {result['risk_score']:.1f}/100")
+        print(f" Risk Label: {result['risk_label']}")
+        print(f" Risk Probability: {result['risk_probability']:.2%}")
+        print(f" Risk Score: {result['risk_score']:.1f}/100")
         
         if result['risk_probability'] > 0.7:
-            print("\n  ⚠️  HIGH RISK - Recommend manual review")
+            print("\n [WARN] HIGH RISK - Recommend manual review")
         elif result['risk_probability'] > 0.4:
-            print("\n  ⚡ MEDIUM RISK - Monitor transaction")
+            print("\n [NOTE] MEDIUM RISK - Monitor transaction")
         else:
-            print("\n  ✅ LOW RISK - Transaction appears normal")
+            print("\n [PASS] LOW RISK - Transaction appears normal")
     
     except Exception as e:
-        print(f"\n❌ Prediction failed: {e}")
+        print(f"\n[FAIL] Prediction failed: {e}")
     
     wait_for_user()
 
@@ -307,14 +307,14 @@ def demo_menu():
         print_header("Pickle Model Persistence - Interactive Demo")
         
         print("\nChoose a demonstration:\n")
-        print("  1. Check Configuration")
-        print("  2. Check for Existing Model")
-        print("  3. Train and Save Model (3-5 minutes)")
-        print("  4. Load Saved Model (2 seconds)")
-        print("  5. Compare Training vs Loading Speed")
-        print("  6. Make Predictions with Loaded Model")
-        print("  7. Run All Demos (Full Walkthrough)")
-        print("  0. Exit")
+        print(" 1. Check Configuration")
+        print(" 2. Check for Existing Model")
+        print(" 3. Train and Save Model (3-5 minutes)")
+        print(" 4. Load Saved Model (2 seconds)")
+        print(" 5. Compare Training vs Loading Speed")
+        print(" 6. Make Predictions with Loaded Model")
+        print(" 7. Run All Demos (Full Walkthrough)")
+        print(" 0. Exit")
         
         choice = input("\nEnter your choice (0-7): ").strip()
         
@@ -338,30 +338,30 @@ def demo_menu():
             demo_load_model()
             demo_compare_speed()
             demo_make_prediction()
-            print_header("All Demos Complete! 🎉")
+            print_header("All Demos Complete!")
             wait_for_user()
         elif choice == '0':
-            print("\n👋 Thanks for trying the pickle demo!")
+            print("\nThanks for trying the pickle demo!")
             break
         else:
-            print("\n⚠️ Invalid choice. Please try again.")
+            print("\n[WARN] Invalid choice. Please try again.")
 
 if __name__ == '__main__':
     print("""
 ╔═══════════════════════════════════════════════════════════════════╗
-║                                                                   ║
-║     PICKLE MODEL PERSISTENCE - INTERACTIVE DEMO                   ║
-║     Fraud Management System                                       ║
-║                                                                   ║
+║ ║
+║ PICKLE MODEL PERSISTENCE - INTERACTIVE DEMO ║
+║ Fraud Management System ║
+║ ║
 ╚═══════════════════════════════════════════════════════════════════╝
 
 This demo shows how pickle enables fast model loading.
 
 Key Features:
-  ✓ Save trained models to disk
-  ✓ Load models in ~2 seconds (vs 5 minutes training)
-  ✓ Deploy pre-trained models to production
-  ✓ Share models across sessions
+   Save trained models to disk
+   Load models in ~2 seconds (vs 5 minutes training)
+   Deploy pre-trained models to production
+   Share models across sessions
 
 """)
     

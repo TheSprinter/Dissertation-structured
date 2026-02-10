@@ -10,7 +10,7 @@ SYSTEM_NAME = "Fraud Management AI System"
 VERSION = "1.0.0"
 
 # Data Settings
-DATA_PATH = None  # Set to your data file path
+DATA_PATH = None # Set to your data file path
 SYNTHETIC_DATA_SIZE = 1000
 
 # Model Settings
@@ -35,8 +35,8 @@ DASHBOARD_FIGSIZE = (18, 12)
 
 # Anomaly Detection Settings
 ZSCORE_THRESHOLD = 3
-EARLY_HOUR_THRESHOLD = 300  # 5 AM in minutes
-LATE_HOUR_THRESHOLD = 1320  # 10 PM in minutes
+EARLY_HOUR_THRESHOLD = 300 # 5 AM in minutes
+LATE_HOUR_THRESHOLD = 1320 # 10 PM in minutes
 
 # Structuring Detection
 STRUCTURING_MIN = 9000

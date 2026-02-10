@@ -1,6 +1,6 @@
-# Quick Start Guide - AML Compliance System
+﻿# Quick Start Guide - AML Compliance System
 
-## 🚀 Getting Started in 5 Minutes
+## Getting Started in 5 Minutes
 
 ### Step 1: Setup
 ```bash
@@ -18,7 +18,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-## 📝 Common Tasks
+## Common Tasks
 
 ### Load Custom Data
 ```python
@@ -64,7 +64,7 @@ summary = aml.generate_summary_report()
 print(summary)
 ```
 
-## 🎯 Module-Specific Usage
+## Module-Specific Usage
 
 ### Data Manager Only
 ```python
@@ -106,7 +106,7 @@ viz = AMLVisualizer(df)
 viz.create_comprehensive_dashboard(profiles, anomalies)
 ```
 
-## 🔧 Configuration
+## Configuration
 
 Edit `src/config.py` to customize:
 
@@ -123,7 +123,7 @@ TEST_SIZE = 0.3
 CONTAMINATION_RATE = 0.1
 ```
 
-## 📊 Output Files
+## Output Files
 
 After running the analysis:
 
@@ -133,7 +133,7 @@ After running the analysis:
 - `output/detailed_analysis.png` - Detailed charts
 - `output/customer_profiles.png` - Customer visualizations
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Import Errors
 ```bash
@@ -141,8 +141,8 @@ After running the analysis:
 cd aml_compliance_system
 
 # Add to Python path
-export PYTHONPATH="${PYTHONPATH}:$(pwd)/src"  # Linux/Mac
-set PYTHONPATH=%PYTHONPATH%;%CD%\src          # Windows
+export PYTHONPATH="${PYTHONPATH}:$(pwd)/src" # Linux/Mac
+set PYTHONPATH=%PYTHONPATH%;%CD%\src # Windows
 ```
 
 ### Missing Dependencies
@@ -157,21 +157,21 @@ cd aml_compliance_system
 python main.py
 ```
 
-## 💡 Tips
+## Tips
 
 1. **Synthetic Data**: If no data file is provided, the system automatically generates synthetic data
 2. **Parallel Execution**: Modules can be used independently for faster prototyping
 3. **Custom Models**: Extend MLPredictor class to add your own ML models
 4. **Batch Processing**: Process multiple transactions at once using pandas DataFrames
 
-## 📚 Learn More
+## Learn More
 
 - Full documentation: `README.md`
 - Module documentation: Check docstrings in each module
 - Configuration options: `src/config.py`
 - Tests: `tests/test_system.py`
 
-## 🤝 Need Help?
+## Need Help?
 
 1. Check the README.md file
 2. Review module docstrings
@@ -180,4 +180,4 @@ python main.py
 
 ---
 
-**Happy Analyzing! 🎉**
+**Happy Analyzing! **

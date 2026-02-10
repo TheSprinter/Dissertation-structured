@@ -1,4 +1,4 @@
-"""
+﻿"""
 Visualizer Module
 =================
 
@@ -229,35 +229,35 @@ class AMLVisualizer:
         fraudulent_transactions = self.df['is_fraud'].sum()
         fraud_rate = fraudulent_transactions / total_transactions * 100
         
-        print(f"\n📊 TRANSACTION OVERVIEW:")
-        print(f"   Total Transactions Analyzed: {total_transactions:,}")
-        print(f"   Fraudulent Transactions: {fraudulent_transactions:,}")
-        print(f"   Overall Fraud Rate: {fraud_rate:.2f}%")
-        print(f"   Date Range: {self.df['transaction_date'].min()} to {self.df['transaction_date'].max()}")
+        print(f"\n TRANSACTION OVERVIEW:")
+        print(f" Total Transactions Analyzed: {total_transactions:,}")
+        print(f" Fraudulent Transactions: {fraudulent_transactions:,}")
+        print(f" Overall Fraud Rate: {fraud_rate:.2f}%")
+        print(f" Date Range: {self.df['transaction_date'].min()} to {self.df['transaction_date'].max()}")
         
         # Customer risk summary
         if customer_profiles is not None:
             risk_summary = customer_profiles['risk_classification'].value_counts()
-            print(f"\n🎯 CUSTOMER RISK ASSESSMENT:")
+            print(f"\n CUSTOMER RISK ASSESSMENT:")
             for risk_level, count in risk_summary.items():
                 percentage = count / len(customer_profiles) * 100
-                print(f"   {risk_level} Risk Customers: {count} ({percentage:.1f}%)")
+                print(f" {risk_level} Risk Customers: {count} ({percentage:.1f}%)")
         
         # Anomaly detection summary
         if anomalies is not None and 'composite_anomaly' in anomalies.columns:
             anomaly_count = anomalies['composite_anomaly'].sum()
             anomaly_rate = anomaly_count / len(anomalies) * 100
-            print(f"\n🔍 ANOMALY DETECTION RESULTS:")
-            print(f"   Anomalous Transactions: {anomaly_count:,}")
-            print(f"   Anomaly Detection Rate: {anomaly_rate:.2f}%")
+            print(f"\n ANOMALY DETECTION RESULTS:")
+            print(f" Anomalous Transactions: {anomaly_count:,}")
+            print(f" Anomaly Detection Rate: {anomaly_rate:.2f}%")
         
         # ML model performance
         if ml_metrics:
-            print(f"\n🤖 MACHINE LEARNING MODEL PERFORMANCE:")
+            print(f"\n MACHINE LEARNING MODEL PERFORMANCE:")
             for model_name, metrics in ml_metrics.items():
-                print(f"   {model_name.upper()}:")
+                print(f" {model_name.upper()}:")
                 for metric_name, value in metrics.items():
-                    print(f"     {metric_name}: {value:.3f}")
+                    print(f" {metric_name}: {value:.3f}")
         
         print("\n" + "="*80)
         print("REPORT GENERATION COMPLETE")

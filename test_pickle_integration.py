@@ -1,4 +1,4 @@
-"""
+﻿"""
 Quick Test: Verify Pickle Integration
 ======================================
 
@@ -26,10 +26,10 @@ def test_imports():
         
         from aml_system import AMLComplianceSystem
         from modules.ml_predictor import MLPredictor
-        print("✅ All imports successful")
+        print("[PASS] All imports successful")
         return True
     except Exception as e:
-        print(f"❌ Import error: {e}")
+        print(f"[FAIL] Import error: {e}")
         return False
 
 
@@ -37,10 +37,10 @@ def test_model_directory():
     """Test that models directory exists"""
     print("\nTesting models directory...")
     if os.path.exists('models'):
-        print("✅ Models directory exists")
+        print("[PASS] Models directory exists")
         return True
     else:
-        print("⚠️ Models directory not found (will be created on first save)")
+        print("[WARN] Models directory not found (will be created on first save)")
         return True
 
 
@@ -63,14 +63,14 @@ def test_pickle_functionality():
         os.remove(temp_file)
         
         if loaded_data == test_data:
-            print("✅ Joblib save/load working correctly")
+            print("[PASS] Joblib save/load working correctly")
             return True
         else:
-            print("❌ Data mismatch after load")
+            print("[FAIL] Data mismatch after load")
             return False
             
     except Exception as e:
-        print(f"❌ Joblib test failed: {e}")
+        print(f"[FAIL] Joblib test failed: {e}")
         return False
 
 
@@ -98,14 +98,14 @@ def test_ml_predictor_methods():
                 missing_methods.append(method)
         
         if missing_methods:
-            print(f"❌ Missing methods: {', '.join(missing_methods)}")
+            print(f"[FAIL] Missing methods: {', '.join(missing_methods)}")
             return False
         else:
-            print("✅ All required methods present")
+            print("[PASS] All required methods present")
             return True
             
     except Exception as e:
-        print(f"❌ Method check failed: {e}")
+        print(f"[FAIL] Method check failed: {e}")
         return False
 
 
@@ -132,14 +132,14 @@ def test_system_methods():
                 missing_methods.append(method)
         
         if missing_methods:
-            print(f"❌ Missing methods: {', '.join(missing_methods)}")
+            print(f"[FAIL] Missing methods: {', '.join(missing_methods)}")
             return False
         else:
-            print("✅ All required methods present")
+            print("[PASS] All required methods present")
             return True
             
     except Exception as e:
-        print(f"❌ Method check failed: {e}")
+        print(f"[FAIL] Method check failed: {e}")
         return False
 
 
@@ -150,13 +150,13 @@ def test_requirements():
         with open('requirements.txt', 'r') as f:
             content = f.read()
             if 'joblib' in content:
-                print("✅ Joblib found in requirements.txt")
+                print("[PASS] Joblib found in requirements.txt")
                 return True
             else:
-                print("⚠️ Joblib not in requirements.txt")
+                print("[WARN] Joblib not in requirements.txt")
                 return False
     except Exception as e:
-        print(f"❌ Could not read requirements.txt: {e}")
+        print(f"[FAIL] Could not read requirements.txt: {e}")
         return False
 
 
@@ -180,7 +180,7 @@ def run_all_tests():
         try:
             results.append(test())
         except Exception as e:
-            print(f"❌ Test failed with exception: {e}")
+            print(f"[FAIL] Test failed with exception: {e}")
             results.append(False)
     
     print("\n" + "="*60)
@@ -191,10 +191,10 @@ def run_all_tests():
     print(f"Tests passed: {passed}/{total}")
     
     if all(results):
-        print("\n🎉 All tests passed! Pickle integration is working correctly.")
+        print("\n All tests passed! Pickle integration is working correctly.")
         return True
     else:
-        print("\n⚠️ Some tests failed. Check the output above.")
+        print("\n[WARN] Some tests failed. Check the output above.")
         return False
 
 

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Main Execution Script
 =====================
 
@@ -27,11 +27,11 @@ def main():
     # Load data (use your data path or synthetic data will be generated)
     data_path = 'https://drive.google.com/file/d/1AxCyxmfbAMgPMhxQAnyWcieCaDMfhCMQ/view?usp=sharing'
     
-    print("\n📂 Loading transaction data...")
+    print("\n Loading transaction data...")
     aml_system.load_data(data_path)
     
     # Run complete analysis
-    print("\n🔄 Starting complete fraud analysis...")
+    print("\n Starting complete fraud analysis...")
     analysis_results = aml_system.run_complete_analysis(save_results=True)
     
     # Example: Predict risk for a new transaction
@@ -56,10 +56,10 @@ def main():
         prediction = aml_system.predict_compliance_risk(new_transaction)
         print("\nTransaction Details:")
         for key, value in new_transaction.items():
-            print(f"   {key}: {value}")
+            print(f" {key}: {value}")
         print("\nRisk Assessment:")
         for key, value in prediction.items():
-            print(f"   {key}: {value}")
+            print(f" {key}: {value}")
     except Exception as e:
         print(f"Prediction error: {e}")
     
@@ -78,14 +78,14 @@ def main():
             print(f"{key.replace('_', ' ').title()}: {value}")
     
     print("\n" + "="*80)
-    print("✅ ANALYSIS COMPLETE!")
+    print("[PASS] ANALYSIS COMPLETE!")
     print("="*80)
-    print("\n📁 Generated Files:")
-    print("   • output/customer_profiles.csv")
-    print("   • output/detected_anomalies.csv")
-    print("   • output/dashboard.png")
-    print("   • output/detailed_analysis.png")
-    print("   • output/customer_profiles.png")
+    print("\n Generated Files:")
+    print(" • output/customer_profiles.csv")
+    print(" • output/detected_anomalies.csv")
+    print(" • output/dashboard.png")
+    print(" • output/detailed_analysis.png")
+    print(" • output/customer_profiles.png")
 
 
 if __name__ == "__main__":

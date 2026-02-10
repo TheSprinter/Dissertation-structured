@@ -29,10 +29,10 @@ def check_configuration():
     status['total'] += 1
     try:
         import joblib
-        print(f"   ✅ Joblib installed (version {joblib.__version__})")
+        print(f" [PASS] Joblib installed (version {joblib.__version__})")
         status['passed'] += 1
     except ImportError:
-        print("   ❌ Joblib not installed")
+        print(" [FAIL] Joblib not installed")
         status['issues'].append("Install joblib: pip install joblib")
     
     # Check 2: Requirements.txt
@@ -41,28 +41,28 @@ def check_configuration():
     try:
         with open('requirements.txt', 'r') as f:
             if 'joblib' in f.read():
-                print("   ✅ Joblib in requirements.txt")
+                print(" [PASS] Joblib in requirements.txt")
                 status['passed'] += 1
             else:
-                print("   ⚠️ Joblib not in requirements.txt")
+                print(" [WARN] Joblib not in requirements.txt")
                 status['issues'].append("Add 'joblib>=1.3.0' to requirements.txt")
     except FileNotFoundError:
-        print("   ❌ requirements.txt not found")
+        print(" [FAIL] requirements.txt not found")
         status['issues'].append("Create requirements.txt")
     
     # Check 3: Models directory
     print("\n3. Checking models directory...")
     status['total'] += 1
     if os.path.exists('models'):
-        print("   ✅ Models directory exists")
+        print(" [PASS] Models directory exists")
         files = os.listdir('models')
         if files:
-            print(f"   📁 Contains: {', '.join(files)}")
+            print(f" [DIR] Contains: {', '.join(files)}")
         else:
-            print("   📁 Empty (will be populated after first training)")
+            print(" [DIR] Empty (will be populated after first training)")
         status['passed'] += 1
     else:
-        print("   ❌ Models directory not found")
+        print(" [FAIL] Models directory not found")
         status['issues'].append("Create 'models' directory")
     
     # Check 4: MLPredictor methods
@@ -79,13 +79,13 @@ def check_configuration():
         missing = [m for m in methods if not hasattr(predictor, m)]
         
         if not missing:
-            print(f"   ✅ All methods present: {', '.join(methods)}")
+            print(f" [PASS] All methods present: {', '.join(methods)}")
             status['passed'] += 1
         else:
-            print(f"   ❌ Missing methods: {', '.join(missing)}")
+            print(f" [FAIL] Missing methods: {', '.join(missing)}")
             status['issues'].append("Update ml_predictor.py with pickle methods")
     except Exception as e:
-        print(f"   ❌ Error: {e}")
+        print(f" [FAIL] Error: {e}")
         status['issues'].append("Fix MLPredictor import/implementation")
     
     # Check 5: AMLComplianceSystem methods
@@ -99,13 +99,13 @@ def check_configuration():
         missing = [m for m in methods if not hasattr(system, m)]
         
         if not missing:
-            print(f"   ✅ All methods present: {', '.join(methods)}")
+            print(f" [PASS] All methods present: {', '.join(methods)}")
             status['passed'] += 1
         else:
-            print(f"   ❌ Missing methods: {', '.join(missing)}")
+            print(f" [FAIL] Missing methods: {', '.join(missing)}")
             status['issues'].append("Update aml_system.py with model management methods")
     except Exception as e:
-        print(f"   ❌ Error: {e}")
+        print(f" [FAIL] Error: {e}")
         status['issues'].append("Fix AMLComplianceSystem import/implementation")
     
     # Check 6: Auto-save in run_complete_analysis
@@ -115,13 +115,13 @@ def check_configuration():
         with open('src/aml_system.py', 'r') as f:
             content = f.read()
             if 'load_model_from_disk' in content and 'run_complete_analysis' in content:
-                print("   ✅ Auto-load feature integrated in run_complete_analysis")
+                print(" [PASS] Auto-load feature integrated in run_complete_analysis")
                 status['passed'] += 1
             else:
-                print("   ⚠️ Auto-load may not be configured")
+                print(" [WARN] Auto-load may not be configured")
                 status['issues'].append("Review aml_system.py run_complete_analysis method")
     except Exception as e:
-        print(f"   ❌ Error: {e}")
+        print(f" [FAIL] Error: {e}")
     
     # Check 7: Streamlit app integration
     print("\n7. Checking Streamlit app (app.py)...")
@@ -130,13 +130,13 @@ def check_configuration():
         with open('app.py', 'r') as f:
             content = f.read()
             if 'run_complete_analysis' in content and 'AMLComplianceSystem' in content:
-                print("   ✅ App.py uses AMLComplianceSystem.run_complete_analysis()")
-                print("   ℹ️  Model loading is automatic via run_complete_analysis")
+                print(" [PASS] App.py uses AMLComplianceSystem.run_complete_analysis()")
+                print(" [INFO] Model loading is automatic via run_complete_analysis")
                 status['passed'] += 1
             else:
-                print("   ⚠️ App.py may need updates")
+                print(" [WARN] App.py may need updates")
     except Exception as e:
-        print(f"   ❌ Error: {e}")
+        print(f" [FAIL] Error: {e}")
     
     # Check 8: Documentation
     print("\n8. Checking documentation...")
@@ -144,10 +144,10 @@ def check_configuration():
     docs = ['MODEL_PERSISTENCE.md', 'example_model_persistence.py']
     found_docs = [d for d in docs if os.path.exists(d)]
     if found_docs:
-        print(f"   ✅ Documentation available: {', '.join(found_docs)}")
+        print(f" [PASS] Documentation available: {', '.join(found_docs)}")
         status['passed'] += 1
     else:
-        print("   ⚠️ Documentation files not found")
+        print(" [WARN] Documentation files not found")
     
     # Check 9: Saved models
     print("\n9. Checking for saved models...")
@@ -156,11 +156,11 @@ def check_configuration():
     if os.path.exists('models'):
         existing = [f for f in model_files if os.path.exists(os.path.join('models', f))]
         if existing:
-            print(f"   ✅ Found saved models: {', '.join(existing)}")
-            print("   ℹ️  System will load these automatically")
+            print(f" [PASS] Found saved models: {', '.join(existing)}")
+            print(" [INFO] System will load these automatically")
         else:
-            print("   ℹ️  No saved models yet (will be created after first training)")
-            print("   ℹ️  Run analysis once to train and save model")
+            print(" [INFO] No saved models yet (will be created after first training)")
+            print(" [INFO] Run analysis once to train and save model")
     
     # Summary
     print("\n" + "="*70)
@@ -169,27 +169,27 @@ def check_configuration():
     print(f"Tests Passed: {status['passed']}/{status['total']}")
     
     if status['passed'] == status['total']:
-        print("\n🎉 CONFIGURATION: EXCELLENT")
-        print("✅ Pickle integration is fully configured and operational!")
-        print("\n📝 Next Steps:")
-        print("   1. Run the app: streamlit run app.py")
-        print("   2. Upload data and run analysis")
-        print("   3. Model will be trained and saved automatically")
-        print("   4. Future runs will load the saved model instantly")
+        print("\nCONFIGURATION: EXCELLENT")
+        print("[PASS] Pickle integration is fully configured and operational!")
+        print("\nNext Steps:")
+        print(" 1. Run the app: streamlit run app.py")
+        print(" 2. Upload data and run analysis")
+        print(" 3. Model will be trained and saved automatically")
+        print(" 4. Future runs will load the saved model instantly")
     elif status['passed'] >= status['total'] * 0.7:
-        print("\n✅ CONFIGURATION: GOOD")
+        print("\n[PASS] CONFIGURATION: GOOD")
         print("Pickle integration is mostly configured.")
         if status['issues']:
-            print("\n⚠️ Minor issues to address:")
+            print("\n[WARN] Minor issues to address:")
             for issue in status['issues']:
-                print(f"   - {issue}")
+                print(f" - {issue}")
     else:
-        print("\n⚠️ CONFIGURATION: NEEDS ATTENTION")
+        print("\n[WARN] CONFIGURATION: NEEDS ATTENTION")
         print("Some configuration issues detected.")
         if status['issues']:
-            print("\n❌ Issues to fix:")
+            print("\n[FAIL] Issues to fix:")
             for issue in status['issues']:
-                print(f"   - {issue}")
+                print(f" - {issue}")
     
     print("\n" + "="*70)
     

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Data Manager Module
 ===================
 
@@ -37,34 +37,34 @@ class DataManager:
 
             missing_cols = set(required_columns) - set(self.df.columns)
             if missing_cols:
-                print(f"⚠ Warning: Missing columns: {missing_cols}")
+                print(f"[WARN] Warning: Missing columns: {missing_cols}")
 
             self._display_data_summary()
             return self.df
 
         except Exception as e:
-            print(f"⚠ Error loading data: {e}")
-            print("📝 Generating synthetic data for demonstration...")
+            print(f"[WARN] Error loading data: {e}")
+            print(" Generating synthetic data for demonstration...")
             self.df = self._generate_synthetic_data()
             return self.df
     
     def _display_data_summary(self):
         """Display comprehensive data summary"""
-        print(f"✓ Dataset loaded successfully!")
-        print(f"  • Total Transactions: {len(self.df):,}")
-        print(f"  • Columns: {len(self.df.columns)} columns")
-        print(f"  • Date Range: {self.df['transaction_date'].min()} to {self.df['transaction_date'].max()}")
+        print(f" Dataset loaded successfully!")
+        print(f" • Total Transactions: {len(self.df):,}")
+        print(f" • Columns: {len(self.df.columns)} columns")
+        print(f" • Date Range: {self.df['transaction_date'].min()} to {self.df['transaction_date'].max()}")
         fraud_count = self.df['is_fraud'].sum() if 'is_fraud' in self.df.columns else 0
-        print(f"  • Fraudulent Transactions: {fraud_count:,} ({fraud_count/len(self.df)*100:.2f}%)")
+        print(f" • Fraudulent Transactions: {fraud_count:,} ({fraud_count/len(self.df)*100:.2f}%)")
         
-        print(f"\n📊 Sample Data:")
+        print(f"\n Sample Data:")
         print(self.df.head())
     
     def _generate_synthetic_data(self, n_transactions=1000):
         """Generate synthetic transaction data for testing - New Schema"""
         np.random.seed(42)
         
-        print(f"🔄 Generating {n_transactions} synthetic transactions...")
+        print(f" Generating {n_transactions} synthetic transactions...")
         
         # Define data parameters
         merchants = [f'MERCH{str(i).zfill(4)}' for i in range(1, 101)]
@@ -90,15 +90,15 @@ class DataManager:
             # Amount patterns based on fraud
             if is_fraud:
                 amount = np.random.choice([
-                    np.random.randint(9000, 10000),   # Structuring
+                    np.random.randint(9000, 10000), # Structuring
                     np.random.randint(50000, 200000), # Large suspicious
-                    np.random.randint(1000, 15000)    # Smurfing
+                    np.random.randint(1000, 15000) # Smurfing
                 ], p=[0.4, 0.3, 0.3])
             else:
                 amount = np.random.choice([
-                    np.random.randint(10, 500),      # Small
-                    np.random.randint(500, 5000),    # Medium
-                    np.random.randint(5000, 50000)   # Large legitimate
+                    np.random.randint(10, 500), # Small
+                    np.random.randint(500, 5000), # Medium
+                    np.random.randint(5000, 50000) # Large legitimate
                 ], p=[0.6, 0.3, 0.1])
             
             transaction = {
@@ -152,5 +152,5 @@ class DataManager:
             data.append(transaction)
         
         df = pd.DataFrame(data)
-        print(f"✓ Synthetic data generated: {len(df)} transactions")
+        print(f" Synthetic data generated: {len(df)} transactions")
         return df

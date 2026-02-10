@@ -1,4 +1,4 @@
-"""
+﻿"""
 """Usage Examples for Fraud Management System
 =========================================
 
@@ -33,12 +33,12 @@ def example_1_quick_start():
     system = AMLComplianceSystem()
     
     # Load data (will generate synthetic if path is None)
-    system.load_data(None)  # Uses synthetic data
+    system.load_data(None) # Uses synthetic data
     
     # Run complete analysis
     results = system.run_complete_analysis()
     
-    print("\n✓ Analysis complete!")
+    print("\n Analysis complete!")
     print(f"Analyzed {len(results['customer_profiles'])} customers")
     print(f"Detected {len(results['anomalies'])} total transactions")
 
@@ -64,7 +64,7 @@ def example_2_custom_data():
     # Option 3: Use synthetic data
     system.load_data(None)
     
-    print("✓ Data loaded successfully!")
+    print(" Data loaded successfully!")
 
 
 # =============================================================================
@@ -84,15 +84,15 @@ def example_3_single_prediction():
     
     # Define a high-risk transaction
     high_risk_txn = {
-        'Time': '02:30:00',  # Late night
+        'Time': '02:30:00', # Late night
         'Date': '2024-06-15',
         'Sender_account': 'ACC0001',
         'Receiver_account': 'ACC0002',
-        'Amount': 9500,  # Just under $10k threshold
+        'Amount': 9500, # Just under $10k threshold
         'Payment_currency': 'USD',
-        'Received_currency': 'AED',  # Currency conversion
+        'Received_currency': 'AED', # Currency conversion
         'Sender_bank_location': 'US-NY',
-        'Receiver_bank_location': 'AE-DXB',  # High-risk location
+        'Receiver_bank_location': 'AE-DXB', # High-risk location
         'Payment_type': 'Wire'
     }
     
@@ -148,9 +148,9 @@ def example_4_batch_prediction():
     for i, txn in enumerate(transactions, 1):
         risk = system.predict_compliance_risk(txn)
         print(f"\nTransaction {i}:")
-        print(f"  Amount: ${txn['Amount']:,}")
-        print(f"  Route: {txn['Sender_bank_location']} → {txn['Receiver_bank_location']}")
-        print(f"  Risk Score: {risk['risk_score']:.2f}% - {risk['risk_label']}")
+        print(f" Amount: ${txn['Amount']:,}")
+        print(f" Route: {txn['Sender_bank_location']} → {txn['Receiver_bank_location']}")
+        print(f" Risk Score: {risk['risk_score']:.2f}% - {risk['risk_label']}")
 
 
 # =============================================================================
@@ -172,7 +172,7 @@ def example_5_customer_analysis():
     profiles = results['customer_profiles']
     high_risk_customers = profiles[profiles['risk_classification'] == 'HIGH']
     
-    print(f"\n📊 Found {len(high_risk_customers)} high-risk customers")
+    print(f"\n Found {len(high_risk_customers)} high-risk customers")
     
     # Analyze first high-risk customer
     if len(high_risk_customers) > 0:
@@ -180,12 +180,12 @@ def example_5_customer_analysis():
         profile = system.get_customer_risk_profile(account_id)
         
         print(f"\nDetailed Profile for {account_id}:")
-        print(f"  Risk Score: {profile['risk_score']:.2f}")
-        print(f"  Total Transactions: {profile['total_transactions']}")
-        print(f"  Suspicious Transactions: {profile['suspicious_transactions']}")
-        print(f"  Total Volume: ${profile['total_volume']:,.2f}")
-        print(f"  Cross-border Count: {profile['cross_border_count']}")
-        print(f"  High-risk Countries: {profile['high_risk_countries']}")
+        print(f" Risk Score: {profile['risk_score']:.2f}")
+        print(f" Total Transactions: {profile['total_transactions']}")
+        print(f" Suspicious Transactions: {profile['suspicious_transactions']}")
+        print(f" Total Volume: ${profile['total_volume']:,.2f}")
+        print(f" Cross-border Count: {profile['cross_border_count']}")
+        print(f" High-risk Countries: {profile['high_risk_countries']}")
 
 
 # =============================================================================
@@ -218,7 +218,7 @@ def example_6_individual_modules():
     predictor = MLPredictor(df)
     model = predictor.train_compliance_model()
     
-    print("\n✓ All modules executed independently!")
+    print("\n All modules executed independently!")
 
 
 # =============================================================================
@@ -248,9 +248,9 @@ def example_7_custom_thresholds():
     normal = profiles[profiles['risk_score'] < elevated_threshold]
     
     print(f"\nCustom Risk Analysis:")
-    print(f"  Critical Risk (≥{critical_threshold}): {len(critical)} customers")
-    print(f"  Elevated Risk (≥{elevated_threshold}): {len(elevated)} customers")
-    print(f"  Normal Risk (<{elevated_threshold}): {len(normal)} customers")
+    print(f" Critical Risk (≥{critical_threshold}): {len(critical)} customers")
+    print(f" Elevated Risk (≥{elevated_threshold}): {len(elevated)} customers")
+    print(f" Normal Risk (<{elevated_threshold}): {len(normal)} customers")
 
 
 # =============================================================================
@@ -265,26 +265,26 @@ def example_8_export_reports():
     
     system = AMLComplianceSystem()
     system.load_data(None)
-    results = system.run_complete_analysis()  # Already saves CSV files
+    results = system.run_complete_analysis() # Already saves CSV files
     
     # Generate summary
     summary = system.generate_summary_report()
     
-    print("\n📄 Generated Reports:")
-    print("  ✓ output/customer_profiles.csv")
-    print("  ✓ output/detected_anomalies.csv")
-    print("  ✓ output/dashboard.png")
-    print("  ✓ output/detailed_analysis.png")
-    print("  ✓ output/customer_profiles.png")
+    print("\n Generated Reports:")
+    print(" output/customer_profiles.csv")
+    print(" output/detected_anomalies.csv")
+    print(" output/dashboard.png")
+    print(" output/detailed_analysis.png")
+    print(" output/customer_profiles.png")
     
-    print("\n📊 Executive Summary:")
+    print("\n Executive Summary:")
     for key, value in summary.items():
         if isinstance(value, float):
-            print(f"  {key.replace('_', ' ').title()}: {value:.2f}")
+            print(f" {key.replace('_', ' ').title()}: {value:.2f}")
         elif isinstance(value, int):
-            print(f"  {key.replace('_', ' ').title()}: {value:,}")
+            print(f" {key.replace('_', ' ').title()}: {value:,}")
         else:
-            print(f"  {key.replace('_', ' ').title()}: {value}")
+            print(f" {key.replace('_', ' ').title()}: {value}")
 
 
 # =============================================================================
@@ -307,7 +307,7 @@ def example_9_visualization():
     # Generate dashboard (without profiles/anomalies)
     viz.create_comprehensive_dashboard()
     
-    print("\n✓ Basic dashboard generated!")
+    print("\n Basic dashboard generated!")
 
 
 # =============================================================================
@@ -321,31 +321,31 @@ def example_10_complete_workflow():
     print("="*60)
     
     # Step 1: Initialize system
-    print("\n📋 Step 1: Initializing system...")
+    print("\n Step 1: Initializing system...")
     system = AMLComplianceSystem()
     
     # Step 2: Load production data
-    print("\n📂 Step 2: Loading data...")
-    system.load_data(None)  # Replace with actual data path
+    print("\n Step 2: Loading data...")
+    system.load_data(None) # Replace with actual data path
     
     # Step 3: Run comprehensive analysis
-    print("\n🔍 Step 3: Running analysis...")
+    print("\n Step 3: Running analysis...")
     results = system.run_complete_analysis()
     
     # Step 4: Review high-risk customers
-    print("\n🚨 Step 4: Reviewing high-risk customers...")
+    print("\n Step 4: Reviewing high-risk customers...")
     profiles = results['customer_profiles']
     high_risk = profiles[profiles['risk_classification'] == 'HIGH']
     print(f"Found {len(high_risk)} high-risk customers requiring review")
     
     # Step 5: Check anomalies
-    print("\n🔍 Step 5: Checking anomalies...")
+    print("\n Step 5: Checking anomalies...")
     anomalies = results['anomalies']
     flagged = anomalies[anomalies['composite_anomaly'] == 1]
     print(f"Detected {len(flagged)} anomalous transactions")
     
     # Step 6: Real-time monitoring
-    print("\n📡 Step 6: Real-time transaction monitoring...")
+    print("\n Step 6: Real-time transaction monitoring...")
     new_transactions = [
         {'Time': '15:30:00', 'Date': '2024-06-16', 'Sender_account': 'ACC0010',
          'Receiver_account': 'ACC0020', 'Amount': 5000, 'Payment_currency': 'USD',
@@ -356,16 +356,16 @@ def example_10_complete_workflow():
     for txn in new_transactions:
         risk = system.predict_compliance_risk(txn)
         if risk['risk_score'] > 70:
-            print(f"⚠ HIGH RISK ALERT: Transaction flagged - Score: {risk['risk_score']:.2f}%")
+            print(f"[WARN] HIGH RISK ALERT: Transaction flagged - Score: {risk['risk_score']:.2f}%")
         else:
-            print(f"✓ Transaction cleared - Score: {risk['risk_score']:.2f}%")
+            print(f" Transaction cleared - Score: {risk['risk_score']:.2f}%")
     
     # Step 7: Generate reports for management
-    print("\n📊 Step 7: Generating executive report...")
+    print("\n Step 7: Generating executive report...")
     summary = system.generate_summary_report()
     print("Report generated successfully!")
     
-    print("\n✅ Workflow complete!")
+    print("\n[PASS] Workflow complete!")
 
 
 # =============================================================================

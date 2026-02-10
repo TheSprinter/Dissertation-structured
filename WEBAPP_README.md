@@ -1,6 +1,6 @@
-# Fraud Management System - Streamlit Web Application
+﻿# Fraud Management System - Streamlit Web Application
 
-## �️ Technologies Used
+## � Technologies Used
 
 - **Streamlit** (v1.30.0+) - Interactive web application framework
 - **Python** (v3.8+) - Runtime environment
@@ -9,7 +9,7 @@
 - **matplotlib** & **seaborn** - Data visualization
 - **Docker** - Containerization for deployment
 
-## �🚀 Quick Start
+## � Quick Start
 
 ### Option 1: Using the Start Script (Easiest)
 
@@ -41,18 +41,18 @@ chmod +x start_app.sh
 
 ---
 
-## 📱 Features
+## Features
 
-- **🏠 Home**: Overview of system capabilities
-- **📊 Data Upload & Analysis**: Upload CSV files or use sample data
-- **🔍 Transaction Risk Prediction**: Real-time risk assessment for individual transactions
-- **👥 Customer Risk Profiles**: View and analyze customer risk profiles
-- **📈 Dashboard & Reports**: Comprehensive visualizations and downloadable reports
-- **ℹ️ About**: System information and documentation
+- ** Home**: Overview of system capabilities
+- ** Data Upload & Analysis**: Upload CSV files or use sample data
+- ** Transaction Risk Prediction**: Real-time risk assessment for individual transactions
+- ** Customer Risk Profiles**: View and analyze customer risk profiles
+- ** Dashboard & Reports**: Comprehensive visualizations and downloadable reports
+- ** About**: System information and documentation
 
 ---
 
-## 🎯 How to Use
+## How to Use
 
 1. **Navigate to "Data Upload & Analysis"**
    - Upload your transaction CSV file, or
@@ -80,7 +80,7 @@ chmod +x start_app.sh
 
 ---
 
-## 🐳 Docker Deployment
+## Docker Deployment
 
 ### Quick Deploy with Docker
 
@@ -107,7 +107,7 @@ docker-compose logs -f
 
 ---
 
-## ☁️ Cloud Deployment
+## Cloud Deployment
 
 ### Streamlit Cloud (Free)
 
@@ -130,7 +130,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
 
 ---
 
-## 📋 Requirements
+## Requirements
 
 - Python 3.12 or higher
 - 2GB RAM minimum (4GB recommended)
@@ -138,7 +138,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
 
 ---
 
-## 🔧 Configuration
+## Configuration
 
 Streamlit configuration is stored in `.streamlit/config.toml`:
 
@@ -154,7 +154,7 @@ enableCORS = false
 
 ---
 
-## 📊 Expected Input Format
+## Expected Input Format
 
 Your CSV file should contain these columns:
 
@@ -172,7 +172,7 @@ Your CSV file should contain these columns:
 
 ---
 
-## 🎨 Screenshots
+## Screenshots
 
 The application includes:
 
@@ -184,7 +184,7 @@ The application includes:
 
 ---
 
-## 🛠️ Troubleshooting
+## Troubleshooting
 
 ### Port already in use
 ```bash
@@ -209,7 +209,7 @@ pip install -r requirements.txt --upgrade
 
 ---
 
-## 📞 Support
+## Support
 
 For issues or questions:
 1. Check [DEPLOYMENT.md](DEPLOYMENT.md) for deployment help
@@ -218,16 +218,16 @@ For issues or questions:
 
 ---
 
-## 📄 Academic Project
+## Academic Project
 
 This project is submitted as part of the **Final Semester Dissertation Project** for the **Master of Technology (MTech) in Artificial Intelligence and Machine Learning (AIML)** degree at **Birla Institute of Technology and Science (BITS), Pilani**.
 
-**Institution**: BITS Pilani  
-**Program**: MTech in AIML  
-**Project Type**: Dissertation Project  
+**Institution**: BITS Pilani 
+**Program**: MTech in AIML 
+**Project Type**: Dissertation Project 
 **Academic Year**: 2025-2026
 
 ---
 
-**Version**: 1.0.0  
+**Version**: 1.0.0 
 **Created**: January 2026

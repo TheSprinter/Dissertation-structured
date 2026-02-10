@@ -1,8 +1,8 @@
-# Fraud Management System
+﻿# Fraud Management System
 
 A comprehensive fraud detection and management system using AI/ML techniques for fraud detection, risk assessment, and compliance monitoring. The system provides both a **Streamlit web application** and a **Python/CLI batch pipeline**, and is developed as part of an MTech AIML dissertation at BITS Pilani.
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Features](#features)
 - [Technologies Used](#technologies-used)
@@ -20,7 +20,7 @@ A comprehensive fraud detection and management system using AI/ML techniques for
 - [Academic Context](#academic-context)
 - [Contact](#contact)
 
-## ✨ Features
+## Features
 
 - **Customer Risk Profiling** – Comprehensive customer-level risk assessment based on transaction behaviour
 - **Anomaly Detection** – Multi-algorithm approach using Isolation Forest and statistical methods
@@ -29,7 +29,7 @@ A comprehensive fraud detection and management system using AI/ML techniques for
 - **Dashboards & Reports** – Visual dashboards and analytical plots for investigation
 - **Real-time Prediction** – Risk assessment for new transactions via web UI or Python API
 
-## 🧰 Technologies Used
+## Technologies Used
 
 ### Data Processing & Analysis
 - pandas (≥ 2.0.0)
@@ -54,7 +54,7 @@ A comprehensive fraud detection and management system using AI/ML techniques for
 
 Optional deep learning libraries (TensorFlow / Keras) are listed in `requirements.txt` but commented out by default.
 
-## 🧱 Architecture Overview
+## Architecture Overview
 
 At a high level, the system is organised into three layers:
 
@@ -67,46 +67,46 @@ For detailed diagrams and data-flow descriptions, see:
 - `ARCHITECTURE_DIAGRAM.md` – architecture and data flow diagrams
 - `STRUCTURE.md` – detailed description of modules and their responsibilities
 
-## 📁 Project Structure
+## Project Structure
 
 Root directory (simplified):
 
 ```text
 .
-├── app.py                     # Streamlit web application entry point
-├── main.py                    # CLI/batch analysis entry point
-├── examples.py                # Example usage patterns for developers
-├── generate_report.py         # Automated dissertation report (DOCX) generator
-├── generate_presentation.py   # Automated presentation (PPTX) generator
-├── requirements.txt           # Python dependencies
-├── Dockerfile                 # Docker image definition (Streamlit app)
-├── docker-compose.yml         # Docker Compose service for the web app
-├── MODEL_PERSISTENCE.md       # Detailed model persistence guide
-├── WEBAPP_README.md           # Detailed Streamlit web app usage
-├── DEPLOYMENT.md              # Deployment options (Docker, cloud, etc.)
-├── STRUCTURE.md               # Full project structure and module details
-├── ARCHITECTURE_DIAGRAM.md    # Architecture and data flow diagrams
+├── app.py # Streamlit web application entry point
+├── main.py # CLI/batch analysis entry point
+├── examples.py # Example usage patterns for developers
+├── generate_report.py # Automated dissertation report (DOCX) generator
+├── generate_presentation.py # Automated presentation (PPTX) generator
+├── requirements.txt # Python dependencies
+├── Dockerfile # Docker image definition (Streamlit app)
+├── docker-compose.yml # Docker Compose service for the web app
+├── MODEL_PERSISTENCE.md # Detailed model persistence guide
+├── WEBAPP_README.md # Detailed Streamlit web app usage
+├── DEPLOYMENT.md # Deployment options (Docker, cloud, etc.)
+├── STRUCTURE.md # Full project structure and module details
+├── ARCHITECTURE_DIAGRAM.md # Architecture and data flow diagrams
 │
 ├── src/
-│   ├── __init__.py
-│   ├── config.py              # Global configuration (thresholds, paths, etc.)
-│   ├── aml_system.py          # AMLComplianceSystem orchestrator
-│   └── modules/
-│       ├── __init__.py
-│       ├── data_manager.py    # Data loading, validation, synthetic data
-│       ├── customer_profiler.py   # Customer risk profiling
-│       ├── anomaly_detector.py    # Anomaly detection logic
-│       ├── ml_predictor.py    # ML training and prediction
-│       └── visualizer.py      # Visualisation and reporting
+│ ├── __init__.py
+│ ├── config.py # Global configuration (thresholds, paths, etc.)
+│ ├── aml_system.py # AMLComplianceSystem orchestrator
+│ └── modules/
+│ ├── __init__.py
+│ ├── data_manager.py # Data loading, validation, synthetic data
+│ ├── customer_profiler.py # Customer risk profiling
+│ ├── anomaly_detector.py # Anomaly detection logic
+│ ├── ml_predictor.py # ML training and prediction
+│ └── visualizer.py # Visualisation and reporting
 │
-├── models/                    # Saved ML models and related artefacts
-├── output/                    # Generated outputs (CSV, plots, reports)
-└── tests/                     # Unit tests for core components
+├── models/ # Saved ML models and related artefacts
+├── output/ # Generated outputs (CSV, plots, reports)
+└── tests/ # Unit tests for core components
 ```
 
 For a more exhaustive tree and explanation of every directory, see `STRUCTURE.md`.
 
-## 🚀 Installation
+## Installation
 
 1. **Clone the repository**
 
@@ -131,7 +131,7 @@ For a more exhaustive tree and explanation of every directory, see `STRUCTURE.md
     pip install -r requirements.txt
     ```
 
-## 🌐 Quickstart – Streamlit Web App
+## Quickstart – Streamlit Web App
 
 The Streamlit web application is the primary interface for interactive analysis.
 
@@ -155,7 +155,7 @@ Then open a browser and visit: `http://localhost:8501`.
 ### Option 2 – Manual start
 
 ```bash
-pip install -r requirements.txt   # if not already installed
+pip install -r requirements.txt # if not already installed
 streamlit run app.py
 ```
 
@@ -169,7 +169,7 @@ Key pages in the web app include:
 
 For screenshots, troubleshooting, and more detailed instructions, see `WEBAPP_README.md`.
 
-## 🧪 Quickstart – CLI / Batch Pipeline
+## Quickstart – CLI / Batch Pipeline
 
 You can also run the full analysis pipeline from the command line.
 
@@ -222,7 +222,7 @@ print(risk)
 
 More end-to-end examples are available in `examples.py` and `QUICKSTART.md`.
 
-## 🐳 Docker & Cloud Deployment
+## Docker & Cloud Deployment
 
 ### Docker (local)
 
@@ -252,7 +252,7 @@ The project includes guidance for deploying to:
 
 For step-by-step instructions and configuration details, see `DEPLOYMENT.md`.
 
-## 🧩 Core Modules
+## Core Modules
 
 All core modules live under `src/modules/` and are orchestrated by `AMLComplianceSystem`.
 
@@ -288,7 +288,7 @@ All core modules live under `src/modules/` and are orchestrated by `AMLComplianc
 
 For deeper, implementation-level details, see `STRUCTURE.md` and `ARCHITECTURE_DIAGRAM.md`.
 
-## 📊 Output
+## Output
 
 The system writes outputs into the `output/` directory. Typical artefacts include:
 
@@ -299,7 +299,7 @@ The system writes outputs into the `output/` directory. Typical artefacts includ
 
 These outputs are consumed by the Streamlit web app and can also be used directly in analysis or reporting.
 
-## ⚙️ Configuration
+## Configuration
 
 Global configuration is centralised in `src/config.py`. You can adjust, for example:
 
@@ -310,7 +310,7 @@ Global configuration is centralised in `src/config.py`. You can adjust, for exam
 
 Both the CLI and Streamlit web app honour these shared settings.
 
-## 📝 Data Format
+## Data Format
 
 The current pipeline expects a **transaction-centric schema**. Key required columns (see `DataManager` in `src/modules/data_manager.py`) include:
 
@@ -333,7 +333,7 @@ Additional optional fields (billing/shipping countries, verification flags, beha
 
 > Note: Older documentation and examples using columns like `Sender_account`, `Receiver_account`, `Is_laundering`, and `Laundering_type` refer to a previous version of the dataset. New experiments should follow the schema implemented in `data_manager.py`.
 
-## 📚 Further Documentation
+## Further Documentation
 
 - `WEBAPP_README.md` – Detailed Streamlit web app usage and screenshots
 - `DEPLOYMENT.md` – Docker and cloud deployment instructions
@@ -343,7 +343,7 @@ Additional optional fields (billing/shipping countries, verification flags, beha
 - `QUICKSTART.md` – Additional developer-focused quickstart and usage patterns
 - `PROJECT_SUMMARY.md` – Narrative summary of the refactoring and project evolution
 
-## 📜 Academic Context
+## Academic Context
 
 This project is submitted as part of the **Final Semester Dissertation Project** for the **Master of Technology (MTech) in Artificial Intelligence and Machine Learning (AIML)** degree at **Birla Institute of Technology and Science (BITS), Pilani)**.
 
@@ -354,7 +354,7 @@ This project is submitted as part of the **Final Semester Dissertation Project**
 
 The dissertation investigates the design of a modular, explainable fraud management system that combines anomaly detection, supervised learning, and interactive analytics via a web-based interface.
 
-## 📧 Contact
+## Contact
 
 For academic inquiries or questions about this dissertation project, please contact through the appropriate BITS Pilani academic channels.
 

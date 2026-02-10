@@ -1,8 +1,8 @@
-# Deployment Guide for Fraud Management System
+﻿# Deployment Guide for Fraud Management System
 
 This guide covers multiple deployment options for the Streamlit-based Fraud Management System.
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Local Development](#local-development)
 - [Docker Deployment](#docker-deployment)
@@ -13,7 +13,7 @@ This guide covers multiple deployment options for the Streamlit-based Fraud Mana
 
 ---
 
-## 🖥️ Local Development
+## Local Development
 
 ### Prerequisites
 - Python 3.12 or higher
@@ -42,7 +42,7 @@ This guide covers multiple deployment options for the Streamlit-based Fraud Mana
 
 ---
 
-## 🐳 Docker Deployment
+## Docker Deployment
 
 ### Using Docker
 
@@ -75,7 +75,7 @@ This guide covers multiple deployment options for the Streamlit-based Fraud Mana
 
 ---
 
-## ☁️ Streamlit Cloud
+## Streamlit Cloud
 
 ### Steps
 
@@ -104,7 +104,7 @@ This guide covers multiple deployment options for the Streamlit-based Fraud Mana
 
 ---
 
-## 🟣 Heroku Deployment
+## Heroku Deployment
 
 ### Prerequisites
 - Heroku account
@@ -143,7 +143,7 @@ This guide covers multiple deployment options for the Streamlit-based Fraud Mana
 
 ---
 
-## 🔵 Azure App Service
+## Azure App Service
 
 ### Using Azure CLI
 
@@ -192,7 +192,7 @@ This guide covers multiple deployment options for the Streamlit-based Fraud Mana
 
 ---
 
-## 🟠 AWS EC2
+## AWS EC2
 
 ### Steps
 
@@ -244,7 +244,7 @@ This guide covers multiple deployment options for the Streamlit-based Fraud Mana
 
 ---
 
-## 🔐 Environment Variables & Secrets
+## Environment Variables & Secrets
 
 For production deployments, consider setting:
 
@@ -260,7 +260,7 @@ PYTHONUNBUFFERED=1
 
 ---
 
-## 🔍 Monitoring & Logs
+## Monitoring & Logs
 
 ### Docker logs
 ```bash
@@ -279,7 +279,7 @@ az webapp log tail --name your-app-name --resource-group aml-rg
 
 ---
 
-## 🛠️ Troubleshooting
+## Troubleshooting
 
 ### Port already in use
 ```bash
@@ -300,7 +300,7 @@ kill -9 <PID>
 
 ---
 
-## 📞 Support
+## Support
 
 For deployment issues:
 1. Check application logs
@@ -310,7 +310,7 @@ For deployment issues:
 
 ---
 
-## 📝 Additional Notes
+## Additional Notes
 
 - **Data Security**: Never commit sensitive data or credentials
 - **Scalability**: Consider load balancing for high traffic
@@ -319,11 +319,11 @@ For deployment issues:
 
 ---
 
-## 📄 Academic Project
+## Academic Project
 
 This deployment guide is part of the **Final Semester Dissertation Project** for **MTech in AIML** at **BITS Pilani**.
 
 ---
 
-**Version**: 1.0.0  
+**Version**: 1.0.0 
 **Last Updated**: January 2026

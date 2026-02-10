@@ -1,4 +1,4 @@
-"""
+﻿"""
 Fraud Management System
 =======================
 
@@ -18,7 +18,7 @@ class AMLComplianceSystem:
     
     Integrates:
     - Data Management
-    - Customer Profiling  
+    - Customer Profiling 
     - Anomaly Detection
     - Machine Learning Prediction
     - Visualization & Reporting
@@ -37,12 +37,12 @@ class AMLComplianceSystem:
         print("="*80)
         print("FRAUD MANAGEMENT AI SYSTEM INITIALIZED")
         print("="*80)
-        print("🔧 System Components:")
-        print("   • Data Management Module")
-        print("   • Customer Profiling Module") 
-        print("   • Anomaly Detection Module")
-        print("   • Machine Learning Module")
-        print("   • Visualization & Reporting Module")
+        print(" System Components:")
+        print(" • Data Management Module")
+        print(" • Customer Profiling Module") 
+        print(" • Anomaly Detection Module")
+        print(" • Machine Learning Module")
+        print(" • Visualization & Reporting Module")
         print("="*80)
         print("System Ready. Use load_data() to begin analysis.")
     
@@ -61,7 +61,7 @@ class AMLComplianceSystem:
         self.ml_predictor = MLPredictor(self.df)
         self.visualizer = AMLVisualizer(self.df)
         
-        print("\n✓ All modules initialized with loaded data")
+        print("\n All modules initialized with loaded data")
         return self.df
     
     def run_complete_analysis(self, save_results=True):
@@ -74,28 +74,28 @@ class AMLComplianceSystem:
             raise ValueError("Data not loaded. Please run load_data() first.")
         
         # Step 1: Customer Profiling
-        print("\n🔍 Step 1: Customer Risk Profiling...")
+        print("\n Step 1: Customer Risk Profiling...")
         customer_profiles = self.customer_profiler.analyze_customers(save_results)
         
-        # Step 2: Anomaly Detection  
-        print("\n🚨 Step 2: Transaction Anomaly Detection...")
+        # Step 2: Anomaly Detection 
+        print("\n Step 2: Transaction Anomaly Detection...")
         anomalies = self.anomaly_detector.detect_anomalies(save_results)
         
         # Step 3: Machine Learning Model Training
-        print("\n🤖 Step 3: ML Model Training...")
+        print("\n Step 3: ML Model Training...")
         # Try to load existing model, otherwise train new one
         if not self.ml_predictor.load_model_from_disk():
             model = self.ml_predictor.train_compliance_model()
         else:
             model = self.ml_predictor.model
-            print("   Using pre-trained model from disk")
+            print(" Using pre-trained model from disk")
         
         # Step 4: Comprehensive Visualization
-        print("\n📊 Step 4: Generating Visualizations...")
+        print("\n Step 4: Generating Visualizations...")
         self.visualizer.create_comprehensive_dashboard(customer_profiles, anomalies)
         
         # Step 5: Generate Final Report
-        print("\n📄 Step 5: Generating Compliance Report...")
+        print("\n Step 5: Generating Compliance Report...")
         self.visualizer.generate_compliance_report(
             customer_profiles, 
             anomalies, 
@@ -103,7 +103,7 @@ class AMLComplianceSystem:
         )
         
         print("\n" + "="*80)
-        print("✅ COMPLETE ANALYSIS FINISHED SUCCESSFULLY")
+        print("[PASS] COMPLETE ANALYSIS FINISHED SUCCESSFULLY")
         print("="*80)
         
         return {
@@ -125,7 +125,7 @@ class AMLComplianceSystem:
         if self.ml_predictor is None:
             raise ValueError("ML predictor not initialized. Please run load_data() first.")
         
-        print("\n🔄 Training new model...")
+        print("\n Training new model...")
         return self.ml_predictor.train_compliance_model(save_model=save)
     
     def load_saved_model(self, model_dir='models'):

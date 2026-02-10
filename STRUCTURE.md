@@ -1,43 +1,43 @@
-# Project Structure Overview
+﻿# Project Structure Overview
 
 ## Directory Tree
 
 ```
 aml_compliance_system/
 │
-├── 📄 main.py                          # Main entry point - Run this!
-├── 📄 setup.py                         # Setup and verification script
-├── 📄 requirements.txt                 # Python dependencies
-├── 📄 README.md                        # Comprehensive documentation
-├── 📄 QUICKSTART.md                    # Quick start guide
-├── 📄 STRUCTURE.md                     # This file
-├── 📄 .gitignore                       # Git ignore rules
+├── main.py # Main entry point - Run this!
+├── setup.py # Setup and verification script
+├── requirements.txt # Python dependencies
+├── README.md # Comprehensive documentation
+├── QUICKSTART.md # Quick start guide
+├── STRUCTURE.md # This file
+├── .gitignore # Git ignore rules
 │
-├── 📁 src/                             # Source code directory
-│   ├── 📄 __init__.py                  # Package initializer
-│   ├── 📄 config.py                    # Configuration settings
-│   ├── 📄 aml_system.py                # Main orchestrator class
-│   │
-│   └── 📁 modules/                     # Core modules
-│       ├── 📄 __init__.py              # Modules package init
-│       ├── 📄 data_manager.py          # Data loading & generation
-│       ├── 📄 customer_profiler.py     # Customer risk profiling
-│       ├── 📄 anomaly_detector.py      # Anomaly detection
-│       ├── 📄 ml_predictor.py          # ML model training
-│       └── 📄 visualizer.py            # Visualization & reporting
+├── src/ # Source code directory
+│ ├── __init__.py # Package initializer
+│ ├── config.py # Configuration settings
+│ ├── aml_system.py # Main orchestrator class
+│ │
+│ └── modules/ # Core modules
+│ ├── __init__.py # Modules package init
+│ ├── data_manager.py # Data loading & generation
+│ ├── customer_profiler.py # Customer risk profiling
+│ ├── anomaly_detector.py # Anomaly detection
+│ ├── ml_predictor.py # ML model training
+│ └── visualizer.py # Visualization & reporting
 │
-├── 📁 data/                            # Data storage
-│   └── (place your CSV files here)
+├── data/ # Data storage
+│ └── (place your CSV files here)
 │
-├── 📁 output/                          # Generated outputs
-│   ├── customer_profiles.csv
-│   ├── detected_anomalies.csv
-│   ├── dashboard.png
-│   ├── detailed_analysis.png
-│   └── customer_profiles.png
+├── output/ # Generated outputs
+│ ├── customer_profiles.csv
+│ ├── detected_anomalies.csv
+│ ├── dashboard.png
+│ ├── detailed_analysis.png
+│ └── customer_profiles.png
 │
-└── 📁 tests/                           # Unit tests
-    └── 📄 test_system.py               # System tests
+└── tests/ # Unit tests
+    └── test_system.py # System tests
 ```
 
 ## Module Dependencies
@@ -77,7 +77,7 @@ main.py
 
 ## Module Descriptions
 
-### 📄 main.py
+### main.py
 **Purpose**: Entry point for running the complete system
 - Initializes AMLComplianceSystem
 - Loads data
@@ -85,7 +85,7 @@ main.py
 - Demonstrates prediction capabilities
 - Generates summary report
 
-### 📄 src/aml_system.py
+### src/aml_system.py
 **Purpose**: Main orchestrator that coordinates all modules
 **Key Methods**:
 - `load_data()` - Initialize all modules with data
@@ -94,14 +94,14 @@ main.py
 - `get_customer_risk_profile()` - Get customer details
 - `generate_summary_report()` - Executive summary
 
-### 📄 src/modules/data_manager.py
+### src/modules/data_manager.py
 **Purpose**: Data loading, validation, and synthetic generation
 **Key Methods**:
 - `load_data()` - Load from CSV or generate synthetic
 - `_display_data_summary()` - Show data overview
 - `_generate_synthetic_data()` - Create test data
 
-### 📄 src/modules/customer_profiler.py
+### src/modules/customer_profiler.py
 **Purpose**: Customer risk profiling and classification
 **Key Methods**:
 - `analyze_customers()` - Profile all customers
@@ -109,7 +109,7 @@ main.py
 - `_calculate_risk_scores()` - Compute risk metrics
 **Output**: Customer profiles with risk scores (0-100)
 
-### 📄 src/modules/anomaly_detector.py
+### src/modules/anomaly_detector.py
 **Purpose**: Transaction anomaly detection
 **Key Methods**:
 - `detect_anomalies()` - Run detection algorithms
@@ -117,7 +117,7 @@ main.py
 - `_statistical_detection()` - Statistical analysis
 **Algorithms**: Isolation Forest, Z-score analysis
 
-### 📄 src/modules/ml_predictor.py
+### src/modules/ml_predictor.py
 **Purpose**: Machine learning model training and prediction
 **Key Methods**:
 - `train_compliance_model()` - Train models
@@ -125,7 +125,7 @@ main.py
 - `_engineer_features()` - Feature engineering
 **Models**: Random Forest, Gradient Boosting
 
-### 📄 src/modules/visualizer.py
+### src/modules/visualizer.py
 **Purpose**: Data visualization and reporting
 **Key Methods**:
 - `create_comprehensive_dashboard()` - Main dashboard
@@ -133,7 +133,7 @@ main.py
 - `_plot_customer_profiles()` - Customer charts
 **Output**: PNG files with visualizations
 
-### 📄 src/config.py
+### src/config.py
 **Purpose**: Centralized configuration
 **Settings**:
 - Risk thresholds

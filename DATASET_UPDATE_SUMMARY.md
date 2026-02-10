@@ -125,10 +125,10 @@ The model now trains on 30+ engineered features including:
 - Payment method and merchant category patterns
 
 ## Testing
-✅ All Python files pass syntax validation
-✅ No import errors detected
-✅ All module dependencies properly updated
-✅ Ready for production use with new dataset
+[PASS] All Python files pass syntax validation
+[PASS] No import errors detected
+[PASS] All module dependencies properly updated
+[PASS] Ready for production use with new dataset
 
 ## Usage
 

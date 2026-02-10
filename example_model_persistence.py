@@ -1,4 +1,4 @@
-"""
+﻿"""
 Example: Model Persistence with Pickle/Joblib
 ==============================================
 
@@ -21,11 +21,11 @@ def example_save_model():
     system.load_data(data_path)
     
     # Train and automatically save model
-    print("\n🤖 Training model (will auto-save)...")
+    print("\n Training model (will auto-save)...")
     system.ml_predictor.train_compliance_model(save_model=True)
     
-    print("\n✅ Model saved successfully!")
-    print("   Location: models/fraud_model.pkl")
+    print("\n[PASS] Model saved successfully!")
+    print(" Location: models/fraud_model.pkl")
 
 
 def example_load_model():
@@ -42,14 +42,14 @@ def example_load_model():
     system.load_data(data_path)
     
     # Load pre-trained model
-    print("\n📂 Loading pre-trained model...")
+    print("\n Loading pre-trained model...")
     if system.ml_predictor.load_model_from_disk():
-        print("✅ Model loaded successfully!")
+        print("[PASS] Model loaded successfully!")
         
         # You can now use the model for predictions without retraining
-        print("\n🎯 Model ready for predictions!")
+        print("\n Model ready for predictions!")
     else:
-        print("❌ No saved model found. Train one first.")
+        print("[FAIL] No saved model found. Train one first.")
 
 
 def example_check_and_load():
@@ -67,10 +67,10 @@ def example_check_and_load():
     
     # Check if model exists
     if system.ml_predictor.model_exists():
-        print("\n✅ Saved model found! Loading...")
+        print("\n[PASS] Saved model found! Loading...")
         system.ml_predictor.load_model_from_disk()
     else:
-        print("\n⚠ No saved model found. Training new model...")
+        print("\n[WARN] No saved model found. Training new model...")
         system.ml_predictor.train_compliance_model(save_model=True)
 
 
@@ -90,10 +90,10 @@ def example_run_analysis_with_saved_model():
     # Run complete analysis (will use saved model if available)
     results = system.run_complete_analysis(save_results=True)
     
-    print("\n✅ Analysis complete!")
-    print(f"   - Customer profiles: {len(results['customer_profiles'])}")
-    print(f"   - Anomalies detected: {len(results['anomalies'])}")
-    print(f"   - Model metrics available: {bool(results['metrics'])}")
+    print("\n[PASS] Analysis complete!")
+    print(f" - Customer profiles: {len(results['customer_profiles'])}")
+    print(f" - Anomalies detected: {len(results['anomalies'])}")
+    print(f" - Model metrics available: {bool(results['metrics'])}")
 
 
 def example_model_management():
@@ -111,7 +111,7 @@ def example_model_management():
     
     # Check model status
     if system.ml_predictor.model_exists():
-        print("\n📊 Existing model found")
+        print("\n Existing model found")
         
         # Load existing model
         system.load_saved_model()
@@ -119,11 +119,11 @@ def example_model_management():
         # Option to train a new model if needed
         retrain = input("\nTrain a new model? (y/n): ").lower()
         if retrain == 'y':
-            print("\n🔄 Training new model...")
+            print("\n Training new model...")
             system.train_new_model(save=True)
     else:
-        print("\n⚠ No existing model found")
-        print("🤖 Training new model...")
+        print("\n[WARN] No existing model found")
+        print(" Training new model...")
         system.train_new_model(save=True)
 
 
@@ -150,5 +150,5 @@ if __name__ == '__main__':
     elif choice == '5':
         example_model_management()
     else:
-        print("\n⚠ Invalid choice. Running Example 3 by default...")
+        print("\n[WARN] Invalid choice. Running Example 3 by default...")
         example_check_and_load()

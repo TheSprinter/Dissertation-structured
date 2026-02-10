@@ -1,4 +1,4 @@
-"""
+﻿"""
 Anomaly Detector Module
 =======================
 
@@ -47,7 +47,7 @@ class AnomalyDetector:
             os.makedirs(OUTPUT_DIR, exist_ok=True)
             out_path = os.path.join(OUTPUT_DIR, 'detected_anomalies.csv')
             self.anomalies.to_csv(out_path, index=False)
-            print(f"💾 Anomaly results saved to {out_path}")
+            print(f" Anomaly results saved to {out_path}")
         
         return self.anomalies
     
@@ -87,7 +87,7 @@ class AnomalyDetector:
     
     def _isolation_forest_detection(self, features):
         """Use Isolation Forest for anomaly detection"""
-        print("🔍 Running Isolation Forest anomaly detection...")
+        print(" Running Isolation Forest anomaly detection...")
         
         # Normalize features
         scaler = StandardScaler()
@@ -103,12 +103,12 @@ class AnomalyDetector:
         results['isolation_anomaly'] = (anomaly_labels == -1).astype(int)
         results['isolation_score'] = anomaly_scores
         
-        print(f"✓ Isolation Forest detected {(anomaly_labels == -1).sum()} anomalies")
+        print(f" Isolation Forest detected {(anomaly_labels == -1).sum()} anomalies")
         return results
     
     def _statistical_detection(self, features):
         """Use statistical methods for anomaly detection"""
-        print("📊 Running statistical anomaly detection...")
+        print(" Running statistical anomaly detection...")
         
         results = self.df.copy()
         
@@ -127,7 +127,7 @@ class AnomalyDetector:
         results['statistical_anomaly'] = statistical_anomalies.astype(int)
         results['amount_zscore'] = amount_zscore
         
-        print(f"✓ Statistical detection found {statistical_anomalies.sum()} anomalies")
+        print(f" Statistical detection found {statistical_anomalies.sum()} anomalies")
         return results
     
     def _combine_anomaly_results(self, isolation_results, statistical_results):
@@ -155,16 +155,16 @@ class AnomalyDetector:
         isolation_anomalies = self.anomalies['isolation_anomaly'].sum()
         statistical_anomalies = self.anomalies['statistical_anomaly'].sum()
         
-        print(f"\n📊 Anomaly Detection Summary:")
-        print(f"   Total Transactions: {len(self.anomalies):,}")
-        print(f"   Isolation Forest Anomalies: {isolation_anomalies:,}")
-        print(f"   Statistical Anomalies: {statistical_anomalies:,}")
-        print(f"   Combined Anomalies: {total_anomalies:,}")
-        print(f"   Anomaly Rate: {total_anomalies/len(self.anomalies)*100:.2f}%")
+        print(f"\n Anomaly Detection Summary:")
+        print(f" Total Transactions: {len(self.anomalies):,}")
+        print(f" Isolation Forest Anomalies: {isolation_anomalies:,}")
+        print(f" Statistical Anomalies: {statistical_anomalies:,}")
+        print(f" Combined Anomalies: {total_anomalies:,}")
+        print(f" Anomaly Rate: {total_anomalies/len(self.anomalies)*100:.2f}%")
         
         # Show top anomalies
         top_anomalies = self.anomalies.nlargest(5, 'anomaly_risk_score')[
             ['customer_id', 'transaction_amount', 'merchant_id', 'anomaly_risk_score', 'is_fraud']
         ]
-        print(f"\n🚨 Top 5 Highest Risk Anomalies:")
+        print(f"\n Top 5 Highest Risk Anomalies:")
         print(top_anomalies.to_string(index=False))

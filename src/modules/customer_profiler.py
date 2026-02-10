@@ -1,4 +1,4 @@
-"""
+﻿"""
 Customer Profiler Module
 ========================
 
@@ -44,7 +44,7 @@ class CustomerProfiler:
             os.makedirs(OUTPUT_DIR, exist_ok=True)
             out_path = os.path.join(OUTPUT_DIR, 'customer_profiles.csv')
             self.profiles.to_csv(out_path, index=False)
-            print(f"💾 Customer profiles saved to {out_path}")
+            print(f" Customer profiles saved to {out_path}")
         
         return self.profiles
     
@@ -79,7 +79,7 @@ class CustomerProfiler:
     
     def _count_high_risk_locations(self, transactions):
         """Count transactions involving high-risk countries"""
-        high_risk = ['AE', 'CN', 'RU']  # Example high-risk countries
+        high_risk = ['AE', 'CN', 'RU'] # Example high-risk countries
         return ((transactions['billing_country'].isin(high_risk)) | 
                 (transactions['shipping_country'].isin(high_risk))).sum()
     
@@ -140,16 +140,16 @@ class CustomerProfiler:
     
     def _display_profiling_results(self):
         """Display customer profiling analysis results"""
-        print(f"✓ Customer profiling completed for {len(self.profiles)} customers")
+        print(f" Customer profiling completed for {len(self.profiles)} customers")
         
         # Risk distribution
         risk_dist = self.profiles['risk_classification'].value_counts()
-        print(f"\n📊 Risk Distribution:")
+        print(f"\n Risk Distribution:")
         for risk, count in risk_dist.items():
             percentage = count / len(self.profiles) * 100
-            print(f"   {risk}: {count} ({percentage:.1f}%)")
+            print(f" {risk}: {count} ({percentage:.1f}%)")
         
         # Top 5 highest risk customers
-        print(f"\n🚨 Top 5 Highest Risk Customers:")
+        print(f"\n Top 5 Highest Risk Customers:")
         top_risk = self.profiles.nlargest(5, 'risk_score')[['customer_id', 'risk_score', 'risk_classification', 'fraudulent_transactions']]
         print(top_risk.to_string(index=False))

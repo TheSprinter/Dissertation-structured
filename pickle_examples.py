@@ -1,4 +1,4 @@
-"""
+﻿"""
 Pickle Examples - Code Snippets
 =================================
 
@@ -37,10 +37,10 @@ def example_1_basic_usage():
     # Next runs: Loads from disk (2 sec)
     results = system.run_complete_analysis()
     
-    print("✅ Analysis complete!")
-    print(f"   Customer profiles: {len(results['customer_profiles'])}")
-    print(f"   Anomalies: {len(results['anomalies'])}")
-    print(f"   Model ready: {results['model'] is not None}")
+    print("[PASS] Analysis complete!")
+    print(f" Customer profiles: {len(results['customer_profiles'])}")
+    print(f" Anomalies: {len(results['anomalies'])}")
+    print(f" Model ready: {results['model'] is not None}")
 
 
 # ============================================================================
@@ -62,16 +62,16 @@ def example_2_check_before_load():
     
     # Check if model exists
     if system.ml_predictor.model_exists():
-        print("✅ Found saved model. Loading...")
+        print("[PASS] Found saved model. Loading...")
         system.load_saved_model()
-        print("   Model loaded in ~2 seconds!")
+        print(" Model loaded in ~2 seconds!")
     else:
-        print("⚠️ No saved model. Training new one...")
+        print("[WARN] No saved model. Training new one...")
         system.train_new_model(save=True)
-        print("   Model trained and saved!")
+        print(" Model trained and saved!")
     
     # Now ready for predictions
-    print("\n🎯 Model is ready for predictions")
+    print("\n Model is ready for predictions")
 
 
 # ============================================================================
@@ -96,11 +96,11 @@ def example_3_explicit_save_load():
     
     # Train without auto-save
     system.train_new_model(save=False)
-    print("✅ Model trained (not saved yet)")
+    print("[PASS] Model trained (not saved yet)")
     
     # Explicitly save
     system.save_current_model()
-    print("✅ Model saved to models/")
+    print("[PASS] Model saved to models/")
     
     # === PART 2: Load Later ===
     print("\n[Part 2] Loading saved model...")
@@ -111,9 +111,9 @@ def example_3_explicit_save_load():
     
     # Explicitly load
     if system2.load_saved_model():
-        print("✅ Model loaded successfully!")
+        print("[PASS] Model loaded successfully!")
     else:
-        print("❌ Failed to load model")
+        print("[FAIL] Failed to load model")
 
 
 # ============================================================================
@@ -135,19 +135,19 @@ def example_4_custom_directory():
     
     # Save to custom directory
     custom_dir = 'my_models'
-    print(f"\n💾 Saving to custom directory: {custom_dir}/")
+    print(f"\n Saving to custom directory: {custom_dir}/")
     
-    system.train_new_model(save=False)  # Train first
+    system.train_new_model(save=False) # Train first
     system.ml_predictor.save_model_to_disk(model_dir=custom_dir)
-    print(f"✅ Model saved to {custom_dir}/")
+    print(f"[PASS] Model saved to {custom_dir}/")
     
     # Load from custom directory
-    print(f"\n📂 Loading from custom directory: {custom_dir}/")
+    print(f"\n Loading from custom directory: {custom_dir}/")
     system2 = AMLComplianceSystem()
     system2.load_data('fraud_management_dataset-1.5L (1).csv')
     
     if system2.ml_predictor.load_model_from_disk(model_dir=custom_dir):
-        print(f"✅ Model loaded from {custom_dir}/")
+        print(f"[PASS] Model loaded from {custom_dir}/")
 
 
 # ============================================================================
@@ -169,7 +169,7 @@ def example_5_batch_predictions():
     system.load_data('fraud_management_dataset-1.5L (1).csv')
     system.load_saved_model()
     
-    print("✅ Model loaded once")
+    print("[PASS] Model loaded once")
     
     # Sample transactions
     transactions = [
@@ -189,15 +189,15 @@ def example_5_batch_predictions():
         }
     ]
     
-    print(f"\n🎯 Processing {len(transactions)} transactions...")
+    print(f"\n Processing {len(transactions)} transactions...")
     
     # Process all transactions efficiently
     for i, transaction in enumerate(transactions, 1):
         result = system.predict_compliance_risk(transaction)
-        print(f"   Transaction {i}: {result['risk_label']} "
+        print(f" Transaction {i}: {result['risk_label']} "
               f"(Score: {result['risk_score']:.1f})")
     
-    print("\n✅ All predictions complete!")
+    print("\n[PASS] All predictions complete!")
 
 
 # ============================================================================
@@ -225,17 +225,17 @@ def example_6_model_versioning():
     version = datetime.now().strftime('%Y%m%d_%H%M%S')
     version_dir = f'models_v{version}'
     
-    print(f"\n💾 Saving versioned model: {version_dir}/")
+    print(f"\n Saving versioned model: {version_dir}/")
     system.ml_predictor.save_model_to_disk(model_dir=version_dir)
-    print(f"✅ Model saved with version: {version}")
+    print(f"[PASS] Model saved with version: {version}")
     
     # Load specific version
-    print(f"\n📂 Loading versioned model...")
+    print(f"\n Loading versioned model...")
     system2 = AMLComplianceSystem()
     system2.load_data('fraud_management_dataset-1.5L (1).csv')
     
     if system2.ml_predictor.load_model_from_disk(model_dir=version_dir):
-        print(f"✅ Loaded model version: {version}")
+        print(f"[PASS] Loaded model version: {version}")
 
 
 # ============================================================================
@@ -258,20 +258,20 @@ def example_7_backup_before_retrain():
     if os.path.exists('models/fraud_model.pkl'):
         # Backup existing model
         backup_dir = f"models_backup_{datetime.now().strftime('%Y%m%d')}"
-        print(f"\n💾 Backing up current model to: {backup_dir}/")
+        print(f"\n Backing up current model to: {backup_dir}/")
         
         if os.path.exists('models'):
             shutil.copytree('models', backup_dir, dirs_exist_ok=True)
-            print(f"✅ Backup created: {backup_dir}/")
+            print(f"[PASS] Backup created: {backup_dir}/")
     
     # Train new model
-    print("\n🤖 Training new model...")
+    print("\n Training new model...")
     system = AMLComplianceSystem()
     system.load_data('fraud_management_dataset-1.5L (1).csv')
     system.train_new_model(save=True)
     
-    print("✅ New model trained and saved!")
-    print("   Old model is backed up and safe")
+    print("[PASS] New model trained and saved!")
+    print(" Old model is backed up and safe")
 
 
 # ============================================================================
@@ -291,12 +291,12 @@ def example_8_error_handling():
     system = AMLComplianceSystem()
     system.load_data('fraud_management_dataset-1.5L (1).csv')
     
-    print("\n🔄 Attempting to load model...")
+    print("\n Attempting to load model...")
     
     try:
         # Try to load
         if system.load_saved_model():
-            print("✅ Model loaded successfully!")
+            print("[PASS] Model loaded successfully!")
             
             # Verify it works
             sample_transaction = {
@@ -308,17 +308,17 @@ def example_8_error_handling():
             }
             
             result = system.predict_compliance_risk(sample_transaction)
-            print(f"   Test prediction: {result['risk_label']}")
+            print(f" Test prediction: {result['risk_label']}")
             
         else:
-            print("⚠️ No saved model found")
-            print("   Training new model as fallback...")
+            print("[WARN] No saved model found")
+            print(" Training new model as fallback...")
             system.train_new_model(save=True)
-            print("✅ New model trained and saved!")
+            print("[PASS] New model trained and saved!")
             
     except Exception as e:
-        print(f"❌ Error occurred: {e}")
-        print("   Recommended action: Retrain model")
+        print(f"[FAIL] Error occurred: {e}")
+        print(" Recommended action: Retrain model")
 
 
 # ============================================================================
@@ -344,25 +344,25 @@ def example_9_check_model_age():
         model_date = datetime.fromtimestamp(mtime)
         age_days = (datetime.now() - model_date).days
         
-        print(f"\n📅 Model Information:")
-        print(f"   Last trained: {model_date.strftime('%Y-%m-%d %H:%M:%S')}")
-        print(f"   Age: {age_days} days")
+        print(f"\n Model Information:")
+        print(f" Last trained: {model_date.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f" Age: {age_days} days")
         
         # Decision logic
         if age_days > 30:
-            print(f"\n⚠️ Model is {age_days} days old (>30 days)")
-            print("   Recommendation: Retrain model with fresh data")
+            print(f"\n[WARN] Model is {age_days} days old (>30 days)")
+            print(" Recommendation: Retrain model with fresh data")
             
             # Retrain
             system = AMLComplianceSystem()
             system.load_data('fraud_management_dataset-1.5L (1).csv')
             system.train_new_model(save=True)
-            print("✅ Model retrained and saved!")
+            print("[PASS] Model retrained and saved!")
         else:
-            print(f"\n✅ Model is recent ({age_days} days old)")
-            print("   No retraining needed")
+            print(f"\n[PASS] Model is recent ({age_days} days old)")
+            print(" No retraining needed")
     else:
-        print("\n⚠️ No model found. Training new one...")
+        print("\n[WARN] No model found. Training new one...")
 
 
 # ============================================================================
@@ -382,24 +382,24 @@ def example_10_access_metadata():
     metadata_path = 'models/model_metadata.pkl'
     
     if os.path.exists(metadata_path):
-        print("\n📊 Loading model metadata...")
+        print("\n Loading model metadata...")
         
         metadata = joblib.load(metadata_path)
         
         print("\nModel Metadata:")
-        print(f"  Training timestamp: {metadata.get('timestamp', 'Unknown')}")
-        print(f"  Feature count: {metadata.get('feature_count', 'Unknown')}")
+        print(f" Training timestamp: {metadata.get('timestamp', 'Unknown')}")
+        print(f" Feature count: {metadata.get('feature_count', 'Unknown')}")
         
         if 'model_metrics' in metadata:
-            print("\n  Performance Metrics:")
+            print("\n Performance Metrics:")
             for model_name, metrics in metadata['model_metrics'].items():
-                print(f"\n    {model_name.upper()}:")
-                print(f"      Accuracy:  {metrics.get('accuracy', 0):.3f}")
-                print(f"      Precision: {metrics.get('precision', 0):.3f}")
-                print(f"      Recall:    {metrics.get('recall', 0):.3f}")
-                print(f"      F1-Score:  {metrics.get('f1_score', 0):.3f}")
+                print(f"\n {model_name.upper()}:")
+                print(f" Accuracy: {metrics.get('accuracy', 0):.3f}")
+                print(f" Precision: {metrics.get('precision', 0):.3f}")
+                print(f" Recall: {metrics.get('recall', 0):.3f}")
+                print(f" F1-Score: {metrics.get('f1_score', 0):.3f}")
     else:
-        print("\n⚠️ No metadata found. Train a model first.")
+        print("\n[WARN] No metadata found. Train a model first.")
 
 
 # ============================================================================
@@ -423,17 +423,17 @@ def show_menu():
     
     while True:
         print("\n" + "="*70)
-        print("  PICKLE EXAMPLES - Choose an example to run")
+        print(" PICKLE EXAMPLES - Choose an example to run")
         print("="*70)
         
         for key, (name, _) in examples.items():
-            print(f"  {key:>2}. {name}")
-        print(f"   0. Exit")
+            print(f" {key:>2}. {name}")
+        print(f" 0. Exit")
         
         choice = input("\nEnter your choice (0-10): ").strip()
         
         if choice == '0':
-            print("\n👋 Goodbye!")
+            print("\n Goodbye!")
             break
         elif choice in examples:
             name, func = examples[choice]
@@ -441,23 +441,23 @@ def show_menu():
                 func()
                 input("\nPress Enter to continue...")
             except FileNotFoundError as e:
-                print(f"\n⚠️ File not found: {e}")
-                print("   Make sure 'fraud_management_dataset-1.5L (1).csv' exists")
+                print(f"\n[WARN] File not found: {e}")
+                print(" Make sure 'fraud_management_dataset-1.5L (1).csv' exists")
                 input("\nPress Enter to continue...")
             except Exception as e:
-                print(f"\n❌ Error: {e}")
+                print(f"\n[FAIL] Error: {e}")
                 input("\nPress Enter to continue...")
         else:
-            print("\n⚠️ Invalid choice")
+            print("\n[WARN] Invalid choice")
 
 
 if __name__ == '__main__':
     print("""
 ╔═══════════════════════════════════════════════════════════════════╗
-║                                                                   ║
-║              PICKLE CODE EXAMPLES                                 ║
-║              Copy these snippets for your own use!                ║
-║                                                                   ║
+║ ║
+║ PICKLE CODE EXAMPLES ║
+║ Copy these snippets for your own use! ║
+║ ║
 ╚═══════════════════════════════════════════════════════════════════╝
 """)
     

@@ -1,4 +1,4 @@
-# Pickle Integration - Model Persistence Guide
+﻿# Pickle Integration - Model Persistence Guide
 
 ## Overview
 
@@ -6,12 +6,12 @@ The Fraud Management System now includes comprehensive pickle/joblib integration
 
 ## Features
 
-✅ **Save Trained Models**: Save ML models with all preprocessing components  
-✅ **Load Pre-trained Models**: Quickly load saved models for predictions  
-✅ **Complete Package**: Saves model, scaler, encoders, features, and metrics  
-✅ **Model Versioning**: Save multiple model versions with custom names  
-✅ **List Models**: View all saved models with metadata  
-✅ **Joblib Support**: Optimized for scikit-learn models (falls back to pickle)
+[PASS] **Save Trained Models**: Save ML models with all preprocessing components 
+[PASS] **Load Pre-trained Models**: Quickly load saved models for predictions 
+[PASS] **Complete Package**: Saves model, scaler, encoders, features, and metrics 
+[PASS] **Model Versioning**: Save multiple model versions with custom names 
+[PASS] **List Models**: View all saved models with metadata 
+[PASS] **Joblib Support**: Optimized for scikit-learn models (falls back to pickle)
 
 ---
 
@@ -19,13 +19,13 @@ The Fraud Management System now includes comprehensive pickle/joblib integration
 
 When you save a model, the following components are persisted:
 
-- ✅ **Trained ML Model** (RandomForest/GradientBoosting)
-- ✅ **StandardScaler** (feature normalization)
-- ✅ **Label Encoders** (categorical variable encoders)
-- ✅ **Feature Names** (column order and names)
-- ✅ **Model Metrics** (accuracy, precision, recall, F1)
-- ✅ **Timestamp** (when model was saved)
-- ✅ **Metadata** (number of features, model type)
+- [PASS] **Trained ML Model** (RandomForest/GradientBoosting)
+- [PASS] **StandardScaler** (feature normalization)
+- [PASS] **Label Encoders** (categorical variable encoders)
+- [PASS] **Feature Names** (column order and names)
+- [PASS] **Model Metrics** (accuracy, precision, recall, F1)
+- [PASS] **Timestamp** (when model was saved)
+- [PASS] **Metadata** (number of features, model type)
 
 ---
 
@@ -33,9 +33,9 @@ When you save a model, the following components are persisted:
 
 ### 1. Using the Web Application (Streamlit)
 
-#### Navigate to "💾 Model Management" page:
+#### Navigate to " Model Management" page:
 
-**View Saved Models (📋 View Models Tab):**
+**View Saved Models ( View Models Tab):**
 - Access all previously saved models in a clean list format
 - See numbered list of available models
 - **Load button** - Quickly select a model for predictions
@@ -44,28 +44,28 @@ When you save a model, the following components are persisted:
 - Helpful tips for new users
 - Display of model components (what gets saved with each model)
 
-**Save Current Model (💾 Save Model Tab):**
+**Save Current Model ( Save Model Tab):**
 - Train a model via "Data Upload & Analysis" page
 - Go to "Model Management" → "Save Model" tab
 - Enter custom model name or use default `ml_package.pkl`
-- Click "💾 Save Model" button
-- Receive success confirmation with balloons 🎉
+- Click " Save Model" button
+- Receive success confirmation with balloons 
 - Model saved with all preprocessing components
 
-**Load Pre-trained Model (📂 Load Model Tab):**
+**Load Pre-trained Model ( Load Model Tab):**
 - Go to "Model Management" → "Load Model" tab
 - Choose default model or custom model path
-- Click "📂 Load Model"
+- Click " Load Model"
 - Model and all components ready for predictions
 - Use for batch predictions without retraining
 
 **Model Components Saved:**
-- ✓ Trained ML Model (RandomForest/GradientBoosting)
-- ✓ Feature Scaler (StandardScaler)
-- ✓ Label Encoders (for categorical variables)
-- ✓ Feature Names and Metadata
-- ✓ Model Metrics (Accuracy, Precision, Recall, F1)
-- ✓ Training Timestamp
+- Trained ML Model (RandomForest/GradientBoosting)
+- Feature Scaler (StandardScaler)
+- Label Encoders (for categorical variables)
+- Feature Names and Metadata
+- Model Metrics (Accuracy, Precision, Recall, F1)
+- Training Timestamp
 
 ---
 
@@ -247,7 +247,7 @@ List all models with metadata.
 
 ---
 
-## 🔧 Technology Stack
+## Technology Stack
 
 ### Model Persistence & Serialization
 - **Joblib** (v1.3.0+)
@@ -302,7 +302,7 @@ List all models with metadata.
 
 ### Model Not Found
 ```
-⚠ No saved package found at models/ml_package.pkl
+[WARN] No saved package found at models/ml_package.pkl
 ```
 **Solution:** Train a model first or check the file path.
 
@@ -341,7 +341,7 @@ pip install scikit-learn>=1.3.0
 
 ## Security Note
 
-⚠️ **WARNING**: Never load pickle files from untrusted sources. Malicious pickle files can execute arbitrary code.
+[WARN] **WARNING**: Never load pickle files from untrusted sources. Malicious pickle files can execute arbitrary code.
 
 **Safe Usage:**
 - Only load models you created
@@ -378,5 +378,5 @@ aml_system.save_trained_model('models/my_model.pkl')
 
 ---
 
-**Last Updated**: January 23, 2026  
+**Last Updated**: January 23, 2026 
 **Version**: 1.0

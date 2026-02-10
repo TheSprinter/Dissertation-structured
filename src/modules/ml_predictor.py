@@ -1,4 +1,4 @@
-"""
+﻿"""
 ML Predictor Module
 ===================
 
@@ -56,12 +56,12 @@ class MLPredictor:
         if save_model:
             self.save_model_to_disk()
         
-        print("✓ Model training completed successfully!")
+        print(" Model training completed successfully!")
         return self.model
     
     def _prepare_ml_features(self):
         """Prepare features for machine learning"""
-        print("🔧 Preparing features for ML model...")
+        print(" Preparing features for ML model...")
         
         # Copy dataframe
         ml_df = self.df.copy()
@@ -98,7 +98,7 @@ class MLPredictor:
         X_scaled = self.scaler.fit_transform(X)
         X = pd.DataFrame(X_scaled, columns=self.feature_names)
         
-        print(f"✓ Feature preparation complete: {len(self.feature_names)} numeric features")
+        print(f" Feature preparation complete: {len(self.feature_names)} numeric features")
         return X, y
     
     def _engineer_features(self, df):
@@ -130,7 +130,7 @@ class MLPredictor:
     
     def _train_multiple_models(self, X_train, y_train):
         """Train multiple ML models"""
-        print("🤖 Training multiple ML models...")
+        print(" Training multiple ML models...")
         
         models = {
             'random_forest': RandomForestClassifier(n_estimators=100, random_state=42),
@@ -141,7 +141,7 @@ class MLPredictor:
         trained_models = {}
         
         for name, model in models.items():
-            print(f"   Training {name}...")
+            print(f" Training {name}...")
             if name == 'isolation_forest_classifier':
                 model.fit(X_train)
                 trained_models[name] = model
@@ -149,14 +149,14 @@ class MLPredictor:
                 model.fit(X_train, y_train)
                 # Cross-validation score
                 cv_scores = cross_val_score(model, X_train, y_train, cv=5)
-                print(f"     CV Score: {cv_scores.mean():.3f} (+/- {cv_scores.std() * 2:.3f})")
+                print(f" CV Score: {cv_scores.mean():.3f} (+/- {cv_scores.std() * 2:.3f})")
                 trained_models[name] = model
         
         return trained_models
     
     def _evaluate_models(self, models, X_test, y_test):
         """Evaluate all models and select the best one"""
-        print("\n📊 Evaluating model performance...")
+        print("\n Evaluating model performance...")
         
         best_model = None
         best_score = 0
@@ -175,10 +175,10 @@ class MLPredictor:
                 f1 = f1_score(y_test, y_pred, zero_division=0)
                 
                 print(f"\n{name.upper()} Results:")
-                print(f"   Accuracy: {accuracy:.3f}")
-                print(f"   Precision: {precision:.3f}")
-                print(f"   Recall: {recall:.3f}")
-                print(f"   F1-Score: {f1:.3f}")
+                print(f" Accuracy: {accuracy:.3f}")
+                print(f" Precision: {precision:.3f}")
+                print(f" Recall: {recall:.3f}")
+                print(f" F1-Score: {f1:.3f}")
                 
                 # Store metrics
                 self.model_metrics[name] = {
@@ -193,7 +193,7 @@ class MLPredictor:
                     best_score = f1
                     best_model = model
         
-        print(f"\n✓ Best model selected with F1-score: {best_score:.3f}")
+        print(f"\n Best model selected with F1-score: {best_score:.3f}")
         return best_model
     
     def _analyze_feature_importance(self):
@@ -204,7 +204,7 @@ class MLPredictor:
                 'importance': self.model.feature_importances_
             }).sort_values('importance', ascending=False)
             
-            print(f"\n🔍 Top 10 Most Important Features:")
+            print(f"\n Top 10 Most Important Features:")
             print(feature_importance.head(10).to_string(index=False))
     
     def save_model_to_disk(self, model_dir='models'):
@@ -243,12 +243,12 @@ class MLPredictor:
         metadata_path = os.path.join(model_dir, 'model_metadata.pkl')
         joblib.dump(metadata, metadata_path, compress=3)
         
-        print(f"\n💾 Model saved successfully to '{model_dir}/' directory")
-        print(f"   - Model: fraud_model.pkl")
-        print(f"   - Scaler: scaler.pkl")
-        print(f"   - Encoders: label_encoders.pkl")
-        print(f"   - Features: feature_names.pkl")
-        print(f"   - Metadata: model_metadata.pkl")
+        print(f"\n Model saved successfully to '{model_dir}/' directory")
+        print(f" - Model: fraud_model.pkl")
+        print(f" - Scaler: scaler.pkl")
+        print(f" - Encoders: label_encoders.pkl")
+        print(f" - Features: feature_names.pkl")
+        print(f" - Metadata: model_metadata.pkl")
     
     def load_model_from_disk(self, model_dir='models'):
         """Load pre-trained model, scaler, and encoders from disk"""
@@ -274,19 +274,19 @@ class MLPredictor:
             metadata = joblib.load(metadata_path)
             self.model_metrics = metadata.get('model_metrics', {})
             
-            print(f"\n✅ Model loaded successfully from '{model_dir}/' directory")
-            print(f"   - Trained on: {metadata.get('timestamp', 'Unknown')}")
-            print(f"   - Features: {metadata.get('feature_count', len(self.feature_names))}")
+            print(f"\n[PASS] Model loaded successfully from '{model_dir}/' directory")
+            print(f" - Trained on: {metadata.get('timestamp', 'Unknown')}")
+            print(f" - Features: {metadata.get('feature_count', len(self.feature_names))}")
             if self.model_metrics:
-                print(f"   - Performance metrics available")
+                print(f" - Performance metrics available")
             return True
             
         except FileNotFoundError as e:
-            print(f"\n⚠ No saved model found in '{model_dir}/' directory")
-            print("   Train a new model using train_compliance_model()")
+            print(f"\n[WARN] No saved model found in '{model_dir}/' directory")
+            print(" Train a new model using train_compliance_model()")
             return False
         except Exception as e:
-            print(f"\n❌ Error loading model: {str(e)}")
+            print(f"\n[FAIL] Error loading model: {str(e)}")
             return False
     
     def model_exists(self, model_dir='models'):
@@ -367,7 +367,7 @@ class MLPredictor:
             missing_features = set(self.feature_names) - set(available_features)
             for missing_feat in missing_features:
                 X[missing_feat] = 0
-            X = X[self.feature_names]  # Reorder to match training order
+            X = X[self.feature_names] # Reorder to match training order
         
         X_scaled = self.scaler.transform(X)
         
